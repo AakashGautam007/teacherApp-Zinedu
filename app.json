@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "TeacherApp",
+    "slug": "TeacherApp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "TeacherApp"
+}
