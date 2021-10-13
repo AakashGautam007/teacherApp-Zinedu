@@ -25,7 +25,7 @@ const PastLiveClasses = ({navigation}) => {
             method: `GET`
         })
         const D = await response.json();
-        console.log(D)
+        console.log(D,'classes data')
         setData(D)
         setIsLoading(false)
         setRefreshing(false)
@@ -61,10 +61,10 @@ const PastLiveClasses = ({navigation}) => {
             shadowOpacity:0.25,
             shadowRadius:3.5,}}>
        
-            <Text style={styles.txt} >
+            <Text style={{...styles.txt,color:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'white':'black',fontWeight:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
             Date / Time : {dateFormat(item.liveclass_assoc.start_date,"ddd dd/mm/yyyy   hh:MM tt")}
             </Text>
-            <Text style={styles.txt} >
+            <Text style={{...styles.txt,color:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'white':'black',fontWeight:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
                CH : {item.liveclass_assoc.chapter_assoc}
             </Text>
 

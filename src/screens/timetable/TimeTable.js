@@ -25,7 +25,7 @@ const TimeTable = ({navigation}) => {
             method: `GET`
         })
         const D = await response.json();
-        console.log(D)
+        console.log(D,'class data')
         setData(D)
         setIsLoading(false)
         setRefreshing(false)
@@ -45,7 +45,7 @@ const TimeTable = ({navigation}) => {
         })
         const D = await response.json();
         console.log(D)
-        if(D.num_live_classes==0){
+        if(D.num_live_classes<=3){
             getSchedule()
         }
         else{
@@ -85,19 +85,19 @@ const TimeTable = ({navigation}) => {
         return(
             <TouchableOpacity 
             onPress={()=>navigation.navigate('LiveClassInfo',{item})}
-            style={{width:width*0.9,padding:15,backgroundColor:'white',marginVertical:10,borderRadius:14,minHeight:107,elevation:7,shadowColor:'grey',marginHorizontal:0.05*width,justifyContent:'center',alignItems: 'flex-start',
+            style={{width:width*0.9,padding:15,backgroundColor:item.chapter_assoc.chapter_name=='Miscellaneous'?'red':'white',marginVertical:10,borderRadius:14,minHeight:107,elevation:7,shadowColor:'grey',marginHorizontal:0.05*width,justifyContent:'center',alignItems: 'flex-start',
             shadowOffset:{height:7,width:0},
             shadowOpacity:0.25,
             shadowRadius:3.5,}}>
        
-            <Text style={styles.txt} >
+            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
             Date / Time : {dateFormat(item.start_date,"ddd dd/mm/yyyy   hh:MM tt")}
             </Text>
-            <Text style={styles.txt} >
+            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
                CH : {item.chapter_assoc.chapter_name}
             </Text>
 
-            <Text style={styles.txt} >
+            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
             Subject : {item.chapter_assoc.subject_assoc.subject_name} 
             {/* {item.id} */}
             </Text> 

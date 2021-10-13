@@ -149,6 +149,17 @@ const LiveClassInfo = ({navigation,route}) => {
             </View>
             </TouchableOpacity>
 
+            <TouchableOpacity 
+            onPress={()=>navigation.navigate('SubjectEdit',{item:liveClass})}
+            style={{width:'45%',justifyContent:'center',alignItems: 'center',backgroundColor:'#ECECEC',height:157,borderRadius:30}} >
+            
+            <View >
+                <Text style={styles.txt} >
+                    EDIT SUBJECT
+                </Text>
+            </View>
+            </TouchableOpacity>
+
         </View>
         
     </SafeAreaView>

@@ -8,6 +8,7 @@ import NotesView from '../screens/timetable/NotesView';
 import NotesAdd from '../screens/timetable/NotesAdd';
 import NotesFile from '../screens/timetable/NotesFile';
 import Chapter from '../screens/timetable/Chapter';
+import SubjectEdit from '../screens/timetable/SubjectEdit';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,8 @@ export default function MyScheduleStack({navigation}) {
        <Stack.Screen name="NotesAdd" component={NotesAdd} options={{title:'Select live Class'}} /> 
        <Stack.Screen name="NotesFile" component={NotesFile} options={{title:'Add Notes'}} /> 
        <Stack.Screen name="Chapter" component={Chapter} options={{title:'Chapter'}} /> 
+       <Stack.Screen name="SubjectEdit" component={SubjectEdit} options={{title:'Edit Subject'}} /> 
+
 
       </Stack.Navigator>
     )
