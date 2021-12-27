@@ -90,14 +90,14 @@ const TimeTable = ({navigation}) => {
             shadowOpacity:0.25,
             shadowRadius:3.5,}}>
        
-            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
+            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.chapter_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
             Date / Time : {dateFormat(item.start_date,"ddd dd/mm/yyyy   hh:MM tt")}
             </Text>
-            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
+            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.chapter_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
                CH : {item.chapter_assoc.chapter_name}
             </Text>
 
-            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.liveclass_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
+            <Text style={{...styles.txt,color:item.chapter_assoc.chapter_name=='Miscellaneous'?'white':'black',fontWeight:item.chapter_assoc.chapter_assoc=='Miscellaneous'?'700':'500'}} >
             Subject : {item.chapter_assoc.subject_assoc.subject_name} 
             {/* {item.id} */}
             </Text> 

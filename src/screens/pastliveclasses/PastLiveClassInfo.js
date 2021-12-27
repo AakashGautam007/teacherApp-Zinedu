@@ -51,7 +51,7 @@ const PastLiveClassInfo = ({navigation,route}) => {
 
 
     useEffect(() => {
-        console.log(item.id)
+        console.log(item.id,'item.id')
         // console.log('this is item',item)
         if(isFocused){
             getSchedule()
@@ -180,6 +180,33 @@ const PastLiveClassInfo = ({navigation,route}) => {
         </Text>
     </View>
     </TouchableOpacity>
+
+    {/* <TouchableOpacity 
+    onPress={()=>navigation.navigate('SearchQuestion')}
+    style={{width:'45%',justifyContent:'center',alignItems: 'center',backgroundColor:'#ECECEC',height:157,borderRadius:30}} >
+    
+    <View >
+        <Text style={styles.txt} >
+            SEARCH QUESTION
+        </Text>
+    </View>
+    </TouchableOpacity> */}
+
+
+</View>
+
+<View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width:'90%',marginVertical:10,marginTop:20}}>
+
+{/* <TouchableOpacity 
+    onPress={()=>navigation.navigate('AddPpt',{studio:data.data.studio_name,idd:item.id})}
+    style={{width:'45%',justifyContent:'center',alignItems: 'center',backgroundColor:'#ECECEC',height:157,borderRadius:30}} >
+    
+    <View >
+        <Text style={styles.txt} >
+            Add Ppt
+        </Text>
+    </View>
+    </TouchableOpacity> */}
 
 
 </View>

@@ -12,6 +12,7 @@ import {ENDPOINT} from './src/utils/config'
 import InternetConnectionAlert from "react-native-internet-connection-alert";
 import Toast from 'react-native-simple-toast';
 import AuthStack from './src/nav/AuthStack';
+import { requestUserPermission, notificationListner } from './src/utils/notificationService'
 
 LogBox.ignoreAllLogs();
 
@@ -22,6 +23,7 @@ export default function App() {
     isLoading:true,
     userName:null,
     userToken:null,
+    // fcmToken:null
   };
   
   const loginReducer =(prevState,action)=>{
@@ -63,7 +65,8 @@ export default function App() {
           body: JSON.stringify({
             username: username,
             password: password,
-            returnSecureToken: true
+            returnSecureToken: true,
+            // service_provider:'zinedu'
           })
         });
         
@@ -122,6 +125,7 @@ export default function App() {
         try {
           await AsyncStorage.setItem('userToken', resData.token)
           await AsyncStorage.setItem('userName', username)
+          requestUserPermission(resData.token)
         } catch (e) {
           // saving error
           console.log(e)
@@ -149,9 +153,8 @@ export default function App() {
   }
   
   }),[]);
-  
-  
-  useEffect(() => {
+
+  const init = () =>{
     setTimeout(async()=>{
   
       let userToken = null
@@ -160,6 +163,7 @@ export default function App() {
        
        userToken = await AsyncStorage.getItem('userToken')
        userName = await AsyncStorage.getItem('userName')
+
       } catch (e) {
         // saving error
         console.log(e)
@@ -167,6 +171,11 @@ export default function App() {
       dispatch({type:'RETRIVE_TOKEN',username:userName,token:userToken})
       // setIsLoading(false)
     },1000);
+  }
+  
+  
+  useEffect(() => {
+    init()
   }, []);
   
   

@@ -8,6 +8,7 @@ import TimeTable from '../screens/timetable/TimeTable';
 import MyScheduleStack from './MyScheduleStack';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import PastClassesStack from './PastClassesStack';
+import SearchQuestionStack from './SearchQuestionStack';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,6 +22,8 @@ export default function DrawerNav() {
         <Drawer.Screen name="MyScheduleStack" component={MyScheduleStack} options={{title:'My Schedule'}} />
         <Drawer.Screen name="PastClassesStack" component={PastClassesStack} options={{title:'My Past Classes'}} />
         <Drawer.Screen name="DoubtStack" component={DoubtStack} options={{title:'Student Doubts'}} />
+        <Drawer.Screen name="SearchQuestionStack" component={SearchQuestionStack} options={{title:'Search Question'}} />
+
       </Drawer.Navigator>
    
   );

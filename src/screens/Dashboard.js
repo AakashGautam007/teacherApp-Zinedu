@@ -88,21 +88,21 @@ const Dashboard = ({navigation}) => {
 
             </View>
 
-            {/* <View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width:'90%',marginVertical:10}}>
+            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width:'90%',marginVertical:10}}>
 
                 <TouchableOpacity 
-                onPress={()=>navigation.navigate('DoubtStack')}
+                onPress={()=>navigation.navigate('SearchQuestionStack')}
                 style={{width:'45%',justifyContent:'center',alignItems: 'center',backgroundColor:'#ECECEC',height:157,borderRadius:30}} >
                 
                 <View >
                     <Text>
-                        STUDENT DOUBTS
+                        SEARCH QUESTION
                     </Text>
                 </View>
                 </TouchableOpacity>
 
 
-            </View> */}
+            </View>
 
 
 

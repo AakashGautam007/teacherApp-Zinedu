@@ -100,11 +100,14 @@ const LiveClassInfo = ({navigation,route}) => {
             </ScrollView>
             </View>
             </View>}
+            <ScrollView style={{flex:1}} >
+                <View style={{flex:1,justifyContent:'flex-start',alignItems:'center'}} >
+
         <View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width:'90%',marginVertical:10,marginTop:20}}>
 
         {liveClass.length!=0&& <TouchableOpacity 
         onPress={()=>navigation.navigate('NotesFile',{item:liveClass})}
-            style={{width:'45%',justifyContent:'center',alignItems: 'center',backgroundColor:'#ECECEC',height:157,borderRadius:30}} >
+        style={{width:'45%',justifyContent:'center',alignItems: 'center',backgroundColor:'#ECECEC',height:157,borderRadius:30}} >
   
 
                 {liveClass.note_info.length!=0?
@@ -162,6 +165,23 @@ const LiveClassInfo = ({navigation,route}) => {
 
         </View>
         
+        
+        <View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width:'90%',marginVertical:10,marginTop:20}}>
+        <TouchableOpacity 
+            onPress={()=>navigation.navigate('AddPpt',{studio:data.data.studio_name,idd:item.id})}
+            style={{width:'45%',justifyContent:'center',alignItems: 'center',backgroundColor:'#ECECEC',height:157,borderRadius:30}} >
+            
+            <View >
+                <Text style={styles.txt} >
+                    ADD PPT
+                </Text>
+            </View>
+            </TouchableOpacity>
+        
+        </View>
+        
+                </View>
+                </ScrollView>
     </SafeAreaView>
     )
 }

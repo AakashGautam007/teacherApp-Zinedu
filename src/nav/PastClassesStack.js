@@ -12,6 +12,8 @@ import PastLiveClasses from '../screens/pastliveclasses/PastLiveClasses';
 import PastLiveClassInfo from '../screens/pastliveclasses/PastLiveClassInfo';
 import ViewRecording from '../screens/pastliveclasses/ViewRecording';
 import SubjectEdit from '../screens/timetable/SubjectEdit';
+import SearchQuestion from '../screens/timetable/SearchQuestion';
+import AddPpt from '../screens/timetable/AddPpt';
 
 const Stack = createStackNavigator();
 
@@ -34,9 +36,8 @@ export default function PastClassesStack({navigation}) {
        <Stack.Screen name="Chapter" component={Chapter} options={{title:'Chapter'}} /> 
        <Stack.Screen name="ViewRecording" component={ViewRecording} options={{title:'Recording'}} /> 
        <Stack.Screen name="SubjectEdit" component={SubjectEdit} options={{title:'Edit Subject'}} /> 
-
-
-
+       <Stack.Screen name="SearchQuestion" component={SearchQuestion} options={{title:'Edit Subject'}} /> 
+       <Stack.Screen name="AddPpt" component={AddPpt} options={{title:'Add Ppt'}} /> 
       </Stack.Navigator>
     )
 }

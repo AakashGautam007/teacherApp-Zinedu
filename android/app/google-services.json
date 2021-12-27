@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "512719928006",
+    "project_id": "zinedu-teacher",
+    "storage_bucket": "zinedu-teacher.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512719928006:android:de20eaf651c9684257b5c7",
+        "android_client_info": {
+          "package_name": "com.teacherapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512719928006-ka4rv3rdhv091t534evjb3evu2ivi51a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv1eI5y6DDtnIa_hOyCZXCkWhB44tvr0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512719928006-ka4rv3rdhv091t534evjb3evu2ivi51a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
