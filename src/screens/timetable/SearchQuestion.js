@@ -351,7 +351,7 @@ const SearchQuestion = ({ navigation, route }) => {
         const response = await fetch(
           `${ENDPOINT}/student/get-objective-exam-questions-per-chapter/?chapter=${ch}&language=${lang_id}&difficulty_level=${difLvl_id}&question_type=${typeId}&verified=true&solution_video=true`,
           requestOptions
-        );
+        ); 
         const D = await response.json();
         console.log(D, "quesBank");
         setQuestionBank(D);
