@@ -282,7 +282,7 @@ const PastLiveClassInfo = ({ navigation, route }) => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate("ScanScreen")}
+              onPress={() => navigation.navigate("ScanScreen", { item: item })}
               style={{
                 width: "45%",
                 justifyContent: "center",

@@ -7,27 +7,113 @@ import {
   Linking,
   TouchableHighlight,
   PermissionsAndroid,
+  Alert,
   Platform,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 
 // import CameraKitCameraScreen
 import { CameraScreen } from "react-native-camera-kit";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { width } from "../../utils/config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ENDPOINT } from "../../utils/config";
 
-export default function ScanScreen() {
+export default function ScanScreen({ navigation, route }) {
+  const { item } = route.params;
+  const [foundUrl, setUrlFound] = useState("");
+  const [isScanning, setIsScanning] = useState(true);
+  const [isUpload, setIsUpload] = useState(false);
+  const [uploadDone, setUploadDone] = useState(false);
+  const [finalMessage, setFinalMessage] = useState("");
+  const getUpload = async () => {
+    setIsUpload(true);
+    const userToken = await AsyncStorage.getItem("userToken");
+    console.log(userToken, " token");
+    console.log(item.liveclass_assoc.id, "liveClassID");
+    var formdata = new FormData();
+    formdata.append("class_notes", foundUrl);
+    var requestOptions = {
+      redirect: "follow",
+      method: "POST",
+      body: formdata,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        Authorization: `Token ${userToken}`,
+      },
+    };
+    const response = await fetch(
+      `${ENDPOINT}/teacher/upload-notes-byqr/${item.liveclass_assoc.id}/`,
+      requestOptions
+    );
+    const D = await response.json();
+    if (response.ok) {
+      setUploadDone(true);
+      setIsUpload(false);
+      setFinalMessage(D.Success);
+      Alert.alert(`${D.Success}`);
+    } else {
+      Alert.alert(`${D.Error}`);
+      setUploadDone(false);
+      setFinalMessage(D.Error);
+      setIsUpload(false);
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CameraScreen
-        // ref={(ref) => (this.camera = ref)}
-        // cameraType={CameraType.Back} // front/back(default)
-        actions={{ rightButtonText: "Done", leftButtonText: "Cancel" }}
-        scanBarcode={true}
-        onBottomButtonPressed={(event) => {}}
-        onReadCode={(event) => Alert.alert("QR code found")} // optional
-        showFrame={true} // (default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner,that stoped when find any code. Frame always at center of the screen
-        laserColor="red" // (default red) optional, color of laser in scanner frame
-        frameColor="white" // (default white) optional, color of border of scanner frame
-      />
+      {isScanning == true ? (
+        <CameraScreen
+          // ref={(ref) => (this.camera = ref)}
+          // cameraType={CameraType.Back} // front/back(default)
+          actions={{ rightButtonText: "Done", leftButtonText: "Cancel" }}
+          scanBarcode={true}
+          onBottomButtonPressed={(event) => {}}
+          onReadCode={(event) => {
+            setIsScanning(false);
+            setUrlFound(event.nativeEvent.codeStringValue);
+          }} // optional
+          showFrame={true} // (default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner,that stoped when find any code. Frame always at center of the screen
+          laserColor="red" // (default red) optional, color of laser in scanner frame
+          frameColor="white" // (default white) optional, color of border of scanner frame
+        />
+      ) : (
+        <View style={{ marginHorizontal: 20 }}>
+          {uploadDone == false ? (
+            <View>
+              {isUpload == false ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    getUpload();
+                  }}
+                  style={{
+                    width: width * 0.8,
+                    backgroundColor: "orange",
+                    padding: 20,
+                    margin: 10,
+                    alignContent: "center",
+                    alignItems: "center",
+                    alignSelf: "center",
+                  }}
+                >
+                  <Text>Upload Now</Text>
+                </TouchableOpacity>
+              ) : (
+                <ActivityIndicator
+                  size={"large"}
+                  color="orange"
+                ></ActivityIndicator>
+              )}
+            </View>
+          ) : (
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              {finalMessage}
+            </Text>
+          )}
+        </View>
+      )}
     </SafeAreaView>
   );
 }
