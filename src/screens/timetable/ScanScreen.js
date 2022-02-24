@@ -53,9 +53,19 @@ export default function ScanScreen({ navigation, route }) {
       setUploadDone(true);
       setIsUpload(false);
       setFinalMessage(D.Success);
-      Alert.alert(`${D.Success}`);
+      if (D.Error != undefined) {
+        Alert.alert(`${D.Error}`);
+      }
+      if (D.Success != undefined) {
+        Alert.alert(`${D.Success}`);
+      }
     } else {
-      Alert.alert(`${D.Error}`);
+      if (D.Error != undefined) {
+        Alert.alert(`${D.Error}`);
+      }
+      if (D.Success != undefined) {
+        Alert.alert(`${D.Success}`);
+      }
       setUploadDone(false);
       setFinalMessage(D.Error);
       setIsUpload(false);
@@ -112,6 +122,8 @@ export default function ScanScreen({ navigation, route }) {
               {finalMessage}
             </Text>
           )}
+          <Text>{item.liveclass_assoc.id}</Text>
+          <Text>{foundUrl}</Text>
         </View>
       )}
     </SafeAreaView>
