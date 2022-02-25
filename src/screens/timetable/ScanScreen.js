@@ -31,7 +31,7 @@ export default function ScanScreen({ navigation, route }) {
     setIsUpload(true);
     const userToken = await AsyncStorage.getItem("userToken");
     console.log(userToken, " token");
-    console.log(item.liveclass_assoc.id, "liveClassID");
+    console.log(item, "liveClassID");
     var formdata = new FormData();
     formdata.append("class_notes", foundUrl);
     var requestOptions = {
@@ -45,7 +45,7 @@ export default function ScanScreen({ navigation, route }) {
       },
     };
     const response = await fetch(
-      `${ENDPOINT}/teacher/upload-notes-byqr/${item.liveclass_assoc.id}/`,
+      `${ENDPOINT}/teacher/upload-notes-byqr/${item}/`,
       requestOptions
     );
     const D = await response.json();
@@ -56,15 +56,15 @@ export default function ScanScreen({ navigation, route }) {
       if (D.Error != undefined) {
         Alert.alert(`${D.Error}`);
       }
-      if (D.Success != undefined) {
-        Alert.alert(`${D.Success}`);
+      if (D.message != undefined) {
+        Alert.alert(`${D.message}`);
       }
     } else {
       if (D.Error != undefined) {
         Alert.alert(`${D.Error}`);
       }
-      if (D.Success != undefined) {
-        Alert.alert(`${D.Success}`);
+      if (D.message != undefined) {
+        Alert.alert(`${D.message}`);
       }
       setUploadDone(false);
       setFinalMessage(D.Error);
@@ -122,7 +122,7 @@ export default function ScanScreen({ navigation, route }) {
               {finalMessage}
             </Text>
           )}
-          <Text>{item.liveclass_assoc.id}</Text>
+          <Text>{item}</Text>
           <Text>{foundUrl}</Text>
         </View>
       )}

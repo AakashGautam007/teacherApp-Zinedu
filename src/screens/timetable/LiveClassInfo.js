@@ -21,6 +21,7 @@ const LiveClassInfo = ({ navigation, route }) => {
   const [liveClass, setLiveClass] = useState([]);
   const [data, setData] = useState([]);
   const isFocused = useIsFocused();
+  console.log(item, "IDChecking");
 
   const getSchedule = async () => {
     const userToken = await AsyncStorage.getItem("userToken");
@@ -278,7 +279,7 @@ const LiveClassInfo = ({ navigation, route }) => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate("ScanScreen", { item: item })}
+              onPress={() => navigation.navigate("ScanScreen", { item: item.id })}
               style={{
                 width: "45%",
                 justifyContent: "center",
