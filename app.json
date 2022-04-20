@@ -3,10 +3,13 @@
     "name": "TeacherApp",
     "slug": "TeacherApp",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "orientation" : "portrait"
+    "assetBundlePatterns": ["**/*"],
+    "orientation": "portrait",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "backgroundColor": "#1C3687",
+      "resizeMode": "contain"
+    }
   },
   "name": "TeacherApp"
 }
