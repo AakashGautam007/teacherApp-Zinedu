@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const { width, height } = Dimensions.get("window");
 
-export const ENDPOINT = `https://apstaging.zinedu.com`;
+export const ENDPOINT = `https://ap.zinedu.com`;
 
 //For Testing Staging Base `https://apstaging.zinedu.com/`;
 
