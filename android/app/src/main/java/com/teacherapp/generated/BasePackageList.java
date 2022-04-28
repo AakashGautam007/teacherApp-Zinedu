@@ -1,4 +1,4 @@
-package com.teacherapp.generated;
+package com.teacherapp.digital.generated;
 
 import java.util.Arrays;
 import java.util.List;

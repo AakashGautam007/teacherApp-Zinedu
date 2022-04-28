@@ -1,4 +1,4 @@
-package com.teacherapp;
+package com.teacherapp.digital;
 
 import android.os.Bundle;
 
