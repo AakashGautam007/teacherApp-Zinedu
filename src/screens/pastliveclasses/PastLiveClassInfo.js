@@ -116,11 +116,11 @@ const PastLiveClassInfo = ({ navigation, route }) => {
                         Date/Time :{" "}
                         {dateFormat(liveClass.start_date, "ddd dd/mm/yyyy hh:MM tt")}
                     </Text>
-                    {data.status ? (
+                    {/* {data.status ? (
                         <Text style={styles.txt}>Studio : {data.data.studio_name}</Text>
                     ) : (
-                        <Text style={styles.txt}>Studio :</Text>
-                    )}
+                        null
+                    )} */}
                     <Text>Batches : </Text>
                     <View
                         style={{

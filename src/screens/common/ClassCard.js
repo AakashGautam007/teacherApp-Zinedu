@@ -49,7 +49,7 @@ function ClassCard({ item, isPastClassPage }) {
 
 					</View>
 
-					<Text style={styles.text}>Studio 11</Text>
+					<Text style={styles.text}>{item.studio_name}</Text>
 
 				</View>}
 
