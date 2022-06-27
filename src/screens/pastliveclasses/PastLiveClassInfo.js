@@ -12,7 +12,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 import dateFormat from "dateformat";
-import { width, ENDPOINT } from "../../utils/config";
+import { width, ENDPOINT, SMSENDPOINT } from "../../utils/config";
 
 const PastLiveClassInfo = ({ navigation, route }) => {
     const { item } = route.params;
@@ -44,7 +44,7 @@ const PastLiveClassInfo = ({ navigation, route }) => {
 
     const getStudioInfo = async () => {
         const response = await fetch(
-            `https://smss.zinedu.com/get-studio-by-liveclass?id=${ item.live_class_id }`,
+            `${ SMSENDPOINT }/get-studio-by-liveclass?id=${ item.live_class_id }`,
             {
                 method: "GET",
                 headers: {

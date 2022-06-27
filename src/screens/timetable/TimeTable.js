@@ -39,7 +39,7 @@ const TimeTable = ({ navigation }) => {
             method: `GET`
         })
         const D = await response.json();
-        console.log(D.payload.liveclasses[0], 'Time Table data')
+        // console.log(D.payload.liveclasses[0], 'Time Table data')
         setData(D.payload.liveclasses)
 
         setIsLoading(false)
@@ -100,8 +100,8 @@ const TimeTable = ({ navigation }) => {
         );
     }
 
-    if (data.length === 0) {
-        return (<Text> No live classes scheduled</Text>)
+    if (data === undefined && !isLoading || data.length === 0) {
+        return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}><Text> No live classes scheduled</Text></View>)
     }
 
     return (

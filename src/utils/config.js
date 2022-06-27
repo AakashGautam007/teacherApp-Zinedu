@@ -3,9 +3,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const { width, height } = Dimensions.get("window");
 
-export const ENDPOINT = `https://apqa.zinedu.com`;
-export const SMSENDPOINT = `https://smsd.zinedu.com`;
-// export const SMSENDPOINT = `https://smss.zinedu.com`;
+export const ENDPOINT = `https://ap.zinedu.com`;
+export const SMSENDPOINT = `https://sms.zinedu.com`; //production
+// export const SMSENDPOINT = `https://smss.zinedu.com`//staging
+// export const SMSENDPOINT = `https://smsd.zinedu.com`//qa
 
 //For Testing Staging Base `https://apstaging.zinedu.com/`;
 
