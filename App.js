@@ -29,10 +29,11 @@ import {
   requestUserPermission,
   notificationListner,
 } from "./src/utils/notificationService";
+import CodePush from "react-native-code-push";
 
 LogBox.ignoreAllLogs();
 
-export default function App() {
+const App = () => {
   const initaialLoginState = {
     isLoading: true,
     userName: null,
@@ -211,6 +212,11 @@ export default function App() {
     </InternetConnectionAlert>
   );
 }
+
+const codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+}
+export default CodePush(codePushOptions)(App)
 
 const styles = StyleSheet.create({
   container: {

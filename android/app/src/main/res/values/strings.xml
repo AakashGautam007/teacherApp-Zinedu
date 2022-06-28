@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">myfaculty</string>
+    <!-- Production -->
+    <!-- <string moduleConfig="true" name="CodePushDeploymentKey">s25bCQNKfT5wpqNpKmaJSGRI-K8bNaU_bQQvm</string> -->
+    <!-- Staging -->
+    <string moduleConfig="true" name="CodePushDeploymentKey">4hEZnbKCPuZ1syFjMrdrCSUeY4mSWR05f4zjT</string>
 </resources>

@@ -28,6 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 
+//Codepush imports
+import com.microsoft.codepush.react.CodePush;
+
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
     new BasePackageList().getPackageList()
@@ -56,14 +59,22 @@ public class MainApplication extends Application implements ReactApplication {
       return new ReanimatedJSIModulePackage();
     }
 
-    @Override
-    protected @Nullable String getJSBundleFile() {
-      if (BuildConfig.DEBUG) {
-        return super.getJSBundleFile();
-      } else {
-        return UpdatesController.getInstance().getLaunchAssetFile();
-      }
-    }
+    // @Override
+    // protected @Nullable String getJSBundleFile() {
+    //   if (BuildConfig.DEBUG) {
+    //     return super.getJSBundleFile();
+    //   } else {
+    //     return UpdatesController.getInstance().getLaunchAssetFile();
+    //   }
+    // }
+
+    // 2. Override the getJSBundleFile method to let
+        // the CodePush runtime determine where to get the JS
+        // bundle location from on each app start
+        @Override
+        protected String getJSBundleFile() {
+            return CodePush.getJSBundleFile();
+        }
 
     @Override
     protected @Nullable String getBundleAssetName() {
