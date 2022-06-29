@@ -5,7 +5,9 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
-    "start": "react-native start"
+    "start": "react-native start",
+    "codepush-staging": "appcenter codepush release-react -a MyClassroom/myFaculty -d Staging",
+    "codepush-production": "appcenter codepush release-react -a MyClassroom/myFaculty -d Production"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.15",
@@ -20,6 +22,7 @@
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.0.5",
     "@react-navigation/stack": "^6.0.6",
+    "@sentry/react-native": "^4.0.2",
     "axios": "^0.21.4",
     "dateformat": "^4.6.3",
     "expo": "~42.0.1",

@@ -30,6 +30,7 @@ import {
   notificationListner,
 } from "./src/utils/notificationService";
 import CodePush from "react-native-code-push";
+import * as Sentry from "@sentry/react-native";
 
 LogBox.ignoreAllLogs();
 
@@ -63,7 +64,7 @@ const App = () => {
   };
 
   const [loginState, dispatch] = useReducer(loginReducer, initaialLoginState);
-
+  
   const authContext = useMemo(
     () => ({
       signin: async (username, password) => {
@@ -178,8 +179,18 @@ const App = () => {
     }, 1000);
   };
 
+  const setupSentry = () => {
+    Sentry.init({
+      dsn: "https://5df8744759af49b582fa6c1df3e4891c@o1302218.ingest.sentry.io/6539276",
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      tracesSampleRate: 1.0,
+    });
+  }
+
   useEffect(() => {
     init();
+    setupSentry();
   }, []);
 
   if (loginState.isLoading) {
@@ -214,7 +225,9 @@ const App = () => {
 }
 
 const codePushOptions = {
+  updateDialog: true,
   checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+  // installMode: CodePush.InstallMode.IMMEDIATE
 }
 export default CodePush(codePushOptions)(App)
 

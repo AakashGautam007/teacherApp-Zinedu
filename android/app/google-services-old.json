@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "82983566878",
-    "project_id": "myfaculty-8b9ce",
-    "storage_bucket": "myfaculty-8b9ce.appspot.com"
+    "project_number": "512719928006",
+    "project_id": "zinedu-teacher",
+    "storage_bucket": "zinedu-teacher.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:82983566878:android:4bf2fc0c57da49f300f80f",
+        "mobilesdk_app_id": "1:512719928006:android:de20eaf651c9684257b5c7",
         "android_client_info": {
           "package_name": "com.teacherapp.digital"
         }
       },
       "oauth_client": [
         {
-          "client_id": "82983566878-f9k0d2kamr3q6ecq8nj84ufpa2fi3psj.apps.googleusercontent.com",
+          "client_id": "512719928006-ka4rv3rdhv091t534evjb3evu2ivi51a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBvoCKab5GtsXOT1MOntk0OJN8Sw9jSaWs"
+          "current_key": "AIzaSyAv1eI5y6DDtnIa_hOyCZXCkWhB44tvr0Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "82983566878-f9k0d2kamr3q6ecq8nj84ufpa2fi3psj.apps.googleusercontent.com",
+              "client_id": "512719928006-ka4rv3rdhv091t534evjb3evu2ivi51a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
