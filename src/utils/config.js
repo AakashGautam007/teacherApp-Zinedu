@@ -1,5 +1,6 @@
 import { Dimensions, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { store } from "../redux/store";
 
 export const { width, height } = Dimensions.get("window");
 
@@ -20,7 +21,8 @@ export const SMSENDPOINT = `https://sms.zinedu.com`; //production
 export const postAnalytics = async (page, logout) => {
     var formdata = new FormData();
     try {
-        const token = await AsyncStorage.getItem("userToken");
+        // const token = await AsyncStorage.getItem("userToken");
+        const token = store?.getState()?.authReducer?.userToken
         console.log("Token :", token);
         formdata.append("page_name", page);
         var requestOptions = {
@@ -33,7 +35,7 @@ export const postAnalytics = async (page, logout) => {
             },
         };
         const response = await fetch(
-            `${ ENDPOINT }/users/post-analytics/`,
+            `${ENDPOINT}/users/post-analytics/`,
             requestOptions
         );
         if (response.status === 401) {

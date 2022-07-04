@@ -24,18 +24,20 @@ import Svg, {
     Mask,
   } from 'react-native-svg';
 import {width,height, ENDPOINT} from '../../utils/config'
+import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 // const {width,height} = Dimensions.get('window')
 
 const PendingDoubts = ({navigation}) => {
 
+    const { userToken: token, userName: name } = useAuthFields();
     const isFocused = useIsFocused();
     
     const [data,setData]=useState([])
 
 
     const a = async () => {
-        const name = await AsyncStorage.getItem('userName')
-        const token = await AsyncStorage.getItem('userToken')
+        // const name = await AsyncStorage.getItem('userName')
+        // const token = await AsyncStorage.getItem('userToken')
         const response = await fetch(`${ENDPOINT}/support/get-alloted-doubts/?teacher_username=${name}`,{
             method:'GET',
                 headers:{

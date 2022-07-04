@@ -13,9 +13,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 import dateFormat from "dateformat";
 import { width, ENDPOINT, SMSENDPOINT } from "../../utils/config";
+import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
 
 const LiveClassInfo = ({ navigation, route }) => {
     const { item } = route.params;
+    const { userToken } = useAuthFields();
     // const [itemm,setItemm]=useState(item)
     const [isLoading, setIsLoading] = useState(true);
     const [liveClass, setLiveClass] = useState([]);
@@ -24,8 +26,8 @@ const LiveClassInfo = ({ navigation, route }) => {
     console.log(item, "IDChecking");
 
     const getSchedule = async () => {
-        const userToken = await AsyncStorage.getItem("userToken");
-        const username = await AsyncStorage.getItem("userName");
+        // const userToken = await AsyncStorage.getItem("userToken");
+        // const username = await AsyncStorage.getItem("userName");
         const response = await fetch(
             `${ ENDPOINT }/student/get-teacher-live-class/?id=${ item.live_class_id }`,
             {

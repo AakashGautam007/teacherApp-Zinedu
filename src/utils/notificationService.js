@@ -1,9 +1,10 @@
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ENDPOINT} from './config'
+import { ENDPOINT } from './config'
+import { store } from '../redux/store';
 
 
-export async function requestUserPermission(token) {
+export async function requestUserPermission(token, setAuthFields) {
   const authStatus = await messaging().requestPermission();
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -11,63 +12,65 @@ export async function requestUserPermission(token) {
 
   if (enabled) {
     console.log('Authorization status:', authStatus);
-    getFcmToken(token)
+    getFcmToken(token, setAuthFields)
   }
 }
 
-const postToken = async (tokenFcm,token) =>{
-  console.log('in post fcm Token:',token,' fcemtoke :',tokenFcm)
-  try{
+const postToken = async (tokenFcm, token) => {
+  console.log('in post fcm Token:', token, ' fcemtoke :', tokenFcm)
+  try {
     var formdata1 = new FormData();
-    formdata1.append('fcm_token',`${tokenFcm}`)
-    const response = await fetch(`${ENDPOINT}/users/add-fcm-token/`,{
-      headers:{
-        'Content-Type':'multipart/form-data',
-        'Accept':'application/json',
-        'Authorization':`Token ${token}`
+    formdata1.append('fcm_token', `${tokenFcm}`)
+    const response = await fetch(`${ENDPOINT}/users/add-fcm-token/`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+        'Authorization': `Token ${token}`
       },
-      method:'POST',
-      body:formdata1,
+      method: 'POST',
+      body: formdata1,
     })
     const D = await response.json()
     console.log(D)
-  }catch(err){
-    console.log(err,'post fcm err')
+  } catch (err) {
+    console.log(err, 'post fcm err')
   }
 }
 
-const getFcmToken = async(token) => {
-    let fcmToken = await AsyncStorage.getItem('fcmToken')
-    console.log(fcmToken," the old Token")
-    
-    if(!fcmToken){
-        try{
-            const fcmToken = await messaging().getToken()
-            if(fcmToken){
-                console.log(fcmToken," the new token")
-                await AsyncStorage.setItem('fcmToken',fcmToken)
-              postToken(fcmToken,token)
-            }
-        }catch(err){
-            console.log(err," error in fcmToken")
-        }
-    }else{
-      postToken(fcmToken,token)
+const getFcmToken = async (token, setAuthFields) => {
+  // let fcmToken = await AsyncStorage.getItem('fcmToken')
+  let fcmToken = store.getState().authReducer.fcmToken
+  console.log(fcmToken, " the old Token")
+
+  if (!fcmToken) {
+    try {
+      const fcmToken = await messaging().getToken()
+      if (fcmToken) {
+        console.log(fcmToken, " the new token")
+        // await AsyncStorage.setItem('fcmToken', fcmToken)
+        setAuthFields({ fcmToken })
+        postToken(fcmToken, token)
+      }
+    } catch (err) {
+      console.log(err, " error in fcmToken")
     }
+  } else {
+    postToken(fcmToken, token)
+  }
 }
 
-export const notificationListner = async() =>{
-  messaging().onNotificationOpenedApp(remoteMessage=>{
-    console.log('Notifications caused app to open from background state',remoteMessage.notification)
+export const notificationListner = async () => {
+  messaging().onNotificationOpenedApp(remoteMessage => {
+    console.log('Notifications caused app to open from background state', remoteMessage.notification)
   })
 
-  messaging().onMessage(async remoteMessage=>{
-    console.log('recieved in foreground',remoteMessage)
+  messaging().onMessage(async remoteMessage => {
+    console.log('recieved in foreground', remoteMessage)
   })
 
-  messaging().getInitialNotification().then(remoteMessage=>{
-    if(remoteMessage){
-      console.log('notifications caused app to open from quit state',remoteMessage.notification)
+  messaging().getInitialNotification().then(remoteMessage => {
+    if (remoteMessage) {
+      console.log('notifications caused app to open from quit state', remoteMessage.notification)
     }
   })
 }

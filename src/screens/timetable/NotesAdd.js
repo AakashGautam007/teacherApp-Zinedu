@@ -3,14 +3,16 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ENDPOINT,width} from '../../utils/config'
 import dateFormat from 'dateformat'
+import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 
 const NotesAdd = ({navigation}) => {
 
     const[data,setData]=useState([])
+    const { userToken, userName } = useAuthFields();
 
     const getSchedule = async () =>{
-        const userToken = await AsyncStorage.getItem('userToken')
-        const username = await AsyncStorage.getItem('userName')
+        // const userToken = await AsyncStorage.getItem('userToken')
+        // const username = await AsyncStorage.getItem('userName')
         const response = await fetch(`${ENDPOINT}/student/get-teacher-live-classes/?teacher_username=${username}`,{
             headers:{
                 'Accept':'application/json',

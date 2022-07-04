@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-    StyleSheet,
-    Text,
-    View,
-    TouchableOpacity,
-    SafeAreaView,
-    RefreshControl,
-    ActivityIndicator,
-    ScrollView,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
 import dateFormat from "dateformat";
-import { width, ENDPOINT, SMSENDPOINT } from "../../utils/config";
+import { useEffect, useState } from "react";
+import {
+    ActivityIndicator, SafeAreaView, ScrollView, StyleSheet,
+    Text, TouchableOpacity, View
+} from "react-native";
+import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
+import { ENDPOINT, SMSENDPOINT, width } from "../../utils/config";
 
 const PastLiveClassInfo = ({ navigation, route }) => {
     const { item } = route.params;
+    const { userToken } = useAuthFields();
     // const [itemm,setItemm]=useState(item)
     const [isLoading, setIsLoading] = useState(true);
     const [liveClass, setLiveClass] = useState([]);
@@ -23,8 +18,8 @@ const PastLiveClassInfo = ({ navigation, route }) => {
     const isFocused = useIsFocused();
 
     const getSchedule = async () => {
-        const userToken = await AsyncStorage.getItem("userToken");
-        const username = await AsyncStorage.getItem("userName");
+        // const userToken = await AsyncStorage.getItem("userToken");
+        // const username = await AsyncStorage.getItem("userName");
         const response = await fetch(
             `${ ENDPOINT }/student/get-teacher-live-class/?id=${ item.live_class_id }`,
             {

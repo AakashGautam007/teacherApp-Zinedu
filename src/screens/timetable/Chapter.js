@@ -4,9 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Picker from '@gregfrench/react-native-wheel-picker'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {ENDPOINT,width} from '../../utils/config'
+import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 
 const Chapter = ({navigation,route}) => {
     const{item}= route.params
+  const { userToken } = useAuthFields();
 
    
     const [chapter,setChapter]=useState([])
@@ -18,7 +20,7 @@ const Chapter = ({navigation,route}) => {
 
     const updateChapter = async (ch) =>{
 
-            const userToken = await AsyncStorage.getItem('userToken')
+            // const userToken = await AsyncStorage.getItem('userToken')
             const formdata= new FormData();
             formdata.append('chapter',ch)
             const response = await fetch(`${ENDPOINT}/student/update-scheduled-live-class/${item.id}/`,{
@@ -50,7 +52,7 @@ const Chapter = ({navigation,route}) => {
 
 
       const getChapters = async()=>{
-        const userToken = await AsyncStorage.getItem('userToken')
+        // const userToken = await AsyncStorage.getItem('userToken')
         console.log(userToken,item.chapter_assoc.subject_assoc)
         var requestOptions = {
           redirect: 'follow',

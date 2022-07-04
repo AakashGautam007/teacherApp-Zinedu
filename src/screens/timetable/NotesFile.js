@@ -6,12 +6,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import DocumentPicker from 'react-native-document-picker'
 import { Ionicons } from '@expo/vector-icons'; 
 import {ENDPOINT,width,height} from '../../utils/config'
+import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 
 
 
 const NotesFile = ({navigation,route}) => {
 
     const {item} = route.params;
+    const { userToken } = useAuthFields();
+
     const [itemm,setItemm]=useState(item)
     const [doc,setDoc]=useState(null)
     const [img,setImg]=useState(null)
@@ -92,7 +95,7 @@ const NotesFile = ({navigation,route}) => {
 
         console.log(notess,'thsi is notess')
 
-        const userToken = await AsyncStorage.getItem('userToken')
+        // const userToken = await AsyncStorage.getItem('userToken')
         console.log(item.id,item.chapter_assoc)
         let formdata = new FormData();
         // formdata.append('live_class_id',item.id)
@@ -138,7 +141,7 @@ const NotesFile = ({navigation,route}) => {
     const addNotessss = async () =>{
 
 
-        const userToken = await AsyncStorage.getItem('userToken')
+        // const userToken = await AsyncStorage.getItem('userToken')
     
         console.log(doc.uri,doc.name,doc.size )
         const newImageUri =  "file:///" + doc.uri.split("file:/").join("");
@@ -216,7 +219,7 @@ const NotesFile = ({navigation,route}) => {
 
         setIsUploading(true)
 
-        const userToken = await AsyncStorage.getItem('userToken')
+        // const userToken = await AsyncStorage.getItem('userToken')
         // console.log(item.id,item.chapter_assoc.id,txt,userToken)
         // console.log(img.uri,'img uriii')
         // var imageData = {
@@ -284,7 +287,7 @@ const NotesFile = ({navigation,route}) => {
     const deleteNotes = async () =>{
         setIsLoading(true)
         console.log(notess[0].notes_assoc.id)
-        const userToken = await AsyncStorage.getItem('userToken')
+        // const userToken = await AsyncStorage.getItem('userToken')
         let request_params = {
             method: 'DELETE',
             headers: {
@@ -316,7 +319,7 @@ const NotesFile = ({navigation,route}) => {
 
     const onNotes = async () =>{
         setIsLoading(true)
-        const userToken = await AsyncStorage.getItem('userToken')
+        // const userToken = await AsyncStorage.getItem('userToken')
         let request_params = {
             method: 'GET',
             redirect:'follow',

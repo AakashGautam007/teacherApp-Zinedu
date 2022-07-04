@@ -4,10 +4,12 @@ import * as DocumentPicker from 'expo-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons'; 
 import {ENDPOINT,width} from '../../utils/config'
+import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 
 const AddPpt = ({navigation,route}) => {
 
     const{studio,idd}= route.params
+    const { userToken } = useAuthFields();
 
     const [doc,setDoc]=useState(null)
     const [isLoading,setIsLoading]=useState(false)
@@ -27,7 +29,7 @@ const AddPpt = ({navigation,route}) => {
     const sendPpt = async () =>{
         setIsLoading(true)
         console.log('send called',idd,studio,doc)
-            const userToken = await AsyncStorage.getItem('userToken')
+            // const userToken = await AsyncStorage.getItem('userToken')
             const newImageUri =  "file:///" + doc.uri.split("file:/").join("");
             let formdata = new FormData();
             formdata.append('class_notes',{

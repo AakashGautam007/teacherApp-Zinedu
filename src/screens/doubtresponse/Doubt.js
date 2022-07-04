@@ -4,10 +4,12 @@ import { Camera } from 'expo-camera';
 import { ImageManipulator } from 'expo-image-crop'
 import { width, height, ENDPOINT} from '../../utils/config'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 
 const Doubt = ({navigation,route}) => {
 
     const{question,id}= route.params
+  const { userToken: token } = useAuthFields();
 
 
     const [image, setImage] = useState(null);
@@ -31,7 +33,7 @@ const updateD = async (img) => {
 
   console.log('updateDdddddd')
 
-  const token = await AsyncStorage.getItem('userToken')
+  // const token = await AsyncStorage.getItem('userToken')
 
     let formdata = new FormData();
     formdata.append('status','Solved')

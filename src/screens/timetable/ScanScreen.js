@@ -19,9 +19,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { width } from "../../utils/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ENDPOINT } from "../../utils/config";
+import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
 
 export default function ScanScreen({ navigation, route }) {
   const { item } = route.params;
+  const { userToken } = useAuthFields();
   const [foundUrl, setUrlFound] = useState("");
   const [isScanning, setIsScanning] = useState(true);
   const [isUpload, setIsUpload] = useState(false);
@@ -29,7 +31,7 @@ export default function ScanScreen({ navigation, route }) {
   const [finalMessage, setFinalMessage] = useState("");
   const getUpload = async () => {
     setIsUpload(true);
-    const userToken = await AsyncStorage.getItem("userToken");
+    // const userToken = await AsyncStorage.getItem("userToken");
     console.log(userToken, " token");
     console.log(item, "liveClassID");
     var formdata = new FormData();

@@ -24,6 +24,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 import { width, height, ENDPOINT } from "../../utils/config";
+import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
 
 var PickerItem = Picker.Item;
 
@@ -31,6 +32,8 @@ const SearchQuestion = ({ navigation, route }) => {
   //   const{question,image}= route.params
 
   const [isEnabled, setIsEnabled] = useState(false);
+  const { userToken } = useAuthFields();
+
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   // const [exrcNo, setExrcNo] = useState("");
@@ -99,7 +102,7 @@ const SearchQuestion = ({ navigation, route }) => {
   };
 
   const getLanguage = async () => {
-    const userToken = await AsyncStorage.getItem("userToken");
+    // const userToken = await AsyncStorage.getItem("userToken");
     console.log(userToken);
     var requestOptions = {
       redirect: "follow",
@@ -120,7 +123,7 @@ const SearchQuestion = ({ navigation, route }) => {
   };
 
   const getClass = async () => {
-    const userToken = await AsyncStorage.getItem("userToken");
+    // const userToken = await AsyncStorage.getItem("userToken");
     console.log(userToken);
     var requestOptions = {
       redirect: "follow",
@@ -141,7 +144,7 @@ const SearchQuestion = ({ navigation, route }) => {
   };
 
   const getSubject = async (id) => {
-    const userToken = await AsyncStorage.getItem("userToken");
+    // const userToken = await AsyncStorage.getItem("userToken");
     console.log(userToken);
     var requestOptions = {
       redirect: "follow",
@@ -162,7 +165,7 @@ const SearchQuestion = ({ navigation, route }) => {
   };
 
   const getBook = async (sub, class_id) => {
-    const userToken = await AsyncStorage.getItem("userToken");
+    // const userToken = await AsyncStorage.getItem("userToken");
     var requestOptions = {
       redirect: "follow",
       method: "GET",
@@ -182,7 +185,7 @@ const SearchQuestion = ({ navigation, route }) => {
   };
 
   const getChapter = async (sub) => {
-    const userToken = await AsyncStorage.getItem("userToken");
+    // const userToken = await AsyncStorage.getItem("userToken");
     console.log(userToken);
     var requestOptions = {
       redirect: "follow",
@@ -203,7 +206,7 @@ const SearchQuestion = ({ navigation, route }) => {
   };
 
   const getDifLvl = async () => {
-    const userToken = await AsyncStorage.getItem("userToken");
+    // const userToken = await AsyncStorage.getItem("userToken");
     console.log(userToken);
     var requestOptions = {
       redirect: "follow",
@@ -224,7 +227,7 @@ const SearchQuestion = ({ navigation, route }) => {
   };
 
   const getTags = async (ch) => {
-    const userToken = await AsyncStorage.getItem("userToken");
+    // const userToken = await AsyncStorage.getItem("userToken");
     console.log(userToken);
     var requestOptions = {
       redirect: "follow",
@@ -336,7 +339,7 @@ const SearchQuestion = ({ navigation, route }) => {
   const getQuestionBank = async (ch) => {
     setIsLoading(true)
     try {
-      const userToken = await AsyncStorage.getItem("userToken");
+      // const userToken = await AsyncStorage.getItem("userToken");
       console.log(userToken);
       var requestOptions = {
         redirect: "follow",

@@ -5,10 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ENDPOINT, width } from '../../utils/config'
 import dateFormat from 'dateformat'
 import ClassCard from '../common/ClassCard';
+import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 
 
 const PastLiveClasses = ({ navigation }) => {
 
+    const { userToken, userName } = useAuthFields();
     const [data, setData] = useState([])
     const [refreshing, setRefreshing] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
@@ -17,8 +19,8 @@ const PastLiveClasses = ({ navigation }) => {
     const getSchedule = async () => {
         console.log("inside GETTTtttttttttttttttttt");
 
-        const userToken = await AsyncStorage.getItem('userToken')
-        const username = await AsyncStorage.getItem('userName')
+        // const userToken = await AsyncStorage.getItem('userToken')
+        // const username = await AsyncStorage.getItem('userName')
         console.log(username, userToken);
         const response1 = await fetch(`${ ENDPOINT }/users/get-user-id-base-on-username/?username=${ username }`, {
             headers: {

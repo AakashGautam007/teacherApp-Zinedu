@@ -4,6 +4,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {width,height, ENDPOINT} from '../../utils/config'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BlurView } from 'expo-blur';
+import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 
 
 const WannaAnsOrNot = ({navigation,route}) => {
@@ -12,6 +13,8 @@ const WannaAnsOrNot = ({navigation,route}) => {
         pending_doubt_assoc,
         id
     }}= route.params
+
+  const { userToken: token } = useAuthFields();
 
     const [ans,setAns]=useState(null)
 
@@ -34,7 +37,7 @@ const WannaAnsOrNot = ({navigation,route}) => {
     
     const response = async (id,ans,value) =>{
         console.log(id,ans,value,'yes response')
-        const token = await AsyncStorage.getItem('userToken')
+        // const token = await AsyncStorage.getItem('userToken')
         let formdata = new FormData();
         formdata.append('status','unsolved')
         formdata.append('Response',ans)
@@ -81,7 +84,7 @@ const WannaAnsOrNot = ({navigation,route}) => {
 
     const getDoubt = async ()=>{
         // console.log(pending_doubt_assoc)
-        const token = await AsyncStorage.getItem('userToken')
+        // const token = await AsyncStorage.getItem('userToken')
         const response = await fetch(`${ENDPOINT}/student/get-pending-doubts/?pending_doubt_id=${pending_doubt_assoc}`,{
             method:'GET',
                 headers:{

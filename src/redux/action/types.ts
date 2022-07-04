@@ -1,0 +1,4 @@
+export const SET_TOKEN = 'SET_TOKEN'
+export const UPDATE_USER_DETAILS = 'UPDATE_USER_DETAILS'
+export const RESET_REDUX = 'RESET_REDUX'
+export const SET_FIELDS = 'SET_FIELDS'
