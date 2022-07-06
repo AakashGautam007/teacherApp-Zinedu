@@ -10,7 +10,7 @@ import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
 
 const PastLiveClasses = ({ navigation }) => {
 
-    const { userToken, userName } = useAuthFields();
+    const { userToken, userName: username } = useAuthFields();
     const [data, setData] = useState([])
     const [refreshing, setRefreshing] = useState(false)
     const [isLoading, setIsLoading] = useState(true)

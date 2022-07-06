@@ -204,7 +204,7 @@ const App = () => {
       {/* {... Your whole application should be here ... } */}
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
-          <StatusBar style="auto" hidden={true} />
+          {/* <StatusBar style="auto" hidden={true} /> */}
           {Boolean(userToken) ? (
             <DrawerNav />
           ) : (
