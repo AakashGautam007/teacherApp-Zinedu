@@ -9,7 +9,10 @@ const SubAccordianList = ({ item }) => {
     const { badge, subject } = item
     const navigation = useNavigation();
     return <TouchableOpacity style={styles.subHeader} onPress={() => {
-        navigation.navigate('SimilarQuestion', {
+        // navigation.navigate('SimilarQuestion', {
+        //     title: subject
+        // })
+        navigation.navigate('QuestionList', {
             title: subject
         })
     }}>

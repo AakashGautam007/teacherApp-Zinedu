@@ -1,6 +1,6 @@
 import { useIsFocused } from "@react-navigation/native";
 import dateFormat from "dateformat";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator, SafeAreaView, ScrollView, StyleSheet,
     Text, TouchableOpacity, View

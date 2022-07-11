@@ -39,28 +39,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 30,
         right: 20,
-    },
-    questionIdText: {
-        borderRadius: 10,
-        backgroundColor: '#E7E7E7',
-        paddingHorizontal: 10,
-        padding: 2,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    questionContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    questionBorderContainer: {
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: 'black',
-        padding: 10,
-        paddingVertical: 5,
-        marginTop: 20,
-        borderColor: '#BDBDBD',
     }
 })
 

@@ -6,23 +6,23 @@ import { width } from '../../../utils/config'
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        padding: 10,
         borderRadius: 8,
-        paddingBottom: 20,
+        paddingBottom: 10,
+        borderWidth: 1,
+        borderColor: '#BDBDBD',
+        borderRadius: 8,
         marginVertical: 10
     },
     heading: {
-        fontSize: 16
+        fontSize: 16,
+        marginBottom: 5
     },
     tag: {
         marginVertical: 10
     },
     borderContainer: {
-        borderWidth: 1,
-        borderColor: '#BDBDBD',
-        borderRadius: 8,
-        padding: 12,
-        paddingHorizontal: 20
+        padding: 5,
+        paddingHorizontal: 12
     },
     questionText: {
         color: '#5B5B5B',

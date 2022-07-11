@@ -4,20 +4,24 @@ import { STYLES } from '../../../appStyles';
 import { width } from '../../../utils/config'
 
 const styles = StyleSheet.create({
-    tagContainer: {
+    toBeVerfified: {
         alignItems: 'center',
         justifyContent: 'center',
-        alignSelf: 'flex-start',
-        borderRadius: 40,
+        borderRadius: 47,
+        backgroundColor: '#FFDEBF',
+        padding: 6,
+        maxWidth: '25%',
+    },
+    similarOption: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 47,
         backgroundColor: '#E8E8E8',
         padding: 6,
-        paddingHorizontal: 10,
-        marginRight: 5,
-        marginBottom: 5
+        maxWidth: '25%'
     },
     text: {
-        fontSize: 12,
-        color: '#6F6E6E',
+        fontSize: 10
     }
 })
 
