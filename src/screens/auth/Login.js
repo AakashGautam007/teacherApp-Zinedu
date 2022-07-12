@@ -9,6 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 // import { increment, decrement }  from '../../redux/reducer/counterSlice';
 import { setValues } from '../../redux/reducer/authReducer'
+import { typography } from '../../appStyles';
 
 const { width, height } = Dimensions.get('window');
 
@@ -70,17 +71,17 @@ export default function Login({ navigation }) {
         <SafeAreaView style={styles.container} >
 
             <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', width, padding: 25, paddingTop: width * 0.1 }} >
-                <Text style={{ fontSize: 30, color: '#2C3687', fontWeight: 'bold', padding: 2 }} >Login</Text>
-                <Text style={{ fontSize: 17, color: '#6A7180', padding: 2 }}>Login to continue</Text>
+                <Text style={{ fontSize: 30, color: '#2C3687', fontFamily: 'Montserrat-Bold', padding: 2 }} >Login</Text>
+                <Text style={{ fontSize: 16, color: '#6A7180', padding: 2, fontFamily: 'Montserrat-Regular' }}>Login to continue</Text>
             </View>
 
             <View>
-                <TextInput placeholder="Username" placeholderTextColor="#6A7180" style={styles.textinp}
+                <TextInput placeholder="Username" placeholderTextColor="#6A7180" style={[styles.textinp, {fontFamily: 'Montserrat-Regular'}]}
                     onChangeText={text => setUsername(text)}
                     value={username}
                     autoCapitalize='none'
                 />
-                <TextInput placeholder="Password" placeholderTextColor="#6A7180" style={styles.textinp}
+                <TextInput placeholder="Password" placeholderTextColor="#6A7180" style={[styles.textinp, {fontFamily: 'Montserrat-Regular'}]}
                     onChangeText={text => setPassword(text)}
                     value={password}
                     secureTextEntry={true}
@@ -88,14 +89,14 @@ export default function Login({ navigation }) {
                 />
                 <View style={{ justifyContent: 'flex-end', flexDirection: 'row', paddingVertical: 7 }} >
 
-                    <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')} ><Text style={{ color: '#2C3687', fontSize: 16 }} > Forgot Password?</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')} ><Text style={{ color: '#2C3687', fontSize: 16 , fontFamily: 'Montserrat-Medium'}} > Forgot Password?</Text></TouchableOpacity>
                 </View>
             </View>
 
             <View style={{ paddingTop: 40 }} >
 
                 <TouchableOpacity onPress={() => signin(username, password)} style={{ width: (width * 0.8), height: 48, justifyContent: 'center', borderRadius: 8, backgroundColor: '#EA7A26' }} >
-                    <Text style={{ color: 'white', textAlign: 'center', fontSize: 18, fontWeight: '600' }} >Login</Text>
+                    <Text style={{ color: 'white', textAlign: 'center', fontSize: 18, fontFamily: typography.montserrat_600 }} >Login</Text>
                 </TouchableOpacity>
 {/* 
                 <Text>{value} {range}</Text>
