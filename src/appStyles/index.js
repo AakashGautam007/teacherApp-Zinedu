@@ -52,17 +52,16 @@ export const fontSizeConstants = {
     RFValue34: 34,
 }
 
-export const fontFamilyConstants = {
-    ExtraLight: 'Roboto-Thin',
-    Light: 'Roboto-Light',
-    //=>roboto-regular is in small since uikitten themes uses this name for fonts
-    Regular: 'roboto-regular',
-    Normal: 'roboto-regular',
-    Medium: 'Roboto-Medium',
-    SemiBold: 'Roboto-Medium',
-    Bold: 'Roboto-Medium',
-    ExtraBold: 'Roboto-Bold',
-    UltraBold: 'Roboto-Black',
+export const typography = {
+    montserrat_900: "Montserrat-Black",
+    montserrat_800: "Montserrat-ExtraBold",
+    montserrat_700: "Montserrat-Bold",
+    montserrat_600: "Montserrat-SemiBold",
+    montserrat_500: "Montserrat-Medium",
+    montserrat_400: "Montserrat-Regular",
+    montserrat_300: "Montserrat-Light",
+    montserrat_200: "Montserrat-ExtraLight",
+    montserrat_100: "Montserrat-Thin",
 }
 
 const elevation = {
