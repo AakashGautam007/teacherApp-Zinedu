@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     cardText: {
         width: 65,
         textAlign: 'center',
-        fontSize: 14
+        fontSize: 14,
+        color: 'black'
     },
     cardInactiveText: {
         width: 65,

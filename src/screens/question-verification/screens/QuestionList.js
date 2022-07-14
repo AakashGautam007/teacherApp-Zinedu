@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FlatList, Modal, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { STYLES } from '../../../appStyles'
 import HeaderComponent from '../../../components/HeaderComponent'
@@ -24,6 +24,11 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckboxTag from '../components/CheckboxTag'
 import DropDownPicker from 'react-native-dropdown-picker'
+import { GET_CHAPTER_LIST, GET_QUESTION_DETAILS, GET_QUESTION_IDS, GET_TAG_LIST } from '../api'
+import { FEATURE_TYPE, QUESTION_TYPE } from '../utils'
+import MathJax from '../../../components/MathJax'
+import { width } from '../../../utils/config'
+import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 
 const response = [
     {
@@ -55,17 +60,39 @@ const response = [
 const QuestionList = (props) => {
     const { navigation, route } = props
     const prevScreenData = route?.params || {}
-    const { title } = prevScreenData
+    const { title, subjectId, chapterId } = prevScreenData
 
+    const [loading, setLoading] = useState(false);
     const [approveModal, setApproveModal] = useState(false);
     const [rejectModal, setRejectModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [tagModal, setTagModal] = useState(false);
     const [selectedDifficulty, setSelectedDifficulty] = useState(1);
-    const [selectedFeature, setSelectedFeature] = useState('');
-    const [selectedTags, setSelectedTags] = useState(['Conceptual', 'Analytical', 'Memory based', 'Memoir', 'Dummy']);
+    const [modalSelectedDifficulty, setModalSelectedDifficulty] = useState('');
+    const [selectedTags, setSelectedTags] = useState([]);
     const [searchKey, setSearchKey] = useState('');
     const [rejectReasonText, setRejectReasonText] = useState('');
+    const [questionIdsArray, setQuestionIdsArray] = useState([]);
+    const [questionId, setQuestionId] = useState('');
+    const [featureList, setFeatureList] = useState('');
+    const [selectedFeature, setSelectedFeature] = useState('');
+    const [modalSelectedFeature, setModalSelectedFeature] = useState('');
+    const [selectedModalFeature, setSelectedModalFeature] = useState('');
+    const [questionObject, setQuestionObject] = useState({});
+    const [options, setOptions] = useState([]);
+    // const [tagList, setTagList] = useState([]);
+
+    const [modalSelectedTags, setModalSelectedTags] = useState([]);
+    const [modalTagList, setModalTagList] = useState([]);
+    const [fullModalTagList, setFullModalTagList] = useState([]);
+    const [tempModalSelectedTags, setTempModalSelectedTags] = useState({});
+
+    const [chapterName, setChapterName] = useState('');
+    const [modalChapterName, setModalChapterName] = useState('');
+    const [selectedChapterId, setSelectedChapterId] = useState();
+    const [modalSelectedChapterId, setModalSelectedChapterId] = useState();
+    const [modalChapterList, setModalChapterList] = useState([]);
+    // console.log({ subjectId, chapterId })
 
     const scrollRef = useRef();
 
@@ -82,11 +109,113 @@ const QuestionList = (props) => {
         { label: 'Chapter 2', value: 'Chapter 2' }
     ]);
 
+    const getQuestionIds = async () => {
+        console.log({ subjectId, chapterId })
+        const response = await GET_QUESTION_IDS({ subjectId, chapterId })
+        // console.log('1', JSON.stringify(response))
+        const { L1, L2 } = response?.payload[0]
+        let questionIdsArray = [...L1, ...L2]
+        // console.log({ questionIds })
+        if (questionIdsArray?.length) {
+            getQuestionDetails({ questionId: questionIdsArray[0] })
+
+        }
+        setQuestionIdsArray(questionIdsArray)
+    }
+
+    const getChapterList = async () => {
+        const response = await GET_CHAPTER_LIST({ subjectId })
+        const { chapter_ids, chapter_names } = response?.payload[0]
+        // setting chapter array
+        let chapters = []
+        chapters = chapter_ids?.map((item, index) => {
+            return {
+                label: chapter_names[index],
+                value: item,
+            }
+        })
+        setModalChapterList(chapters)
+    }
+
+    const getTagList = async ({ chapterId }) => {
+        const response = await GET_TAG_LIST({ chapterId })
+        // console.log('getTagList', JSON.stringify(response))
+        const { tag_ids, tag_names } = response?.payload[0]
+        // setting chapter array
+        let tags = []
+        tags = tag_ids?.map((item, index) => {
+            return {
+                name: tag_names[index],
+                id: item,
+            }
+        })
+        setModalTagList(tags)
+        setFullModalTagList(tags)
+    }
+
+    const getQuestionDetails = async ({ questionId }) => {
+        // console.log({ questionId })
+
+        const response = await GET_QUESTION_DETAILS({ questionId })
+        // console.log('1', JSON.stringify(response))
+        const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id } = response?.payload[0]
+        setQuestionId(questionId)
+        setQuestionObject(response?.payload[0])
+        setSelectedDifficulty(difficulty_level)
+        setModalSelectedDifficulty(difficulty_level)
+        setChapterName(chapter_name)
+        setModalChapterName(chapter_name)
+        setSelectedChapterId(chapter_assoc_id)
+        setModalSelectedChapterId(chapter_assoc_id)
+        // set options to generate HTML content
+        let options = []
+        option1 && options.push({ html: option1, selected: is_option1_correct })
+        option2 && options.push({ html: option2, selected: is_option2_correct })
+        option3 && options.push({ html: option3, selected: is_option3_correct })
+        option4 && options.push({ html: option4, selected: is_option4_correct })
+        setOptions(options)
+
+        // setting tags array
+        let tags = []
+        tags = tag_ids?.map((item, index) => {
+            return {
+                id: item,
+                name: tag_names[index]
+            }
+        })
+        setSelectedTags(tags)
+        setModalSelectedTags(tags)
+
+        // setting feature type
+        const { feature_types } = response?.payload[1]
+        // console.log('feature types', Object.values(feature_types))
+        setFeatureList(Object.values(feature_types))
+        setSelectedFeature(FEATURE_TYPE.get(feature_type == 0 ? '1' : feature_type))
+        setModalSelectedFeature(FEATURE_TYPE.get(feature_type == 0 ? '1' : feature_type))
+    }
+
+    useEffect(() => {
+        getQuestionIds()
+        getChapterList()
+        // let a = new Array(FEATURE_TYPE.keys())
+        // console.log('useeffect', [FEATURE_TYPE.get('2')])
+
+        // for (const x of FEATURE_TYPE.values()) {
+        //     console.log('useeffect', x)
+        // }
+    }, [])
+
+    useEffect(() => {
+        if (selectedChapterId) {
+            getTagList({ chapterId: selectedChapterId })
+        }
+    }, [selectedChapterId])
 
     return (
         <SafeAreaView style={STYLES.safeAreaContainer}>
+            <ActivityIndicatorComponent animating={loading} />
             <HeaderComponent
-                text={title}
+                text={questionObject?.chapter_name || title}
                 onPress={navigation.goBack}
             />
 
@@ -126,7 +255,9 @@ const QuestionList = (props) => {
                 <View style={styles.editModalParentContainer}>
                     <View style={styles.editModalContainer}>
                         <Text style={[styles.subHeading, { marginTop: 30, marginBottom: 0, fontSize: 16, marginLeft: 20, fontWeight: '600' }]}>Edit Question Properties</Text>
-                        <ScrollView contentContainerStyle={{ width: '100%', paddingHorizontal: 20 }}>
+                        <ScrollView
+                            nestedScrollEnabled={true}
+                            contentContainerStyle={{ width: '100%', paddingHorizontal: 20 }}>
 
                             <View style={[styles.subHeadingContainer, { marginTop: 10 }]}>
                                 <Text style={styles.subHeading}>Question Type</Text>
@@ -153,13 +284,18 @@ const QuestionList = (props) => {
 
                                 <DropDownPicker
                                     open={open}
-                                    value={value}
-                                    items={items}
+                                    value={modalSelectedChapterId}
+                                    items={modalChapterList}
                                     setOpen={setOpen}
-                                    setValue={setValue}
-                                    setItems={setItems}
+                                    setValue={(value) => {
+                                        (value != modalSelectedChapterId) && setModalSelectedChapterId(value)
+                                    }}
+                                    setItems={setModalChapterList}
                                     searchable={true}
                                     searchPlaceholder={'Search Chapter'}
+                                    flatListProps={{
+                                        nestedScrollEnabled: true
+                                    }}
                                 />
 
                             </View>
@@ -169,24 +305,33 @@ const QuestionList = (props) => {
                             <View style={styles.subHeadingContainer}>
                                 <Title text={'Tags'} mandatory={true} />
 
-                                <TouchableOpacity style={styles.selectedTagContainer} onPress={() => {
+                                <TouchableOpacity style={[styles.selectedTagContainer, modalSelectedTags.length == 0 ? { alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10 } : {}]} onPress={() => {
+                                    let temp = {}
+                                    modalSelectedTags.map(item => {
+                                        temp[item?.id] = item?.name
+                                    })
+                                    setTempModalSelectedTags({ ...temp })
+                                    setModalTagList(fullModalTagList)
+                                    setSearchKey('')
                                     setEditModal(false)
                                     setTimeout(() => {
                                         setTagModal(true)
                                     }, 500)
                                 }}>
-                                    <FlatList
-                                        data={selectedTags}
+                                    {modalSelectedTags.length > 0 ? <FlatList
+                                        data={modalSelectedTags}
                                         contentContainerStyle={styles.flatlistContentContainer}
                                         renderItem={({ index, item }) => {
                                             return <SelectedTag
-                                                text={item}
+                                                text={item?.name}
                                                 index={index}
-                                                selectedTags={selectedTags}
-                                                setSelectedTags={setSelectedTags}
+                                                selectedTags={modalSelectedTags}
+                                                setSelectedTags={setModalSelectedTags}
                                             />
                                         }}
                                     />
+                                        :
+                                        <Text style={styles.subHeadingGray}>No Tags Selected</Text>}
                                     <Fontisto name='angle-right' size={10} color={'#343434'} />
                                 </TouchableOpacity>
 
@@ -203,8 +348,8 @@ const QuestionList = (props) => {
                                         return <DifficultyLevelModal
                                             text={item}
                                             index={index}
-                                            selectedDifficulty={selectedDifficulty}
-                                            setSelectedDifficulty={setSelectedDifficulty}
+                                            selectedDifficulty={modalSelectedDifficulty}
+                                            setSelectedDifficulty={setModalSelectedDifficulty}
                                         />
                                     }}
                                 />
@@ -215,13 +360,13 @@ const QuestionList = (props) => {
                             <View style={styles.subHeadingContainer}>
                                 <Title text={'Feature Type'} mandatory={true} />
                                 <FlatList
-                                    data={['Conceptual', 'Analytical', 'Memory based', 'Memoir', 'Dummy']}
+                                    data={featureList}
                                     contentContainerStyle={styles.flatlistContentContainer}
                                     renderItem={({ index, item }) => {
                                         return <FeatureTag
                                             text={item}
-                                            selectedDifficulty={selectedFeature}
-                                            setSelectedDifficulty={setSelectedFeature}
+                                            selectedFeature={modalSelectedFeature}
+                                            setSelectedFeature={setModalSelectedFeature}
                                         />
                                     }}
                                 />
@@ -230,7 +375,14 @@ const QuestionList = (props) => {
                             <InfoText text={'You have changed the feature type'} />
                         </ScrollView>
 
-                        <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 20, width: '22%', marginVertical: 10 }]} onPress={() => setEditModal(false)}>
+                        <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 20, width: '22%', marginVertical: 10 }]} onPress={() => {
+                            setEditModal(false)
+                            setSelectedDifficulty(modalSelectedDifficulty)
+                            setSelectedFeature(modalSelectedFeature)
+                            setSelectedTags(modalSelectedTags)
+                            setChapterName(modalChapterList.find(item => item?.value == modalSelectedChapterId)?.label)
+                            setSelectedChapterId(modalSelectedChapterId)
+                        }}>
                             <Text style={[styles.approveText, { color: 'white' }]}>Save</Text>
                         </TouchableOpacity>
 
@@ -262,7 +414,11 @@ const QuestionList = (props) => {
                             <Feather name='search' size={20} color='#858585' />
                             <TextInput
                                 value={searchKey}
-                                onChangeText={setSearchKey}
+                                onChangeText={value => {
+                                    let temp = fullModalTagList.filter(item => item?.name?.includes(value))
+                                    setModalTagList([...temp])
+                                    setSearchKey(value)
+                                }}
                                 style={styles.textInput}
                                 placeholder={'Search tags here'}
                                 placeholderTextColor={'#858585'}
@@ -272,11 +428,21 @@ const QuestionList = (props) => {
                         <ScrollView contentContainerStyle={{ width: '100%', paddingHorizontal: 20 }}>
 
                             <FlatList
-                                data={['Sexual reproduction in flowering plants', '1st Law of motion', 'Sexual reproduction in flowering plants', '2nd Law of motion', 'Tag 5', 'Tag 6']}
+                                data={modalTagList}
                                 renderItem={({ item, index }) => {
                                     return <CheckboxTag
-                                        text={item}
+                                        item={item}
                                         index={index}
+                                        selectedItemsObject={tempModalSelectedTags}
+                                        onPress={(isChecked) => {
+                                            let temp = { ...tempModalSelectedTags }
+                                            if (!temp[item?.id]) {
+                                                temp[item?.id] = item?.name
+                                            } else {
+                                                delete temp[item?.id]
+                                            }
+                                            setTempModalSelectedTags({ ...temp })
+                                        }}
                                     />
                                 }}
                             />
@@ -284,6 +450,19 @@ const QuestionList = (props) => {
                         </ScrollView>
 
                         <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 20, width: '22%', marginVertical: 10 }]} onPress={() => {
+                            let keys = Object.keys(tempModalSelectedTags)
+                            let tempList = []
+                            if (keys.length) {
+                                let values = Object.values(tempModalSelectedTags)
+                                tempList = keys.map((item, index) => {
+                                    return {
+                                        id: item,
+                                        name: values[index]
+                                    }
+                                })
+                            }
+                            setModalSelectedTags([...tempList])
+                            setTempModalSelectedTags({})
                             setTagModal(false)
                             setTimeout(() => {
                                 setEditModal(true)
@@ -353,15 +532,23 @@ const QuestionList = (props) => {
                                 <Text style={[styles.heading]}>Question</Text>
                             </View>
                             <View style={styles.questionIdTextContainer}>
-                                <Text style={styles.questionIdText}>QID 025600</Text>
+                                <Text style={styles.questionIdText}>QID {questionId}</Text>
                             </View>
                         </View>
 
-                        <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text>
+                        {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+
+                        {questionObject?.question && <View style={{
+                            width: width * 0.75
+                        }}>
+                            <MathJax
+                                content={questionObject?.question}
+                            />
+                        </View>}
 
                         <FlatList
                             style={{ marginTop: 10 }}
-                            data={response}
+                            data={options}
                             renderItem={({ item, index }) => {
                                 return <QuestionListOption
                                     item={item}
@@ -377,7 +564,14 @@ const QuestionList = (props) => {
                             <Text style={[styles.heading]}>Solution</Text>
                         </View>
 
-                        <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text>
+                        {questionObject?.solution && <View style={{
+                            width: width * 0.75
+                        }}>
+                            <MathJax
+                                content={questionObject?.solution}
+                            />
+                        </View>}
+                        {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
                     </View>
 
                     <View style={styles.container}>
@@ -407,29 +601,30 @@ const QuestionList = (props) => {
 
                         <View style={styles.subHeadingContainer}>
                             <Text style={styles.subHeading}>Question Type</Text>
-                            <Text style={styles.subHeadingGray}>Single correct</Text>
+                            <Text style={styles.subHeadingGray}>{QUESTION_TYPE.get(questionObject?.question_type) || ''}</Text>
                         </View>
 
                         <View style={styles.subHeadingContainer}>
                             <Text style={styles.subHeading}>Subject Name</Text>
-                            <Text style={styles.subHeadingGray}>Maths</Text>
+                            <Text style={styles.subHeadingGray}>{questionObject?.subject_name || ''}</Text>
                         </View>
 
                         <View style={styles.subHeadingContainer}>
                             <Text style={styles.subHeading}>Chapter Name</Text>
-                            <Text style={styles.subHeadingGray}>Laws of motion</Text>
+                            <Text style={styles.subHeadingGray}>{chapterName || ''}</Text>
                         </View>
 
 
                         <View style={styles.subHeadingContainer}>
                             <Text style={styles.subHeading}>Tags</Text>
-                            <FlatList
-                                data={['Newtons Laws', 'Algorithms', 'Newtons Laws', 'Algorithms']}
+                            {selectedTags?.length > 0 ? <FlatList
+                                data={selectedTags}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
                                 renderItem={({ index, item }) => {
-                                    return <Tag text={item} />
+                                    return <Tag text={item?.name} />
                                 }}
-                            />
+                            /> :
+                                <Text style={styles.subHeadingGray}>No Tags Selected</Text>}
                         </View>
 
 
@@ -442,6 +637,7 @@ const QuestionList = (props) => {
                                     return <DifficultyLevel
                                         text={item}
                                         index={index}
+                                        selectedLevel={selectedDifficulty}
                                     />
                                 }}
                             />
@@ -449,13 +645,14 @@ const QuestionList = (props) => {
 
                         <View style={styles.subHeadingContainer}>
                             <Text style={styles.subHeading}>Feature Type</Text>
-                            <FlatList
-                                data={['Analytical']}
+                            <Tag text={selectedFeature} />
+                            {/* <FlatList
+                                data={FEATURE_TYPE.get(questionObject?.feature_type) ? [FEATURE_TYPE.get(questionObject?.feature_type)] : ['Analytical']}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
                                 renderItem={({ index, item }) => {
                                     return <Tag text={item} />
                                 }}
-                            />
+                            /> */}
                         </View>
 
                     </View>

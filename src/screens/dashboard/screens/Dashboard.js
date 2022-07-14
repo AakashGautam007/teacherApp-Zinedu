@@ -5,11 +5,31 @@ import { width, postAnalytics } from '../../../utils/config'
 import styles from '../styles'
 import { STYLES } from '../../../appStyles'
 import { Badge } from '../components/Badge'
+import { useAuthFields } from '../../../AppUtils/hooks/useAuthFields'
+import { GET_REVIEW_QUESTION_COUNT, GET_VISIBILITY_CHECK_COUNT } from '../api'
 
 const Dashboard = ({ navigation }) => {
 
     const { logout } = useContext(AuthContext);
+    const [reviewCount, setReviewCount] = useState(0);
+    const [visibilityCheckCount, setVisibilityCheckCount] = useState(0);
 
+    const getReviewQuestionCount = async () => {
+        const response = await GET_REVIEW_QUESTION_COUNT()
+        // console.log('1', JSON.stringify(response))
+        setReviewCount(response?.payload[0]?.num_pending_questions)
+    }
+
+    const getVisibilityCheckCount = async () => {
+        const response = await GET_VISIBILITY_CHECK_COUNT()
+        // console.log('2', JSON.stringify(response))
+        setVisibilityCheckCount(response?.payload[0]?.num_pending_questions)
+    }
+
+    useEffect(() => {
+        getReviewQuestionCount()
+        getVisibilityCheckCount()
+    }, [])
 
     useEffect(() => {
         postAnalytics('teacher-dashboard', logout)
@@ -85,17 +105,18 @@ const Dashboard = ({ navigation }) => {
                         <View style={styles.questionVerificationContainer}>
                             <TouchableOpacity
                                 // onPress={() => navigation.navigate('SearchQuestionStack')}
+                                disabled={reviewCount == 0}
                                 onPress={() => navigation.navigate('Filter')}
-                                style={styles.questionVerificationActiveCard}>
+                                style={reviewCount == 0 ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard}>
                                 <Badge
-                                    count={'36'}
+                                    count={reviewCount}
                                     viewStyle={{
                                         position: 'absolute',
                                         top: -8,
                                         right: -10,
                                     }}
                                 />
-                                <Text style={styles.cardText}>
+                                <Text style={reviewCount == 0 ? styles.cardInactiveText : styles.cardText}>
                                     Review Question
                                 </Text>
                             </TouchableOpacity>
@@ -103,13 +124,18 @@ const Dashboard = ({ navigation }) => {
 
                         <View style={styles.questionVerificationContainer}>
                             <TouchableOpacity
-                                // disabled={true}
+                                disabled={visibilityCheckCount == 0}
                                 onPress={() => navigation.navigate('CheckQuestion')}
-                                style={styles.questionVerificationInactiveCard} >
-                                {/* <Badge
-                                    count={'36'}
-                                /> */}
-                                <Text style={styles.cardInactiveText}>
+                                style={visibilityCheckCount == 0 ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard} >
+                                <Badge
+                                    count={visibilityCheckCount}
+                                    viewStyle={{
+                                        position: 'absolute',
+                                        top: -8,
+                                        right: -10,
+                                    }}
+                                />
+                                <Text style={visibilityCheckCount == 0 ? styles.cardInactiveText : styles.cardText}>
                                     Visibility Check
                                 </Text>
                             </TouchableOpacity>

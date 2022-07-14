@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         color: '#535353',
         fontSize: 16,
-        fontWeight: '600'
+        fontWeight: '600',
+        maxWidth: '65%'
     },
     subHeaderBadgeContainer: {
         flexDirection: 'row',
@@ -56,7 +57,8 @@ const styles = StyleSheet.create({
         marginRight: 20
     },
     subHeaderBadgeText: {
-        color: 'black', fontSize: 16
+        color: 'black',
+        fontSize: 16
     }
 })
 

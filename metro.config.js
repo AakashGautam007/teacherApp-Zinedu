@@ -28,6 +28,8 @@ module.exports = (async () => {
 
             sourceExts: [...sourceExts, "svg"],
 
+            // sourceExts: ['cjs', 'js', 'ts', 'jsx', 'tsx', 'svg', 'png', 'jpg', 'jpeg', 'native', 'android.cjs' |.native.cjs |.cjs |.android.js |.native.js |.js |.android.ts |.native.ts |.ts |.android.jsx |.native.jsx |.jsx |.android.tsx |.native.tsx |.tsx |.android.json |.native.json |.json],
+
         },
 
     };

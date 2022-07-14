@@ -39,6 +39,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 30,
         right: 20,
+    },
+    infoContainer: {
+        flexDirection: 'row',
+        marginTop: 12
     }
 })
 

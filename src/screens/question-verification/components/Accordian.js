@@ -6,15 +6,14 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import SubAccordianList from './SubAccordianList'
 
 const Accordian = ({ item }) => {
-    const { badge, subjects } = item
-    const classes = item?.class
+    const { id, name, total, chapters } = item
     const [showList, setShowList] = useState(false);
     return <View style={styles.cardContainer}>
         <TouchableOpacity style={styles.header} onPress={() => setShowList(!showList)}>
-            <Text style={styles.headerText}>{classes}</Text>
+            <Text style={styles.headerText}>{name}</Text>
             <View style={styles.badgeContainer}>
                 <Badge
-                    count={badge}
+                    count={total}
                     viewStyle={styles.badge}
                     textStyle={styles.badgeText}
                 />
@@ -25,10 +24,12 @@ const Accordian = ({ item }) => {
         </TouchableOpacity>
 
         {showList && <FlatList
-            data={subjects}
+            keyExtractor={(item, index) => item?._id}
+            data={chapters}
             renderItem={({ item, index }) => {
                 return <SubAccordianList
                     item={item}
+                    subjectId={id}
                 />
             }}
         />}

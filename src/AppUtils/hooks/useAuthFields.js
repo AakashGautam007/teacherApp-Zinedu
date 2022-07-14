@@ -1,19 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthValues, resetAuthValues } from "../../redux/reducer/authReducer";
 
-interface AuthFieldsHooks {
-    userName: string;
-    userToken: string;
-    isLoading: boolean;
-    fcmToken: string;
-}
+// interface AuthFieldsHooks {
+//     userName: string;
+//     userToken: string;
+//     isLoading: boolean;
+//     fcmToken: string;
+// }
 
 // Custom hooks to get tokens and auth fields
 export const useAuthFields = () => {
-    const { userName, userToken, isLoading, fcmToken } = useSelector((state: any) => state['authReducer']);
+    const { userName, userToken, isLoading, fcmToken } = useSelector((state) => state['authReducer']);
     const dispatch = useDispatch()
 
-    const setAuthFields = (value: AuthFieldsHooks) => {
+    const setAuthFields = (value) => {
         dispatch(setAuthValues({
             ...value
         }))

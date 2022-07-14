@@ -4,7 +4,7 @@ import { store } from "../redux/store";
 
 export const { width, height } = Dimensions.get("window");
 
-export const ENDPOINT = `https://ap.zinedu.com`;
+export const ENDPOINT = `https://apdev.myclassroom.digital`;
 export const SMSENDPOINT = `https://sms.zinedu.com`; //production
 // export const SMSENDPOINT = `https://smss.zinedu.com`//staging
 // export const SMSENDPOINT = `https://smsd.zinedu.com`//qa

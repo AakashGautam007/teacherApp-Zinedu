@@ -5,21 +5,24 @@ import styles from '../styles/accordian'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import { useNavigation } from '@react-navigation/native'
 
-const SubAccordianList = ({ item }) => {
-    const { badge, subject } = item
+const SubAccordianList = ({ item, subjectId }) => {
+    const { id: chapterId, name, total } = item
     const navigation = useNavigation();
     return <TouchableOpacity style={styles.subHeader} onPress={() => {
         // navigation.navigate('SimilarQuestion', {
         //     title: subject
         // })
+        // console.log({ chapterId, subjectId, name })
         navigation.navigate('QuestionList', {
-            title: subject
+            title: name,
+            subjectId,
+            chapterId
         })
     }}>
-        <Text style={styles.subHeaderText}>{subject}</Text>
+        <Text style={styles.subHeaderText} numberOfLines={1}>{name}121212</Text>
         <View style={styles.subHeaderBadgeContainer}>
             <Badge
-                count={badge}
+                count={total}
                 viewStyle={[styles.badge, { backgroundColor: '#F2F6FF' }]}
                 textStyle={styles.subHeaderBadgeText}
             />
