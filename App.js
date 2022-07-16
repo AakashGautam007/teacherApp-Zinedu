@@ -20,6 +20,7 @@ import { AuthContext } from "./src/utils/context";
 import {
   requestUserPermission
 } from "./src/utils/notificationService";
+import NavigationService from "./src/AppUtils/NavigationService";
 
 LogBox.ignoreAllLogs();
 
@@ -203,7 +204,8 @@ const App = () => {
     >
       {/* {... Your whole application should be here ... } */}
       <AuthContext.Provider value={authContext}>
-        <NavigationContainer>
+        <NavigationContainer
+          ref={navigatorRef => NavigationService.setTopLevelNavigator(navigatorRef)}>
           {/* <StatusBar style="auto" hidden={true} /> */}
           {Boolean(userToken) ? (
             <DrawerNav />

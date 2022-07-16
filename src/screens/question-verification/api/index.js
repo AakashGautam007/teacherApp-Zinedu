@@ -21,6 +21,16 @@ export const GET_QUESTION_IDS = async ({ subjectId = '', chapterId = '' }) => {
     }
 };
 
+// Get L3 question ids
+export const GET_L3_QUESTION_IDS = async () => {
+    try {
+        let url = ENDPOINT + `/test/fetch-faculty-pending-questions-list-rendering`
+        return await doFetch(url, 'GET');
+    } catch (e) {
+        console.log(e)
+    }
+};
+
 // Get question details
 export const GET_QUESTION_DETAILS = async ({ questionId = '' }) => {
     try {
@@ -46,6 +56,36 @@ export const GET_TAG_LIST = async ({ chapterId = '' }) => {
     try {
         let url = ENDPOINT + `/test/fetch-tags-in-chapter?chapter_id=${chapterId}`
         return await doFetch(url, 'GET');
+    } catch (e) {
+        console.log(e)
+    }
+};
+
+// Approve question
+export const APPROVE_QUESTION = async ({ params }) => {
+    try {
+        let url = ENDPOINT + `/test/update-question-verification-details/`
+        return await doFetch(url, 'POST', params);
+    } catch (e) {
+        console.log(e)
+    }
+};
+
+// Upload files
+export const UPLOAD_FILES = async ({ params }) => {
+    try {
+        let url = ENDPOINT + `/test/upload-file-to-s3/`
+        return await doFetch(url, 'POST', params, true);
+    } catch (e) {
+        console.log(e)
+    }
+};
+
+// Reject question
+export const REJECT_QUESTION = async ({ params }) => {
+    try {
+        let url = ENDPOINT + `/test/update-question-verification-details/`
+        return await doFetch(url, 'POST', params);
     } catch (e) {
         console.log(e)
     }

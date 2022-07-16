@@ -28,8 +28,8 @@ export default function Login({ navigation }) {
     const { signin } = useContext(AuthContext);
 
 
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('5454555555')
+    const [password, setPassword] = useState('checkA@BC@2021')
 
     const { value, range } = useSelector((state) => state.counter)
     const dispatch = useDispatch()

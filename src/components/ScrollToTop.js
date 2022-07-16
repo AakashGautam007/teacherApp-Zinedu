@@ -3,19 +3,18 @@ import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity } from 'r
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import { STYLES } from '../appStyles'
 
+export const scrollToTop = (scrollRef) => {
+    scrollRef && scrollRef.current?.scrollTo({
+        y: 0,
+        animated: true,
+    });
+};
+
 const ScrollToTop = ({ onPress, scrollRef, style }) => {
-
-    const onScrollToTop = () => {
-        scrollRef && scrollRef.current?.scrollTo({
-            y: 0,
-            animated: true,
-        });
-    };
-
     return <TouchableOpacity
         style={[STYLES.elevation, styles.scrollToTop, style]}
         onPress={() => {
-            onPress ? onPress() : onScrollToTop()
+            onPress ? onPress() : scrollToTop(scrollRef)
         }}
     >
         <Fontisto

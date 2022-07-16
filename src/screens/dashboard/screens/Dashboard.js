@@ -124,7 +124,7 @@ const Dashboard = ({ navigation }) => {
 
                         <View style={styles.questionVerificationContainer}>
                             <TouchableOpacity
-                                disabled={visibilityCheckCount == 0}
+                                // disabled={visibilityCheckCount == 0}
                                 onPress={() => navigation.navigate('CheckQuestion')}
                                 style={visibilityCheckCount == 0 ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard} >
                                 <Badge

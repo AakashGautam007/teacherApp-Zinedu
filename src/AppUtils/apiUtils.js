@@ -2,6 +2,7 @@
 import { Platform } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { store } from '../redux/store'
+import { CHECK_TOKEN } from './commonUtils';
 // import { handleCookies, IsIOS } from './CommonUtils';
 // import { CHECK_TOKEN } from './Logout';
 let show = false
@@ -88,10 +89,13 @@ export const doFetch = async (url, type, data = null, isFile = false, tempToken 
         ...signalData
     })
         // .then(handleCookies)
-        .then((res) => res.json())
+        .then((res) => {
+            // console.log('response then', res)
+            return res.json()
+        })
         .then((responseJson) => {
             console.log('response from api', responseJson)
-            // CHECK_TOKEN(responseJson)
+            CHECK_TOKEN(responseJson)
             return responseJson
         })
         .catch((err) => console.log(err));

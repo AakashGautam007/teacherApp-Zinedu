@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
     parentContainer: {
         // flex: 1,
         backgroundColor: '#E5E5E5',
-        paddingHorizontal: 20,
-        paddingBottom: 40
+        // paddingHorizontal: 20,
+        // paddingBottom: 40
     },
     container: {
         backgroundColor: 'white',
@@ -65,7 +65,44 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         marginTop: 20,
         borderColor: '#BDBDBD',
-    }
+    },
+    modalParentContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.2)'
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        margin: 30,
+        borderRadius: 8
+    },
+    modalText: {
+        fontSize: 18,
+        textAlign: 'center'
+    },
+    approveRejectContainer: {
+        flexDirection: 'row',
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        marginTop: 10
+    },
+    approveButton: {
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#2B3789',
+        paddingHorizontal: 20,
+        padding: 6,
+        alignSelf: 'flex-start'
+    },
+    approveText: {
+        color: '#2B3789',
+        fontSize: 14,
+    },
 })
 
 export default styles;

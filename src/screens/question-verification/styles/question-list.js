@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     flatlistContentContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     selectedTagContainer: {
         flexDirection: 'row',
@@ -216,11 +216,14 @@ const styles = StyleSheet.create({
         padding: 5,
         marginTop: 10,
         borderRadius: 2,
-        width: '100%'
+        maxWidth: '50%',
+        marginLeft: 10,
+        alignSelf: 'flex-start'
     },
     screenshotText: {
         color: '#606060',
-        fontSize: 14
+        fontSize: 14,
+        maxWidth: '70%',
     }
 })
 

@@ -186,7 +186,7 @@ const wrapMathjax = (props) => {
 const MathJax = (props) => {
   // console.log('MathJax',{props})
   const html = wrapMathjax(props);
-  console.log({ html })
+  // console.log({ html })
   return (
       <View
         style={{

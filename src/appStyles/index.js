@@ -7,6 +7,19 @@ export const AppColors = {
     BACKGROUND_COLOR: '#E5E5E5',
 }
 
+export const fontFamilyConstants = {
+    ExtraLight: 'Roboto-Thin',
+    Light: 'Roboto-Light',
+    //=>roboto-regular is in small since uikitten themes uses this name for fonts
+    Regular: 'roboto-regular',
+    Normal: 'roboto-regular',
+    Medium: 'Roboto-Medium',
+    SemiBold: 'Roboto-Medium',
+    Bold: 'Roboto-Medium',
+    ExtraBold: 'Roboto-Bold',
+    UltraBold: 'Roboto-Black',
+}
+
 export const fontSizeConstants = {
     // RFValue10: RFValue(10),
     // // RFValue11: RFValue(10, HEIGHT),

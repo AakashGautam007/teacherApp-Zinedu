@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FlatList, Modal, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { STYLES } from '../../../appStyles'
 import HeaderComponent from '../../../components/HeaderComponent'
-import ScrollToTop from '../../../components/ScrollToTop'
+import ScrollToTop, { scrollToTop } from '../../../components/ScrollToTop'
 import CheckQuestionOption from '../components/CheckQuestionOption'
 import QuestionListOption from '../components/QuestionListOption'
 import styles from '../styles/question-list'
@@ -24,11 +24,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckboxTag from '../components/CheckboxTag'
 import DropDownPicker from 'react-native-dropdown-picker'
-import { GET_CHAPTER_LIST, GET_QUESTION_DETAILS, GET_QUESTION_IDS, GET_TAG_LIST } from '../api'
-import { FEATURE_TYPE, QUESTION_TYPE } from '../utils'
+import { APPROVE_QUESTION, GET_CHAPTER_LIST, GET_QUESTION_DETAILS, GET_QUESTION_IDS, GET_TAG_LIST, REJECT_QUESTION, UPLOAD_FILES } from '../api'
+import { FEATURE_TYPE, getCurrentLevel, getKeyByValueFromMap, QUESTION_TYPE } from '../utils'
 import MathJax from '../../../components/MathJax'
 import { width } from '../../../utils/config'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
+import { AttachmentButton } from '../components/AttachmentComponents'
+import DocumentPicker from 'react-native-document-picker'
+import { fileToApiFormat } from '../../../AppUtils/commonUtils'
 
 const response = [
     {
@@ -63,6 +66,9 @@ const QuestionList = (props) => {
     const { title, subjectId, chapterId } = prevScreenData
 
     const [loading, setLoading] = useState(false);
+    const [L1, setL1] = useState([]);
+    const [L2, setL2] = useState([]);
+    const [attachmentFiles, setAttachmentFiles] = useState([]);
     const [approveModal, setApproveModal] = useState(false);
     const [rejectModal, setRejectModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
@@ -73,13 +79,16 @@ const QuestionList = (props) => {
     const [searchKey, setSearchKey] = useState('');
     const [rejectReasonText, setRejectReasonText] = useState('');
     const [questionIdsArray, setQuestionIdsArray] = useState([]);
+    const [skipQuestionIdArray, setSkipQuestionIdArray] = useState([]);
     const [questionId, setQuestionId] = useState('');
-    const [featureList, setFeatureList] = useState('');
+    const [featureList, setFeatureList] = useState([]);
     const [selectedFeature, setSelectedFeature] = useState('');
     const [modalSelectedFeature, setModalSelectedFeature] = useState('');
     const [selectedModalFeature, setSelectedModalFeature] = useState('');
     const [questionObject, setQuestionObject] = useState({});
     const [options, setOptions] = useState([]);
+    const [duplicateQuestions, setDuplicateQuestions] = useState([]);
+    const [visitedQuestionObject, setVisitedQuestionObject] = useState({});
     // const [tagList, setTagList] = useState([]);
 
     const [modalSelectedTags, setModalSelectedTags] = useState([]);
@@ -110,106 +119,235 @@ const QuestionList = (props) => {
     ]);
 
     const getQuestionIds = async () => {
-        console.log({ subjectId, chapterId })
+        // console.log({ subjectId, chapterId })
         const response = await GET_QUESTION_IDS({ subjectId, chapterId })
-        // console.log('1', JSON.stringify(response))
-        const { L1, L2 } = response?.payload[0]
-        let questionIdsArray = [...L1, ...L2]
-        // console.log({ questionIds })
-        if (questionIdsArray?.length) {
-            getQuestionDetails({ questionId: questionIdsArray[0] })
-
+        // console.log('getQuestionIds', JSON.stringify(response))
+        if (response?.status) {
+            const { L1, L2 } = response?.payload[0]
+            let questionIdsArray = [...L1, ...L2]
+            setL1(L1)
+            setL2(L2)
+            // console.log('getQuestionIds', { questionIdsArray })
+            if (questionIdsArray?.length) {
+                getQuestionDetails({ questionId: questionIdsArray[0] })
+            }
+            setQuestionIdsArray([...questionIdsArray])
+            // removing the first index since its used to call the api above, see the skip button onpress
+            questionIdsArray.splice(0, 1)
+            setSkipQuestionIdArray([...questionIdsArray])
         }
-        setQuestionIdsArray(questionIdsArray)
+
     }
 
     const getChapterList = async () => {
         const response = await GET_CHAPTER_LIST({ subjectId })
-        const { chapter_ids, chapter_names } = response?.payload[0]
-        // setting chapter array
-        let chapters = []
-        chapters = chapter_ids?.map((item, index) => {
-            return {
-                label: chapter_names[index],
-                value: item,
-            }
-        })
-        setModalChapterList(chapters)
+        if (response?.status) {
+            const { chapter_ids, chapter_names } = response?.payload[0]
+            // setting chapter array
+            let chapters = []
+            chapters = chapter_ids?.map((item, index) => {
+                return {
+                    label: chapter_names[index],
+                    value: item,
+                }
+            })
+            setModalChapterList(chapters)
+        }
+
     }
 
     const getTagList = async ({ chapterId }) => {
         const response = await GET_TAG_LIST({ chapterId })
         // console.log('getTagList', JSON.stringify(response))
-        const { tag_ids, tag_names } = response?.payload[0]
-        // setting chapter array
-        let tags = []
-        tags = tag_ids?.map((item, index) => {
-            return {
-                name: tag_names[index],
-                id: item,
-            }
-        })
-        setModalTagList(tags)
-        setFullModalTagList(tags)
+        if (response?.status) {
+            const { tag_ids, tag_names } = response?.payload[0]
+            // setting chapter array
+            let tags = []
+            tags = tag_ids?.map((item, index) => {
+                return {
+                    name: tag_names[index],
+                    id: item,
+                }
+            })
+            setModalTagList(tags)
+            setFullModalTagList(tags)
+        }
     }
 
     const getQuestionDetails = async ({ questionId }) => {
         // console.log({ questionId })
-
+        setLoading(true)
         const response = await GET_QUESTION_DETAILS({ questionId })
         // console.log('1', JSON.stringify(response))
-        const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id } = response?.payload[0]
-        setQuestionId(questionId)
-        setQuestionObject(response?.payload[0])
-        setSelectedDifficulty(difficulty_level)
-        setModalSelectedDifficulty(difficulty_level)
-        setChapterName(chapter_name)
-        setModalChapterName(chapter_name)
-        setSelectedChapterId(chapter_assoc_id)
-        setModalSelectedChapterId(chapter_assoc_id)
-        // set options to generate HTML content
-        let options = []
-        option1 && options.push({ html: option1, selected: is_option1_correct })
-        option2 && options.push({ html: option2, selected: is_option2_correct })
-        option3 && options.push({ html: option3, selected: is_option3_correct })
-        option4 && options.push({ html: option4, selected: is_option4_correct })
-        setOptions(options)
+        if (response?.status) {
+            const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id, duplicate_question_ids, duplicate_question_scores } = response?.payload[0]
+            setQuestionId(questionId)
+            setQuestionObject(response?.payload[0])
+            setSelectedDifficulty(difficulty_level)
+            setModalSelectedDifficulty(difficulty_level)
+            setChapterName(chapter_name)
+            setModalChapterName(chapter_name)
+            setSelectedChapterId(chapter_assoc_id)
+            setModalSelectedChapterId(chapter_assoc_id)
+            // set options to generate HTML content
+            let options = []
+            option1 && options.push({ html: option1, selected: is_option1_correct })
+            option2 && options.push({ html: option2, selected: is_option2_correct })
+            option3 && options.push({ html: option3, selected: is_option3_correct })
+            option4 && options.push({ html: option4, selected: is_option4_correct })
+            setOptions(options)
 
-        // setting tags array
-        let tags = []
-        tags = tag_ids?.map((item, index) => {
-            return {
-                id: item,
-                name: tag_names[index]
-            }
-        })
-        setSelectedTags(tags)
-        setModalSelectedTags(tags)
+            // setting tags array
+            let tags = []
+            tags = tag_ids?.map((item, index) => {
+                return {
+                    id: item,
+                    name: tag_names[index]
+                }
+            })
+            setSelectedTags(tags)
+            setModalSelectedTags(tags)
 
-        // setting feature type
-        const { feature_types } = response?.payload[1]
-        // console.log('feature types', Object.values(feature_types))
-        setFeatureList(Object.values(feature_types))
-        setSelectedFeature(FEATURE_TYPE.get(feature_type == 0 ? '1' : feature_type))
-        setModalSelectedFeature(FEATURE_TYPE.get(feature_type == 0 ? '1' : feature_type))
+            // setting feature type
+            const { feature_types } = response?.payload[1]
+            // console.log('feature types', Object.values(feature_types))
+            setFeatureList(Object.values(feature_types))
+            setSelectedFeature(FEATURE_TYPE.get(feature_type == 0 ? '1' : feature_type))
+            setModalSelectedFeature(FEATURE_TYPE.get(feature_type == 0 ? '1' : feature_type))
+
+            // duplicate questions array
+            let duplicateQuestions = []
+            duplicateQuestions = duplicate_question_ids?.map((item, index) => {
+                return {
+                    id: item,
+                    score: duplicate_question_scores[index]
+                }
+            })
+            setDuplicateQuestions(duplicateQuestions)
+
+            scrollToTop(scrollRef)
+        } else {
+            alert('Some error occured')
+        }
+        setLoading(false)
     }
 
     useEffect(() => {
         getQuestionIds()
         getChapterList()
-        // let a = new Array(FEATURE_TYPE.keys())
-        // console.log('useeffect', [FEATURE_TYPE.get('2')])
-
-        // for (const x of FEATURE_TYPE.values()) {
-        //     console.log('useeffect', x)
-        // }
     }, [])
 
     useEffect(() => {
-        if (selectedChapterId) {
-            getTagList({ chapterId: selectedChapterId })
+        if (modalSelectedChapterId) {
+            getTagList({ chapterId: modalSelectedChapterId })
+            setModalSelectedTags([])
         }
-    }, [selectedChapterId])
+    }, [modalSelectedChapterId])
+
+    const validateEditQuestion = () => {
+        let validated = true
+        // if (modalSelectedTags.length == 0) {
+        //     alert('Please select atleast one tag')
+        //     validated = false
+        // }
+        !validated && setLoading(false)
+        return validated
+    }
+
+    const validateRejectModal = () => {
+        let validated = true
+        if (rejectReasonText.trim().length < 3) {
+            alert('Please enter valid reason')
+            validated = false
+        }
+        !validated && setLoading(false)
+        return validated
+    }
+
+    const moveToNextQuestion = () => {
+        questionIdsArray.splice(questionIdsArray.indexOf(Number(questionObject?.question_id)), 1)
+        if (questionIdsArray.length != 0) {
+            if (questionIdsArray?.length) {
+                getQuestionDetails({ questionId: questionIdsArray[0] })
+            }
+            setQuestionIdsArray([...questionIdsArray])
+            // removing the first index since its used to call the api above, see the skip button onpress
+            questionIdsArray.splice(0, 1)
+            setSkipQuestionIdArray([...questionIdsArray])
+            resetModal()
+        } else {
+            navigation.pop(2)
+        }
+    }
+
+    const approveApi = async (params) => {
+        setLoading(true)
+        const response = await APPROVE_QUESTION({ params })
+        console.log('approveApi', JSON.stringify(response))
+        if (response?.status) {
+            moveToNextQuestion()
+        } else {
+
+        }
+        setLoading(false)
+    }
+
+    const rejectApi = async () => {
+        setLoading(true);
+        try {
+            let fileUrls = [];
+            if (attachmentFiles.length > 0) {
+                const formData = new FormData();
+
+                for (const file of attachmentFiles) {
+                    formData.append("file", fileToApiFormat(file));
+                }
+
+                const uploadFilesRes = await UPLOAD_FILES({ params: formData });
+
+                if (uploadFilesRes.status && Array.isArray(uploadFilesRes.payload)) {
+                    const uploadFilesUrls = uploadFilesRes.payload;
+
+                    fileUrls = [...uploadFilesUrls];
+                }
+            }
+
+            const bodyData = {
+                question_id: questionObject.question_id,
+                is_accepted: false,
+                chapter_id: selectedChapterId,
+                tag_ids: selectedTags.map(item => item?.id),
+                difficulty: selectedDifficulty,
+                feature_type: getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }),
+                current_level: getCurrentLevel({ L1, L2, questionId: questionObject?.question_id }),
+            };
+
+            if (rejectReasonText) {
+                bodyData.faculty_feedback_text = rejectReasonText;
+            }
+
+            if (fileUrls.length > 0) {
+                bodyData.faculty_feedback_images = fileUrls;
+            }
+
+            console.log({ bodyData })
+
+            // if (Array.isArray(data.marked_duplicates) && data.marked_duplicates.length > 0) {
+            //     bodyData.marked_duplicates = data.marked_duplicates;
+            // }
+
+            const response = await REJECT_QUESTION({ params: bodyData })
+            // console.log('rejectApi', JSON.stringify(response))
+            if (response?.status) {
+                moveToNextQuestion()
+            } else {
+
+            }
+
+        } catch (error) {
+        }
+        setLoading(false)
+    }
 
     return (
         <SafeAreaView style={STYLES.safeAreaContainer}>
@@ -237,7 +375,19 @@ const QuestionList = (props) => {
                                 <Text style={styles.approveText}>No</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 10 }]} onPress={resetModal}>
+                            <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 10 }]} onPress={() => {
+                                const params = {
+                                    question_id: questionObject?.question_id,
+                                    is_accepted: true, // TODO: Change backend to accept boolean
+                                    chapter_id: selectedChapterId,
+                                    tag_ids: selectedTags.map(item => Number(item?.id)),
+                                    difficulty: selectedDifficulty,
+                                    feature_type: getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }),
+                                    current_level: getCurrentLevel({ L1, L2, questionId: questionObject?.question_id }),
+                                };
+                                // console.log('params', params)
+                                approveApi(params)
+                            }}>
                                 <Text style={[styles.approveText, { color: 'white' }]}>Yes</Text>
                             </TouchableOpacity>
                         </View>
@@ -344,6 +494,8 @@ const QuestionList = (props) => {
                                 <FlatList
                                     data={[1, 2, 3, 4, 5]}
                                     contentContainerStyle={styles.flatlistContentContainer}
+                                    // numColumns={5}
+                                    // horizontal={true}
                                     renderItem={({ index, item }) => {
                                         return <DifficultyLevelModal
                                             text={item}
@@ -376,12 +528,15 @@ const QuestionList = (props) => {
                         </ScrollView>
 
                         <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 20, width: '22%', marginVertical: 10 }]} onPress={() => {
-                            setEditModal(false)
-                            setSelectedDifficulty(modalSelectedDifficulty)
-                            setSelectedFeature(modalSelectedFeature)
-                            setSelectedTags(modalSelectedTags)
-                            setChapterName(modalChapterList.find(item => item?.value == modalSelectedChapterId)?.label)
-                            setSelectedChapterId(modalSelectedChapterId)
+                            if (validateEditQuestion()) {
+                                setEditModal(false)
+                                setSelectedDifficulty(modalSelectedDifficulty)
+                                setSelectedFeature(modalSelectedFeature)
+                                setSelectedTags(modalSelectedTags)
+                                setChapterName(modalChapterList.find(item => item?.value == modalSelectedChapterId)?.label)
+                                setSelectedChapterId(modalSelectedChapterId)
+                            }
+
                         }}>
                             <Text style={[styles.approveText, { color: 'white' }]}>Save</Text>
                         </TouchableOpacity>
@@ -475,12 +630,17 @@ const QuestionList = (props) => {
                 </View>
             </Modal>
 
-
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={rejectModal}
-                onRequestClose={() => setRejectModal(false)}
+                onRequestClose={() => {
+                    setRejectModal(false)
+                    setAttachmentFiles([])
+                }}
+                onDismiss={() => {
+                    setAttachmentFiles([])
+                }}
             >
                 <View style={styles.editModalParentContainer}>
                     <View style={styles.rejectModalContainer}>
@@ -494,22 +654,59 @@ const QuestionList = (props) => {
                                     placeholder={'Type your reason here'}
                                     placeholderTextColor={'#787878'}
                                 />
-                                <FontAwesome name='camera' size={25} color='#787878' />
-                            </View>
-
-
-                            <View style={styles.screenshotContainer}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Feather name='image' size={20} color='#606060' />
-                                    <Text style={styles.screenshotText}>Screenshot 123456</Text>
-                                </View>
-                                <AntDesign name='close' size={25} color='#012C63'
+                                <AttachmentButton
+                                    fileList={attachmentFiles}
+                                    setFileList={fileList => {
+                                        // setLoading(true)
+                                        // uploadFileApi(fileList)
+                                        console.log('AttachmentButton', [...fileList])
+                                        setAttachmentFiles(fileList)
+                                    }}
+                                    text={'Upload Files'}
+                                    multiple={true}
+                                    maxFilesCount={10}
+                                    // here max size is sent as 3mb
+                                    maxAllowedFileSize={3145728}
+                                    onlyImage={true}
+                                    // customComponent={() => {
+                                    //     return <FontAwesome name='camera' size={25} color='#787878' />
+                                    // }}
+                                    allowedFileTypes={[
+                                        DocumentPicker.types.images,
+                                    ]}
+                                    customComponent={<FontAwesome name='camera' size={25} color='#787878' />}
                                 />
                             </View>
+
+                            <ScrollView
+                                horizontal
+                                contentContainerStyle={styles.flatlistContentContainer}>
+                                {attachmentFiles.map((item, index) => {
+                                    return <View style={styles.screenshotContainer}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Feather name='image' size={20} color='#606060' />
+                                            <Text numberOfLines={1} style={styles.screenshotText}>{item?.fileName}</Text>
+                                        </View>
+                                        <TouchableOpacity onPress={() => {
+                                            let temp = [...attachmentFiles]
+                                            temp.splice(index, 1)
+                                            setAttachmentFiles([...temp])
+                                        }}>
+                                            <AntDesign name='close' size={25} color='#012C63'
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                })}
+                            </ScrollView>
+
                         </View>
 
 
-                        <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 20, marginVertical: 10 }]} onPress={() => setRejectModal(false)}>
+                        <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 20, marginVertical: 10 }]} onPress={() => {
+                            if (validateRejectModal()) {
+                                rejectApi()
+                            }
+                        }}>
                             <Text style={[styles.approveText, { color: 'white' }]}>Reject</Text>
                         </TouchableOpacity>
 
@@ -525,6 +722,8 @@ const QuestionList = (props) => {
             // nestedScrollEnabled={true}
             >
                 <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
+
+
 
                     <View style={styles.container}>
                         <View style={styles.questionContainer}>
@@ -574,21 +773,40 @@ const QuestionList = (props) => {
                         {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
                     </View>
 
-                    <View style={styles.container}>
+                    {duplicateQuestions.length > 0 && <View style={styles.container}>
                         <Text style={[styles.heading]}>Check similar Questions</Text>
 
                         <FlatList
                             style={{ marginTop: 10 }}
-                            data={response}
+                            data={duplicateQuestions}
                             renderItem={({ item, index }) => {
                                 return <SimilarQuestionItem
                                     item={item}
                                     index={index}
+                                    isVisited={Boolean(visitedQuestionObject[item?.id])}
+                                    onPress={() => {
+                                        let temp = { ...visitedQuestionObject }
+                                        if (!temp[item?.id]) {
+                                            temp[item?.id] = item?.score
+                                        }
+                                        setVisitedQuestionObject({ ...temp })
+                                        navigation.navigate('SimilarQuestion', {
+                                            question_id: item?.id,
+                                            is_accepted: false,
+                                            chapter_id: selectedChapterId,
+                                            tag_ids: selectedTags.map(item => item?.id),
+                                            difficulty: selectedDifficulty,
+                                            feature_type: getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }),
+                                            current_level: getCurrentLevel({ L1, L2, questionId: questionObject?.question_id }),
+                                            moveToNextQuestion: moveToNextQuestion,
+                                            questionObject
+                                        })
+                                    }}
                                 />
                             }}
                         />
 
-                    </View>
+                    </View>}
 
                     <View style={styles.container}>
                         <View style={styles.questionPropertiesContainer}>
@@ -632,7 +850,9 @@ const QuestionList = (props) => {
                             <Text style={styles.subHeading}>Difficulty Level</Text>
                             <FlatList
                                 data={[1, 2, 3, 4, 5]}
-                                contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center' }}
+                                contentContainerStyle={styles.flatlistContentContainer}
+                                // numColumns={5}
+                                // horizontal={true}
                                 renderItem={({ index, item }) => {
                                     return <DifficultyLevel
                                         text={item}
@@ -674,7 +894,17 @@ const QuestionList = (props) => {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={() => {
+                        let tempArray = []
+                        if (skipQuestionIdArray.length) {
+                            tempArray = [...skipQuestionIdArray]
+                        } else {
+                            tempArray = [...questionIdsArray]
+                        }
+                        let questionId = tempArray?.splice(0, 1)
+                        getQuestionDetails({ questionId })
+                        setSkipQuestionIdArray([...tempArray])
+                    }}>
                         <Text style={styles.approveText}>Skip</Text>
                     </TouchableOpacity>
                 </View>

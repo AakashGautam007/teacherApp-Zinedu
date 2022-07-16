@@ -48,7 +48,8 @@ const Filter = (props) => {
     const getChaptersAndSubjects = async () => {
         const response = await GET_CHAPTERS_AND_SUBJECTS()
         const { L1, L2 } = response?.payload[0]
-        const [count, subject] = generateSubjectList(L1)
+        // console.log({ L1, L2 })
+        const [count, subject] = generateSubjectList([...L1, ...L2])
         setUnverifiedCount(count)
         setSubjectList(subject)
     }

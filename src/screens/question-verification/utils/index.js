@@ -37,3 +37,33 @@ export const QUESTION_TYPE = new Map([
     ['3', 'Fill in the blank']
 ])
 // const QUESTION_TYPE = ['Objective', 'Multiple choice', 'Fill in the blank']
+
+export const getKeyByValueFromMap = ({ map, searchValue }) => {
+    for (let [key, value] of map?.entries()) {
+        if (value === searchValue)
+            return key;
+    }
+}
+
+export const getCurrentLevel = ({ L1 = [], L2 = [], L3 = [], questionId = '' }) => {
+    if (L1.indexOf(questionId) != -1) {
+        return '1'
+    }
+    if (L2.indexOf(questionId) != -1) {
+        return '2'
+    }
+    if (L3.indexOf(questionId) != -1) {
+        return '3'
+    }
+    return '1'
+}
+
+export const getOptionName = (index) => {
+    switch (index) {
+        case 0: return 'Option A'
+        case 1: return 'Option B'
+        case 2: return 'Option C'
+        case 3: return 'Option D'
+        default: break;
+    }
+}
