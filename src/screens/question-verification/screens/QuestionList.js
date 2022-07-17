@@ -366,6 +366,7 @@ const QuestionList = (props) => {
             >
                 <View style={styles.modalParentContainer}>
                     <View style={styles.modalContainer}>
+                        <ActivityIndicatorComponent animating={loading} />
 
                         <Text style={styles.modalText}>Are you sure you want to
                             {approveModal ? ' approve' : ' reject'} this question?</Text>
@@ -644,6 +645,7 @@ const QuestionList = (props) => {
             >
                 <View style={styles.editModalParentContainer}>
                     <View style={styles.rejectModalContainer}>
+                        <ActivityIndicatorComponent animating={loading} />
                         <Text style={[styles.subHeading, { marginTop: 30, marginBottom: 0, fontSize: 16, marginLeft: 20, fontWeight: '600' }]}>What do you want to change in the question?</Text>
                         <View style={styles.rejectReasonContainer}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

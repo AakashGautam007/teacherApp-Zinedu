@@ -29,6 +29,7 @@ export default function Login({ navigation }) {
 
 
     const [username, setUsername] = useState('5454555555')
+    // const [username, setUsername] = useState('7024140855')
     const [password, setPassword] = useState('checkA@BC@2021')
 
     const { value, range } = useSelector((state) => state.counter)

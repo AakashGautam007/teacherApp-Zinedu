@@ -13,6 +13,7 @@ import Option from '../components/Option'
 import { GET_QUESTION_DETAILS, REJECT_QUESTION } from '../api'
 import { width } from '../../../utils/config'
 import MathJax from '../../../components/MathJax'
+import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 
 const response = [
     {
@@ -168,6 +169,7 @@ const SimilarQuestion = (props) => {
             >
                 <View style={styles.modalParentContainer}>
                     <View style={styles.modalContainer}>
+                        <ActivityIndicatorComponent animating={loading} />
 
                         <Text style={styles.modalText}>Question is marked duplicate and will be rejected. Do you want to continue?</Text>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useCallback } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
 import { AuthContext } from '../../../utils/context'
 import { width, postAnalytics } from '../../../utils/config'
@@ -7,6 +7,7 @@ import { STYLES } from '../../../appStyles'
 import { Badge } from '../components/Badge'
 import { useAuthFields } from '../../../AppUtils/hooks/useAuthFields'
 import { GET_REVIEW_QUESTION_COUNT, GET_VISIBILITY_CHECK_COUNT } from '../api'
+import { useFocusEffect } from '@react-navigation/native'
 
 const Dashboard = ({ navigation }) => {
 
@@ -26,10 +27,10 @@ const Dashboard = ({ navigation }) => {
         setVisibilityCheckCount(response?.payload[0]?.num_pending_questions)
     }
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         getReviewQuestionCount()
         getVisibilityCheckCount()
-    }, [])
+    }), [])
 
     useEffect(() => {
         postAnalytics('teacher-dashboard', logout)
