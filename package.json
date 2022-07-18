@@ -7,7 +7,9 @@
     "web": "expo start --web",
     "start": "react-native start",
     "codepush-staging": "appcenter codepush release-react -a MyClassroom/myFaculty -d Staging",
-    "codepush-production": "appcenter codepush release-react -a MyClassroom/myFaculty -d Production"
+    "codepush-production": "appcenter codepush release-react -a MyClassroom/myFaculty -d Production",
+    "codepush-qa": "appcenter codepush release-react -a MyClassroom/myFaculty -d QA",
+    "codepush-dev": "appcenter codepush release-react -a MyClassroom/myFaculty -d Dev"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.15",
@@ -49,6 +51,7 @@
     "react-native-document-picker": "^7.1.1",
     "react-native-dropdown-picker": "^5.1.23",
     "react-native-dropdownalert": "^4.2.1",
+    "react-native-flash-message": "^0.2.1",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-image-picker": "^4.0.6",
     "react-native-internet-connection-alert": "^0.1.6",

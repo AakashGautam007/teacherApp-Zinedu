@@ -21,6 +21,7 @@ import {
   requestUserPermission
 } from "./src/utils/notificationService";
 import NavigationService from "./src/AppUtils/NavigationService";
+import FlashMessage from "react-native-flash-message";
 
 LogBox.ignoreAllLogs();
 
@@ -215,14 +216,17 @@ const App = () => {
           )}
         </NavigationContainer>
       </AuthContext.Provider>
+      <FlashMessage position="top" />
     </InternetConnectionAlert>
   );
 }
 
 const codePushOptions = {
-  updateDialog: true,
-  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+  // updateDialog: true,
+  // checkFrequency: CodePush.CheckFrequency.ON_APP_START,
   // installMode: CodePush.InstallMode.IMMEDIATE
+
+  checkFrequency: CodePush.CheckFrequency.MANUAL,
 }
 export default CodePush(codePushOptions)(App)
 

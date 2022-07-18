@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+import { showMessage } from "react-native-flash-message";
 
 export const generateSubjectList = (chapterDetails = []) => {
     let overallTotal = 0;
@@ -46,13 +48,13 @@ export const getKeyByValueFromMap = ({ map, searchValue }) => {
 }
 
 export const getCurrentLevel = ({ L1 = [], L2 = [], L3 = [], questionId = '' }) => {
-    if (L1.indexOf(questionId) != -1) {
+    if (L1.indexOf(Number(questionId)) != -1) {
         return '1'
     }
-    if (L2.indexOf(questionId) != -1) {
+    if (L2.indexOf(Number(questionId)) != -1) {
         return '2'
     }
-    if (L3.indexOf(questionId) != -1) {
+    if (L3.indexOf(Number(questionId)) != -1) {
         return '3'
     }
     return '1'
@@ -67,3 +69,31 @@ export const getOptionName = (index) => {
         default: break;
     }
 }
+
+export const showApproveMessage = () => {
+    showMessage({
+        message: "Question Approved",
+        type: "success",
+        style: styles.popup,
+        icon: 'success'
+    });
+}
+
+export const showRejectMessage = () => {
+    showMessage({
+        message: "Question sent for correction",
+        type: "success",
+        style: styles.popup,
+        backgroundColor: "#012C63",
+        icon: 'success'
+    });
+}
+
+const styles = StyleSheet.create({
+    popup: {
+        margin: 10,
+        height: 50,
+        paddingTop: 10,
+        borderRadius: 8
+    }
+})

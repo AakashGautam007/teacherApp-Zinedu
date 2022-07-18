@@ -9,7 +9,7 @@ import { width } from '../../../utils/config'
 import { APPROVE_QUESTION, GET_L3_QUESTION_IDS, GET_QUESTION_DETAILS, GET_QUESTION_IDS, REJECT_QUESTION } from '../api'
 import CheckQuestionOption from '../components/CheckQuestionOption'
 import styles from '../styles/check-question'
-import { getCurrentLevel, getKeyByValueFromMap } from '../utils'
+import { getCurrentLevel, getKeyByValueFromMap, showApproveMessage, showRejectMessage } from '../utils'
 
 const response = [
     {
@@ -142,6 +142,7 @@ const CheckQuestion = (props) => {
             const response = await APPROVE_QUESTION({ params })
             // console.log('approveApi', JSON.stringify(response))
             if (response?.status) {
+                showApproveMessage()
                 moveToNextQuestion()
             } else {
 
@@ -174,6 +175,7 @@ const CheckQuestion = (props) => {
             const response = await REJECT_QUESTION({ params: bodyData })
             // console.log('rejectApi', JSON.stringify(response))
             if (response?.status) {
+                showRejectMessage()
                 moveToNextQuestion()
             } else {
 
@@ -295,7 +297,7 @@ const CheckQuestion = (props) => {
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity onPress={() => {
+                {questionIdsArray.length > 1 && <TouchableOpacity onPress={() => {
                     let tempArray = []
                     if (skipQuestionIdArray.length) {
                         tempArray = [...skipQuestionIdArray]
@@ -307,7 +309,7 @@ const CheckQuestion = (props) => {
                     setSkipQuestionIdArray([...tempArray])
                 }}>
                     <Text style={styles.approveText}>Skip</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
 
             <ScrollToTop

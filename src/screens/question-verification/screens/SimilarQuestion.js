@@ -14,6 +14,7 @@ import { GET_QUESTION_DETAILS, REJECT_QUESTION } from '../api'
 import { width } from '../../../utils/config'
 import MathJax from '../../../components/MathJax'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
+import { showRejectMessage } from '../utils'
 
 const response = [
     {
@@ -138,9 +139,10 @@ const SimilarQuestion = (props) => {
             // }
             // console.log({ bodyData })
             const response = await REJECT_QUESTION({ params: bodyData })
-            console.log('similarRejectApi', JSON.stringify(response))
+            // console.log('similarRejectApi', JSON.stringify(response))
 
             if (response?.status) {
+                showRejectMessage()
                 navigation.goBack()
                 moveToNextQuestion()
             } else {

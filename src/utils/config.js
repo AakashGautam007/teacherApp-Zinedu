@@ -4,20 +4,29 @@ import { store } from "../redux/store";
 
 export const { width, height } = Dimensions.get("window");
 
-export const ENDPOINT = `https://apdev.myclassroom.digital`;
-export const SMSENDPOINT = `https://sms.zinedu.com`; //production
+//For Testing Staging Base 
+// export const ENDPOINT = `https://apstaging.zinedu.com`;
+
+//Production Base 
+// export const ENDPOINT = `https://ap.zinedu.com`;
+
+//Dot Net Base 
+// export const ENDPOINT = `http://nadmin.zinedu.com`;
+
+//For Dev Base 
+// export const ENDPOINT = `https://apdev.myclassroom.digital`;
+
+//For UAT BASE 
+// export const ENDPOINT = `https://studyuat.zinedu.com`;
+
+//For QA 
+export const ENDPOINT = `https://apqa.zinedu.com`;
+
+// export const SMSENDPOINT = `https://sms.zinedu.com`; //production
 // export const SMSENDPOINT = `https://smss.zinedu.com`//staging
-// export const SMSENDPOINT = `https://smsd.zinedu.com`//qa
+export const SMSENDPOINT = `https://smsd.zinedu.com`//qa
 
-//For Testing Staging Base `https://apstaging.zinedu.com/`;
 
-//Production Base `https://ap.zinedu.com/`;
-
-//Dot Net Base `http://nadmin.zinedu.com/`;
-
-//For Dev Base `https://dev.zinedu.com/`;
-
-//For UAT BASE `https://studyuat.zinedu.com/`;
 export const postAnalytics = async (page, logout) => {
     var formdata = new FormData();
     try {

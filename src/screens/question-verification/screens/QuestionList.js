@@ -25,40 +25,13 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckboxTag from '../components/CheckboxTag'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { APPROVE_QUESTION, GET_CHAPTER_LIST, GET_QUESTION_DETAILS, GET_QUESTION_IDS, GET_TAG_LIST, REJECT_QUESTION, UPLOAD_FILES } from '../api'
-import { FEATURE_TYPE, getCurrentLevel, getKeyByValueFromMap, QUESTION_TYPE } from '../utils'
+import { FEATURE_TYPE, getCurrentLevel, getKeyByValueFromMap, QUESTION_TYPE, showApproveMessage, showRejectMessage } from '../utils'
 import MathJax from '../../../components/MathJax'
 import { width } from '../../../utils/config'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 import { AttachmentButton } from '../components/AttachmentComponents'
 import DocumentPicker from 'react-native-document-picker'
-import { fileToApiFormat } from '../../../AppUtils/commonUtils'
-
-const response = [
-    {
-        option: 'Option A',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option B',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option C',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option D',
-        badge: '9',
-        question: '',
-        answer: ''
-    }
-]
+import { compareTwoArrays, fileToApiFormat } from '../../../AppUtils/commonUtils'
 
 const QuestionList = (props) => {
     const { navigation, route } = props
@@ -84,7 +57,6 @@ const QuestionList = (props) => {
     const [featureList, setFeatureList] = useState([]);
     const [selectedFeature, setSelectedFeature] = useState('');
     const [modalSelectedFeature, setModalSelectedFeature] = useState('');
-    const [selectedModalFeature, setSelectedModalFeature] = useState('');
     const [questionObject, setQuestionObject] = useState({});
     const [options, setOptions] = useState([]);
     const [duplicateQuestions, setDuplicateQuestions] = useState([]);
@@ -121,12 +93,12 @@ const QuestionList = (props) => {
     const getQuestionIds = async () => {
         // console.log({ subjectId, chapterId })
         const response = await GET_QUESTION_IDS({ subjectId, chapterId })
-        // console.log('getQuestionIds', JSON.stringify(response))
+        console.log('getQuestionIds', JSON.stringify(response))
         if (response?.status) {
             const { L1, L2 } = response?.payload[0]
             let questionIdsArray = [...L1, ...L2]
-            setL1(L1)
-            setL2(L2)
+            setL1([...L1])
+            setL2([...L2])
             // console.log('getQuestionIds', { questionIdsArray })
             if (questionIdsArray?.length) {
                 getQuestionDetails({ questionId: questionIdsArray[0] })
@@ -181,7 +153,7 @@ const QuestionList = (props) => {
         // console.log('1', JSON.stringify(response))
         if (response?.status) {
             const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id, duplicate_question_ids, duplicate_question_scores } = response?.payload[0]
-            setQuestionId(questionId)
+            setQuestionId(questionId?.toString())
             setQuestionObject(response?.payload[0])
             setSelectedDifficulty(difficulty_level)
             setModalSelectedDifficulty(difficulty_level)
@@ -212,8 +184,8 @@ const QuestionList = (props) => {
             const { feature_types } = response?.payload[1]
             // console.log('feature types', Object.values(feature_types))
             setFeatureList(Object.values(feature_types))
-            setSelectedFeature(FEATURE_TYPE.get(feature_type == 0 ? '1' : feature_type))
-            setModalSelectedFeature(FEATURE_TYPE.get(feature_type == 0 ? '1' : feature_type))
+            setSelectedFeature(FEATURE_TYPE.get(feature_type))
+            setModalSelectedFeature(FEATURE_TYPE.get(feature_type))
 
             // duplicate questions array
             let duplicateQuestions = []
@@ -246,10 +218,16 @@ const QuestionList = (props) => {
 
     const validateEditQuestion = () => {
         let validated = true
-        // if (modalSelectedTags.length == 0) {
-        //     alert('Please select atleast one tag')
-        //     validated = false
-        // }
+        if (modalSelectedTags.length == 0) {
+            alert('Please select atleast one tag')
+            validated = false
+            return;
+        }
+        if (!modalSelectedFeature) {
+            alert('Please select a Feature type')
+            validated = false
+            return;
+        }
         !validated && setLoading(false)
         return validated
     }
@@ -276,15 +254,16 @@ const QuestionList = (props) => {
             setSkipQuestionIdArray([...questionIdsArray])
             resetModal()
         } else {
-            navigation.pop(2)
+            navigation.pop(1)
         }
     }
 
     const approveApi = async (params) => {
         setLoading(true)
         const response = await APPROVE_QUESTION({ params })
-        console.log('approveApi', JSON.stringify(response))
+        // console.log('approveApi', JSON.stringify(response))
         if (response?.status) {
+            showApproveMessage()
             moveToNextQuestion()
         } else {
 
@@ -318,7 +297,7 @@ const QuestionList = (props) => {
                 chapter_id: selectedChapterId,
                 tag_ids: selectedTags.map(item => item?.id),
                 difficulty: selectedDifficulty,
-                feature_type: getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }),
+                feature_type: selectedFeature ? getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }) : questionObject?.feature_type,
                 current_level: getCurrentLevel({ L1, L2, questionId: questionObject?.question_id }),
             };
 
@@ -330,7 +309,7 @@ const QuestionList = (props) => {
                 bodyData.faculty_feedback_images = fileUrls;
             }
 
-            console.log({ bodyData })
+            // console.log({ bodyData })
 
             // if (Array.isArray(data.marked_duplicates) && data.marked_duplicates.length > 0) {
             //     bodyData.marked_duplicates = data.marked_duplicates;
@@ -339,11 +318,11 @@ const QuestionList = (props) => {
             const response = await REJECT_QUESTION({ params: bodyData })
             // console.log('rejectApi', JSON.stringify(response))
             if (response?.status) {
+                showRejectMessage()
                 moveToNextQuestion()
             } else {
 
             }
-
         } catch (error) {
         }
         setLoading(false)
@@ -383,7 +362,7 @@ const QuestionList = (props) => {
                                     chapter_id: selectedChapterId,
                                     tag_ids: selectedTags.map(item => Number(item?.id)),
                                     difficulty: selectedDifficulty,
-                                    feature_type: getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }),
+                                    feature_type: selectedFeature ? getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }) : questionObject?.feature_type,
                                     current_level: getCurrentLevel({ L1, L2, questionId: questionObject?.question_id }),
                                 };
                                 // console.log('params', params)
@@ -412,12 +391,12 @@ const QuestionList = (props) => {
 
                             <View style={[styles.subHeadingContainer, { marginTop: 10 }]}>
                                 <Text style={styles.subHeading}>Question Type</Text>
-                                <Text style={styles.subHeadingGray}>Single correct</Text>
+                                <Text style={styles.subHeadingGray}>{QUESTION_TYPE.get(questionObject?.question_type) || ''}</Text>
                             </View>
 
                             <View style={styles.subHeadingContainer}>
                                 <Text style={styles.subHeading}>Subject Name</Text>
-                                <Text style={styles.subHeadingGray}>Maths</Text>
+                                <Text style={styles.subHeadingGray}>{questionObject?.subject_name || ''}</Text>
                             </View>
 
                             <View style={styles.subHeadingContainer}>
@@ -451,7 +430,7 @@ const QuestionList = (props) => {
 
                             </View>
 
-                            <InfoText text={'You have changed the chapter'} />
+                            {(questionObject?.chapter_assoc_id != modalSelectedChapterId) && <InfoText text={'You have changed the chapter'} />}
 
                             <View style={styles.subHeadingContainer}>
                                 <Title text={'Tags'} mandatory={true} />
@@ -488,7 +467,7 @@ const QuestionList = (props) => {
 
                             </View>
 
-                            <InfoText text={'You have changed the tags'} />
+                            {!compareTwoArrays(questionObject?.tag_ids, modalSelectedTags.map(item => item?.id)) && <InfoText text={'You have changed the tags'} />}
 
                             <View style={styles.subHeadingContainer}>
                                 <Title text={'Difficulty level'} mandatory={true} />
@@ -508,7 +487,7 @@ const QuestionList = (props) => {
                                 />
                             </View>
 
-                            <InfoText text={'You have changed the difficulty level'} />
+                            {questionObject?.difficulty_level != modalSelectedDifficulty && <InfoText text={'You have changed the difficulty level'} />}
 
                             <View style={styles.subHeadingContainer}>
                                 <Title text={'Feature Type'} mandatory={true} />
@@ -525,7 +504,7 @@ const QuestionList = (props) => {
                                 />
                             </View>
 
-                            <InfoText text={'You have changed the feature type'} />
+                            {(FEATURE_TYPE.get(questionObject?.feature_type) != modalSelectedFeature) && <InfoText text={'You have changed the feature type'} />}
                         </ScrollView>
 
                         <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 20, width: '22%', marginVertical: 10 }]} onPress={() => {
@@ -730,7 +709,7 @@ const QuestionList = (props) => {
                     <View style={styles.container}>
                         <View style={styles.questionContainer}>
                             <View>
-                                <Text style={[styles.heading]}>Question</Text>
+                                <Text style={[styles.heading]}>Question {questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id))+1 : ''}</Text>
                             </View>
                             <View style={styles.questionIdTextContainer}>
                                 <Text style={styles.questionIdText}>QID {questionId}</Text>
@@ -765,20 +744,22 @@ const QuestionList = (props) => {
                             <Text style={[styles.heading]}>Solution</Text>
                         </View>
 
-                        {questionObject?.solution && <View style={{
+                        {Boolean(questionObject?.solution) ? <View style={{
                             width: width * 0.75
                         }}>
                             <MathJax
                                 content={questionObject?.solution}
                             />
-                        </View>}
+                        </View>
+                            :
+                            null}
                         {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
                     </View>
 
-                    {duplicateQuestions.length > 0 && <View style={styles.container}>
+                    <View style={styles.container}>
                         <Text style={[styles.heading]}>Check similar Questions</Text>
 
-                        <FlatList
+                        {duplicateQuestions.length > 0 ? <FlatList
                             style={{ marginTop: 10 }}
                             data={duplicateQuestions}
                             renderItem={({ item, index }) => {
@@ -798,7 +779,7 @@ const QuestionList = (props) => {
                                             chapter_id: selectedChapterId,
                                             tag_ids: selectedTags.map(item => item?.id),
                                             difficulty: selectedDifficulty,
-                                            feature_type: getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }),
+                                            feature_type: selectedFeature ? getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }) : questionObject?.feature_type,
                                             current_level: getCurrentLevel({ L1, L2, questionId: questionObject?.question_id }),
                                             moveToNextQuestion: moveToNextQuestion,
                                             questionObject
@@ -807,8 +788,9 @@ const QuestionList = (props) => {
                                 />
                             }}
                         />
-
-                    </View>}
+                            :
+                            <Text style={[styles.subHeadingGray, { marginTop: 10 }]}>No similar questions found</Text>}
+                    </View>
 
                     <View style={styles.container}>
                         <View style={styles.questionPropertiesContainer}>
@@ -867,7 +849,7 @@ const QuestionList = (props) => {
 
                         <View style={styles.subHeadingContainer}>
                             <Text style={styles.subHeading}>Feature Type</Text>
-                            <Tag text={selectedFeature} />
+                            {selectedFeature ? <Tag text={selectedFeature} /> : <Text style={styles.subHeadingGray}>No Feature Type Selected</Text>}
                             {/* <FlatList
                                 data={FEATURE_TYPE.get(questionObject?.feature_type) ? [FEATURE_TYPE.get(questionObject?.feature_type)] : ['Analytical']}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
@@ -896,7 +878,7 @@ const QuestionList = (props) => {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={() => {
+                    {questionIdsArray.length > 1 && <TouchableOpacity onPress={() => {
                         let tempArray = []
                         if (skipQuestionIdArray.length) {
                             tempArray = [...skipQuestionIdArray]
@@ -908,7 +890,7 @@ const QuestionList = (props) => {
                         setSkipQuestionIdArray([...tempArray])
                     }}>
                         <Text style={styles.approveText}>Skip</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
             </ScrollView>
 

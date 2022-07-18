@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react'
+import React, { useEffect, useState, useContext, useRef, useCallback } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity, FlatList, ScrollView } from 'react-native'
 import styles from '../styles/filter'
 import Feather from 'react-native-vector-icons/Feather'
@@ -9,6 +9,8 @@ import { STYLES } from '../../../appStyles'
 import ScrollToTop from '../../../components/ScrollToTop'
 import { GET_CHAPTERS_AND_SUBJECTS } from '../api'
 import { generateSubjectList } from '../utils'
+import { useFocusEffect } from '@react-navigation/native'
+import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 
 const response = [
     {
@@ -42,25 +44,32 @@ const Filter = (props) => {
     const { navigation } = props
     const scrollRef = useRef();
 
+    const [loading, setLoading] = useState(true);
     const [unverifiedCount, setUnverifiedCount] = useState(0);
     const [subjectList, setSubjectList] = useState([]);
 
     const getChaptersAndSubjects = async () => {
+        setLoading(true)
         const response = await GET_CHAPTERS_AND_SUBJECTS()
-        const { L1, L2 } = response?.payload[0]
-        // console.log({ L1, L2 })
-        const [count, subject] = generateSubjectList([...L1, ...L2])
-        setUnverifiedCount(count)
-        setSubjectList(subject)
+        if (response?.status) {
+            const { L1, L2 } = response?.payload[0]
+            // console.log({ L1, L2 })
+            const [count, subject] = generateSubjectList([...L1, ...L2])
+            setUnverifiedCount(count)
+            setSubjectList(subject)
+        } else {
+
+        }
+        setLoading(false)
     }
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         getChaptersAndSubjects()
-    }, [])
-
+    }, []))
 
     return (
         <SafeAreaView style={STYLES.safeAreaContainer}>
+            <ActivityIndicatorComponent animating={loading} />
             <HeaderComponent
                 text='Filters'
                 onPress={navigation.goBack}
