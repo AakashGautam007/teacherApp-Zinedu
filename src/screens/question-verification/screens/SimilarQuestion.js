@@ -63,6 +63,7 @@ const SimilarQuestion = (props) => {
     const scrollRef = useRef();
 
     const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true);
     const [options, setOptions] = useState([]);
     const [approveModal, setApproveModal] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState({});
@@ -73,22 +74,37 @@ const SimilarQuestion = (props) => {
         const response = await GET_QUESTION_DETAILS({ questionId })
         console.log('1', JSON.stringify(response))
         if (response?.status) {
-            const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id, duplicate_question_ids, duplicate_question_scores } = response?.payload[0]
+            const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id, duplicate_question_ids, duplicate_question_scores, fill_in_the_blank_answer, correct_option } = response?.payload[0]
             setCurrentQuestion(response?.payload[0])
 
-            // set options to generate HTML content
             let options = []
-            option1 && options.push({ html: option1, selected: is_option1_correct, prevQuestionHtml: questionObject?.option1 })
-            option2 && options.push({ html: option2, selected: is_option2_correct, prevQuestionHtml: questionObject?.option2 })
-            option3 && options.push({ html: option3, selected: is_option3_correct, prevQuestionHtml: questionObject?.option3 })
-            option4 && options.push({ html: option4, selected: is_option4_correct, prevQuestionHtml: questionObject?.option4 })
-            setOptions(options)
+            if (question_type == '1') {
+                // if Objective
+                option1 && options.push({ html: option1, selected: correct_option === '1', prevQuestionHtml: questionObject?.option1 })
+                option2 && options.push({ html: option2, selected: correct_option === '2', prevQuestionHtml: questionObject?.option2 })
+                option3 && options.push({ html: option3, selected: correct_option === '3', prevQuestionHtml: questionObject?.option3 })
+                option4 && options.push({ html: option4, selected: correct_option === '4', prevQuestionHtml: questionObject?.option4 })
+                setOptions(options)
+            } else if (question_type == '2') {
+                // if Multiple
+                option1 && options.push({ html: option1, selected: is_option1_correct, prevQuestionHtml: questionObject?.option1 })
+                option2 && options.push({ html: option2, selected: is_option2_correct, prevQuestionHtml: questionObject?.option2 })
+                option3 && options.push({ html: option3, selected: is_option3_correct, prevQuestionHtml: questionObject?.option3 })
+                option4 && options.push({ html: option4, selected: is_option4_correct, prevQuestionHtml: questionObject?.option4 })
+                setOptions(options)
+                setOptions(options)
+            } else if (question_type == '3') {
+                // if Fill ups
+                fill_in_the_blank_answer && options.push({ html: fill_in_the_blank_answer, prevQuestionHtml: questionObject?.fill_in_the_blank_answer, selected: true, isFillUps: true })
+                setOptions(options)
+            }
 
             scrollToTop(scrollRef)
         } else {
             alert('Some error occured')
         }
         setLoading(false)
+        setInitialLoading(false)
     }
 
     useEffect(() => {
@@ -157,6 +173,7 @@ const SimilarQuestion = (props) => {
 
     return (
         <SafeAreaView style={STYLES.safeAreaContainer}>
+            <ActivityIndicatorComponent animating={loading} />
             <HeaderComponent
                 text={'Check Similar Question'}
                 onPress={navigation.goBack}
@@ -190,7 +207,7 @@ const SimilarQuestion = (props) => {
                 </View>
             </Modal>
 
-            <ScrollView
+            {!initialLoading && <ScrollView
                 ref={scrollRef}
                 scrollsToTop={true}
                 contentContainerStyle={styles.parentContainer}
@@ -261,28 +278,27 @@ const SimilarQuestion = (props) => {
                         }}
                     />
                 </View>
+            </ScrollView>}
 
-                <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
-                    <Text style={[styles.approveText, { color: 'black' }]}>Is the question duplicate?</Text>
+            {!initialLoading && <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
+                <Text style={[styles.approveText, { color: 'black' }]}>Is the question duplicate?</Text>
 
-                    <View style={styles.approveRejectContainer}>
-                        <TouchableOpacity style={styles.approveButton} onPress={() => navigation.goBack()}>
-                            <Text style={styles.approveText}>No</Text>
-                        </TouchableOpacity>
+                <View style={styles.approveRejectContainer}>
+                    <TouchableOpacity style={styles.approveButton} onPress={() => navigation.goBack()}>
+                        <Text style={styles.approveText}>No</Text>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 40 }]}
-                            onPress={() => setApproveModal(true)}>
-                            <Text style={[styles.approveText, { color: 'white' }]}>Yes</Text>
-                        </TouchableOpacity>
-                    </View>
-
-
+                    <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 40 }]}
+                        onPress={() => setApproveModal(true)}>
+                        <Text style={[styles.approveText, { color: 'white' }]}>Yes</Text>
+                    </TouchableOpacity>
                 </View>
-
-            </ScrollView>
-
+            </View>}
             <ScrollToTop
                 scrollRef={scrollRef}
+                style={{
+                    bottom: 100
+                }}
             />
 
         </SafeAreaView>

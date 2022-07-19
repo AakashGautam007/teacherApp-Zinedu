@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        height: 75
     },
     approveRejectContainer: {
         flexDirection: 'row',

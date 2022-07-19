@@ -7,10 +7,10 @@ import { getOptionName } from '../utils'
 import OptionTag from './OptionTag'
 
 const Option = ({ item, index }) => {
-    const { option, html, prevQuestionHtml } = item
+    const { option, html, prevQuestionHtml, isFillUps } = item
     // console.log({ item })
     return <View style={styles.container}>
-        <Text style={styles.heading}>{getOptionName(index)}</Text>
+        <Text style={styles.heading}>{isFillUps ? 'Correct Answer' : getOptionName(index)}</Text>
 
         <OptionTag verify={true} style={styles.tag} />
 

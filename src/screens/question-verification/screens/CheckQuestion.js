@@ -45,6 +45,7 @@ const CheckQuestion = (props) => {
     const scrollRef = useRef();
 
     const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true);
     const [approveModal, setApproveModal] = useState(false);
     const [rejectModal, setRejectModal] = useState(false);
     const [questionId, setQuestionId] = useState('');
@@ -62,8 +63,6 @@ const CheckQuestion = (props) => {
 
 
     const getQuestionIds = async () => {
-        // console.log('getQuestionIds')
-        // const response = await GET_QUESTION_IDS({ subjectId: 2, chapterId: 824 })
         const response = await GET_L3_QUESTION_IDS()
         // console.log('getQuestionIds', JSON.stringify(response))
         if (response?.status) {
@@ -71,6 +70,9 @@ const CheckQuestion = (props) => {
             // console.log('getQuestionIds', { questionIdsArray })
             if (questionIdsArray?.length) {
                 getQuestionDetails({ questionId: questionIdsArray[0] })
+            } else {
+                setLoading(false)
+                setInitialLoading(false)
             }
             setQuestionIdsArray([...questionIdsArray])
             // removing the first index since its used to call the api above, see the skip button onpress
@@ -78,6 +80,7 @@ const CheckQuestion = (props) => {
             setSkipQuestionIdArray([...questionIdsArray])
         } else {
             setLoading(false)
+            setInitialLoading(false)
         }
 
     }
@@ -88,23 +91,37 @@ const CheckQuestion = (props) => {
         const response = await GET_QUESTION_DETAILS({ questionId })
         // console.log('getQuestionDetails', JSON.stringify(response))
         if (response?.status) {
-            const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id, duplicate_question_ids, duplicate_question_scores } = response?.payload[0]
+            const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id, duplicate_question_ids, duplicate_question_scores, fill_in_the_blank_answer, correct_option } = response?.payload[0]
             setQuestionId(questionId)
             setQuestionObject(response?.payload[0])
 
-            // set options to generate HTML content
             let options = []
-            option1 && options.push({ html: option1, selected: is_option1_correct })
-            option2 && options.push({ html: option2, selected: is_option2_correct })
-            option3 && options.push({ html: option3, selected: is_option3_correct })
-            option4 && options.push({ html: option4, selected: is_option4_correct })
-            setOptions(options)
-
+            if (question_type == '1') {
+                // if Objective
+                option1 && options.push({ html: option1, selected: correct_option === '1' })
+                option2 && options.push({ html: option2, selected: correct_option === '2' })
+                option3 && options.push({ html: option3, selected: correct_option === '3' })
+                option4 && options.push({ html: option4, selected: correct_option === '4' })
+                setOptions(options)
+            } else if (question_type == '2') {
+                // if Multiple
+                option1 && options.push({ html: option1, selected: is_option1_correct })
+                option2 && options.push({ html: option2, selected: is_option2_correct })
+                option3 && options.push({ html: option3, selected: is_option3_correct })
+                option4 && options.push({ html: option4, selected: is_option4_correct })
+                setOptions(options)
+            } else if (question_type == '3') {
+                // if Fill ups
+                fill_in_the_blank_answer && options.push({ html: fill_in_the_blank_answer, selected: true, isFillUps: true })
+                setOptions(options)
+            }
+            
             scrollToTop(scrollRef)
         } else {
             alert('Some error occured')
         }
         setLoading(false)
+        setInitialLoading(false)
     }
 
     useEffect(() => {
@@ -228,7 +245,7 @@ const CheckQuestion = (props) => {
                 </View>
             </Modal>
 
-            <ScrollView
+            {!initialLoading && <ScrollView
                 ref={scrollRef}
                 scrollsToTop={true}
                 contentContainerStyle={styles.parentContainer}
@@ -283,9 +300,9 @@ const CheckQuestion = (props) => {
                     </View>}
                 </View>
 
-            </ScrollView>
+            </ScrollView>}
 
-            <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
+            {!initialLoading && <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
                 <View style={styles.approveRejectContainer}>
                     <TouchableOpacity style={styles.approveButton} onPress={() => setRejectModal(true)}>
                         <Text style={styles.approveText}>Reject</Text>
@@ -310,7 +327,7 @@ const CheckQuestion = (props) => {
                 }}>
                     <Text style={styles.approveText}>Skip</Text>
                 </TouchableOpacity>}
-            </View>
+            </View>}
 
             <ScrollToTop
                 scrollRef={scrollRef}

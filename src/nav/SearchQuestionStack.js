@@ -14,9 +14,9 @@ export default function SearchQuestionStack({navigation}) {
         <Stack.Screen name="SearchQuestion" component={SearchQuestion} options={{
           headerLeftContainerStyle:{marginHorizontal:10},
           title:'Question Bank',
-          headerLeft:()=>(
-            <Entypo name="menu" size={24} color="black" onPress={()=>navigation.toggleDrawer()} />
-          )
+          // headerLeft:()=>(
+          //   <Entypo name="menu" size={24} color="black" onPress={()=>navigation.toggleDrawer()} />
+          // )
         }}   />
             <Stack.Screen name="ViewRecording" component={ViewRecording} options={{title:'Recording'}} /> 
       </Stack.Navigator>

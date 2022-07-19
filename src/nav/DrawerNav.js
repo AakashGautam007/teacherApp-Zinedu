@@ -18,9 +18,10 @@ const Drawer = createDrawerNavigator();
 export default function DrawerNav() {
   return (
 
-    <Drawer.Navigator initialRouteName="Dashboard"
+    <Drawer.Navigator
+      initialRouteName="Dashboard"
       drawerContent={props => <CustomDrawerContent {...props} />}
-      screenOptions={{ headerShown: false }} >
+      screenOptions={{ headerShown: false, gestureEnabled: false, swipeEnabled: false }} >
       <Drawer.Screen name="Dashboard" component={DashboardStack} options={{ title: 'Home' }} />
       <Drawer.Screen name="MyScheduleStack" component={MyScheduleStack} options={{ title: 'My Schedule' }} />
       <Drawer.Screen name="PastClassesStack" component={PastClassesStack} options={{ title: 'My Past Classes' }} />

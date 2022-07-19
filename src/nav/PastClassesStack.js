@@ -27,14 +27,14 @@ export default function PastClassesStack({ navigation }) {
         options={{
           headerLeftContainerStyle: { marginHorizontal: 10 },
           title: "Past Classes",
-          headerLeft: () => (
-            <Entypo
-              name="menu"
-              size={24}
-              color="black"
-              onPress={() => navigation.toggleDrawer()}
-            />
-          ),
+          // headerLeft: () => (
+          //   <Entypo
+          //     name="menu"
+          //     size={24}
+          //     color="black"
+          //     onPress={() => navigation.toggleDrawer()}
+          //   />
+          // ),
         }}
       />
       <Stack.Screen name="Tags" component={Tags} options={{ title: "Tags" }} />
