@@ -18,12 +18,13 @@ const styles = StyleSheet.create({
         marginLeft: 13,
         color: '#201F1F',
         fontSize: 16,
-        fontWeight: '600'
+        fontWeight: '600',
+        maxWidth: '65%'
     },
     badge: {
         marginRight: 15,
-        height: 30,
-        width: 30,
+        minHeight: 30,
+        minWidth: 30,
         backgroundColor: '#1F3061'
     },
     badgeContainer: {

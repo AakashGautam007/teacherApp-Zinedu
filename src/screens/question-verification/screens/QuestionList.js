@@ -25,7 +25,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckboxTag from '../components/CheckboxTag'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { APPROVE_QUESTION, GET_CHAPTER_LIST, GET_QUESTION_DETAILS, GET_QUESTION_IDS, GET_TAG_LIST, REJECT_QUESTION, UPLOAD_FILES } from '../api'
-import { FEATURE_TYPE, getCurrentLevel, getKeyByValueFromMap, QUESTION_TYPE, showApproveMessage, showRejectMessage } from '../utils'
+import { FEATURE_TYPE, getCurrentLevel, getKeyByValueFromMap, QUESTION_TYPE, showApproveMessage, showRejectMessage, showSkipMessage } from '../utils'
 import MathJax from '../../../components/MathJax'
 import { width } from '../../../utils/config'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
@@ -153,7 +153,7 @@ const QuestionList = (props) => {
         }
     }
 
-    const getQuestionDetails = async ({ questionId }) => {
+    const getQuestionDetails = async ({ questionId, isSkip = false }) => {
         // console.log({ questionId })
         setLoading(true)
         const response = await GET_QUESTION_DETAILS({ questionId })
@@ -223,6 +223,7 @@ const QuestionList = (props) => {
             })
             setDuplicateQuestions(duplicateQuestions)
 
+            isSkip && showSkipMessage()
             scrollToTop(scrollRef)
         } else {
             alert('Some error occured')
@@ -922,7 +923,7 @@ const QuestionList = (props) => {
                             tempArray = [...questionIdsArray]
                         }
                         let questionId = tempArray?.splice(0, 1)
-                        getQuestionDetails({ questionId })
+                        getQuestionDetails({ questionId, isSkip: true })
                         setSkipQuestionIdArray([...tempArray])
                     }}>
                         <Text style={styles.approveText}>Skip</Text>

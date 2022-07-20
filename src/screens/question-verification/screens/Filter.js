@@ -83,6 +83,7 @@ const Filter = (props) => {
                     <Badge
                         count={unverifiedCount}
                         viewStyle={styles.badge}
+                        textStyle={styles.badgeText}
                     />
                 </View>
 

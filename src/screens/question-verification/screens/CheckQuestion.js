@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FlatList, Modal, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import FlashMessage from 'react-native-flash-message'
 import { STYLES } from '../../../appStyles'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 import HeaderComponent from '../../../components/HeaderComponent'
@@ -9,7 +10,8 @@ import { width } from '../../../utils/config'
 import { APPROVE_QUESTION, GET_L3_QUESTION_IDS, GET_QUESTION_DETAILS, GET_QUESTION_IDS, REJECT_QUESTION } from '../api'
 import CheckQuestionOption from '../components/CheckQuestionOption'
 import styles from '../styles/check-question'
-import { getCurrentLevel, getKeyByValueFromMap, showApproveMessage, showRejectMessage } from '../utils'
+import { getCurrentLevel, getKeyByValueFromMap, showApproveMessage, showRejectMessage, showSkipMessage } from '../utils'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 const response = [
     {
@@ -85,7 +87,7 @@ const CheckQuestion = (props) => {
 
     }
 
-    const getQuestionDetails = async ({ questionId }) => {
+    const getQuestionDetails = async ({ questionId, isSkip = false }) => {
         // console.log({ questionId })
         setLoading(true)
         const response = await GET_QUESTION_DETAILS({ questionId })
@@ -115,7 +117,8 @@ const CheckQuestion = (props) => {
                 fill_in_the_blank_answer && options.push({ html: fill_in_the_blank_answer, selected: true, isFillUps: true })
                 setOptions(options)
             }
-            
+
+            isSkip && showSkipMessage()
             scrollToTop(scrollRef)
         } else {
             alert('Some error occured')
@@ -248,86 +251,87 @@ const CheckQuestion = (props) => {
             {!initialLoading && <ScrollView
                 ref={scrollRef}
                 scrollsToTop={true}
-                contentContainerStyle={styles.parentContainer}
+                // contentContainerStyle={styles.parentContainer}
             // nestedScrollEnabled={true}
             >
 
-                <View style={styles.container}>
-                    <View style={styles.questionContainer}>
+                <View style={styles.parentContainer}>
+                    <View style={styles.container}>
+                        <View style={styles.questionContainer}>
+                            <View>
+                                <Text style={[styles.heading]}>Question {questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}</Text>
+                            </View>
+                            <View style={styles.questionIdTextContainer}>
+                                <Text style={styles.questionIdText}>QID {questionObject?.question_id}</Text>
+                            </View>
+                        </View>
+
+                        {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+                        {questionObject?.question && <View style={{
+                            width: width * 0.75
+                        }}>
+                            <MathJax
+                                content={questionObject?.question}
+                            />
+                        </View>}
+
+                    </View>
+
+                    <FlatList
+                        data={options}
+                        renderItem={({ item, index }) => {
+                            return <CheckQuestionOption
+                                item={item}
+                                index={index}
+                            />
+                        }}
+                    />
+
+                    <View style={styles.container}>
                         <View>
-                            <Text style={[styles.heading]}>Question</Text>
+                            <Text style={[styles.heading]}>Solution</Text>
                         </View>
-                        <View style={styles.questionIdTextContainer}>
-                            <Text style={styles.questionIdText}>QID {questionObject?.question_id}</Text>
-                        </View>
+
+                        {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+                        {questionObject?.solution?.length > 0 && <View style={{
+                            width: width * 0.75
+                        }}>
+                            <MathJax
+                                content={questionObject?.solution}
+                            />
+                        </View>}
                     </View>
 
-                    {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
-                    {questionObject?.question && <View style={{
-                        width: width * 0.75
-                    }}>
-                        <MathJax
-                            content={questionObject?.question}
-                        />
-                    </View>}
-
                 </View>
+                {!initialLoading && <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
+                    <View style={styles.approveRejectContainer}>
+                        <TouchableOpacity style={styles.approveButton} onPress={() => setRejectModal(true)}>
+                            <Text style={styles.approveText}>Reject</Text>
+                        </TouchableOpacity>
 
-
-
-                <FlatList
-                    data={options}
-                    renderItem={({ item, index }) => {
-                        return <CheckQuestionOption
-                            item={item}
-                            index={index}
-                        />
-                    }}
-                />
-
-                <View style={styles.container}>
-                    <View>
-                        <Text style={[styles.heading]}>Solution</Text>
+                        <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 40 }]}
+                            onPress={() => setApproveModal(true)}>
+                            <Text style={[styles.approveText, { color: 'white' }]}>Approve</Text>
+                        </TouchableOpacity>
                     </View>
 
-                    {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
-                    {questionObject?.solution?.length > 0 && <View style={{
-                        width: width * 0.75
+                    {questionIdsArray.length > 1 && <TouchableOpacity onPress={() => {
+                        let tempArray = []
+                        if (skipQuestionIdArray.length) {
+                            tempArray = [...skipQuestionIdArray]
+                        } else {
+                            tempArray = [...questionIdsArray]
+                        }
+                        let questionId = tempArray?.splice(0, 1)
+                        getQuestionDetails({ questionId, isSkip: true })
+                        setSkipQuestionIdArray([...tempArray])
                     }}>
-                        <MathJax
-                            content={questionObject?.solution}
-                        />
-                    </View>}
-                </View>
-
+                        <Text style={styles.approveText}>Skip</Text>
+                    </TouchableOpacity>}
+                </View>}
             </ScrollView>}
 
-            {!initialLoading && <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
-                <View style={styles.approveRejectContainer}>
-                    <TouchableOpacity style={styles.approveButton} onPress={() => setRejectModal(true)}>
-                        <Text style={styles.approveText}>Reject</Text>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 40 }]}
-                        onPress={() => setApproveModal(true)}>
-                        <Text style={[styles.approveText, { color: 'white' }]}>Approve</Text>
-                    </TouchableOpacity>
-                </View>
-
-                {questionIdsArray.length > 1 && <TouchableOpacity onPress={() => {
-                    let tempArray = []
-                    if (skipQuestionIdArray.length) {
-                        tempArray = [...skipQuestionIdArray]
-                    } else {
-                        tempArray = [...questionIdsArray]
-                    }
-                    let questionId = tempArray?.splice(0, 1)
-                    getQuestionDetails({ questionId })
-                    setSkipQuestionIdArray([...tempArray])
-                }}>
-                    <Text style={styles.approveText}>Skip</Text>
-                </TouchableOpacity>}
-            </View>}
 
             <ScrollToTop
                 scrollRef={scrollRef}

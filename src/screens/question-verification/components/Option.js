@@ -33,19 +33,19 @@ const Option = ({ item, index }) => {
                 width: width * 0.75
             }}>
                 <MathJax
-                    content={html}
+                    content={prevQuestionHtml}
                 />
             </View>
         </View>
 
-        <OptionTag verify={false} style={styles.tag} />
+        <OptionTag verify={false} text={isFillUps ? 'Similar Answer' : null} style={[styles.tag, isFillUps ? { maxWidth: '28%' } : null]} />
         <View style={styles.borderContainer}>
             {/* <Text style={styles.questionText}>Haier</Text> */}
             <View style={{
                 width: width * 0.75
             }}>
                 <MathJax
-                    content={prevQuestionHtml}
+                    content={html}
                 />
             </View>
         </View>

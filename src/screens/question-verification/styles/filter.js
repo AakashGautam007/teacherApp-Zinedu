@@ -22,13 +22,17 @@ const styles = StyleSheet.create({
     unverifiedCardText: {
         marginLeft: 10,
         color: '#201F1F',
-        fontWeight: '600'
+        fontWeight: '600',
+        fontSize: 14
     },
     badge: {
         marginRight: 10,
-        height: 30,
-        width: 30,
+        minHeight: 30,
+        minWidth: 30,
         backgroundColor: '#1F3061'
+    },
+    badgeText: {
+        fontSize: 14
     },
     scrollToTop: {
         width: 50,
