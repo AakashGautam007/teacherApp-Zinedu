@@ -46,7 +46,7 @@ const Dashboard = ({ navigation }) => {
         postAnalytics('teacher-dashboard', logout)
     }, [])
 
-    
+
 
     const resetModal = () => {
         setApproveModal(false)
@@ -90,10 +90,10 @@ const Dashboard = ({ navigation }) => {
                         {/* <TouchableOpacity onPress={() => navigation.toggleDrawer()} >
                             <Image source={require('../../../assets/menu.png')} style={{ height: 44, width: 44, marginHorizontal: 8, marginVertical: 14 }} />
                         </TouchableOpacity> */}
-                        <Image source={require('../../../assets/my-faculty-logo/index.png')} 
-                        resizeMethod='scale'
-                        resizeMode='contain'
-                        style={{ width: 150, height: 35.08, marginLeft: 8 }} />
+                        <Image source={require('../../../assets/my-faculty-logo/index.png')}
+                            resizeMethod='scale'
+                            resizeMode='contain'
+                            style={{ width: 150, height: 35.08, marginLeft: 8 }} />
                     </View>
                     <TouchableOpacity onPress={() => setApproveModal(true)}>
                         <MaterialIcons name='logout' color={'#5B5B5B'} size={25} style={{ marginRight: 16 }} />
@@ -159,9 +159,14 @@ const Dashboard = ({ navigation }) => {
                         <View style={styles.questionVerificationContainer}>
                             <TouchableOpacity
                                 // onPress={() => navigation.navigate('SearchQuestionStack')}
-                                disabled={reviewCount == 0}
-                                onPress={() => navigation.navigate('Filter')}
-                                style={reviewCount == 0 ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard}>
+                                // disabled={reviewCount == 0}
+                                onPress={() => {
+                                    reviewCount == 0 ?
+                                        navigation.navigate('Congrats')
+                                        :
+                                        navigation.navigate('Filter')
+                                }}
+                                style={false ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard}>
                                 <Badge
                                     count={reviewCount}
                                     viewStyle={{
@@ -170,7 +175,7 @@ const Dashboard = ({ navigation }) => {
                                         right: -10,
                                     }}
                                 />
-                                <Text style={reviewCount == 0 ? styles.cardInactiveText : styles.cardText}>
+                                <Text style={false ? styles.cardInactiveText : styles.cardText}>
                                     Review Question
                                 </Text>
                             </TouchableOpacity>
@@ -178,9 +183,15 @@ const Dashboard = ({ navigation }) => {
 
                         <View style={styles.questionVerificationContainer}>
                             <TouchableOpacity
-                                disabled={visibilityCheckCount == 0}
-                                onPress={() => navigation.navigate('CheckQuestion')}
-                                style={visibilityCheckCount == 0 ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard} >
+                                // disabled={visibilityCheckCount == 0}
+                                onPress={() => {
+                                    visibilityCheckCount == 0 ?
+                                        navigation.navigate('Congrats')
+                                        :
+                                        navigation.navigate('CheckQuestion')
+                                }}
+
+                                style={false ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard} >
                                 <Badge
                                     count={visibilityCheckCount}
                                     viewStyle={{
@@ -189,7 +200,7 @@ const Dashboard = ({ navigation }) => {
                                         right: -10,
                                     }}
                                 />
-                                <Text style={visibilityCheckCount == 0 ? styles.cardInactiveText : styles.cardText}>
+                                <Text style={false ? styles.cardInactiveText : styles.cardText}>
                                     Visibility Check
                                 </Text>
                             </TouchableOpacity>

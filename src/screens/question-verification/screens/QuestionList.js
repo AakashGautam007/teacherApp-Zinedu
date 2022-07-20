@@ -156,7 +156,7 @@ const QuestionList = (props) => {
     const getQuestionDetails = async ({ questionId, isSkip = false }) => {
         // console.log({ questionId })
         setLoading(true)
-        const response = await GET_QUESTION_DETAILS({ questionId })
+        const response = await GET_QUESTION_DETAILS({ questionId: '86788' })
 
         // console.log('1', JSON.stringify(response))
         if (response?.status) {
@@ -272,7 +272,7 @@ const QuestionList = (props) => {
 
     const moveToNextQuestion = () => {
         questionIdsArray.splice(questionIdsArray.indexOf(Number(questionObject?.question_id)), 1)
-        if (questionIdsArray.length != 0) {
+        if (questionIdsArray.length > 0) {
             if (questionIdsArray?.length) {
                 setInitialLoading(true)
                 getQuestionDetails({ questionId: questionIdsArray[0] })
@@ -677,7 +677,7 @@ const QuestionList = (props) => {
                                     setFileList={fileList => {
                                         // setLoading(true)
                                         // uploadFileApi(fileList)
-                                        console.log('AttachmentButton', [...fileList])
+                                        // console.log('AttachmentButton', [...fileList])
                                         setAttachmentFiles(fileList)
                                     }}
                                     text={'Upload Files'}

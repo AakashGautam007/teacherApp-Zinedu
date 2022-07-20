@@ -55,8 +55,12 @@ const Filter = (props) => {
             const { L1, L2 } = response?.payload[0]
             // console.log({ L1, L2 })
             const [count, subject] = generateSubjectList([...L1, ...L2])
-            setUnverifiedCount(count)
-            setSubjectList(subject)
+            if (subject.length > 0) {
+                setUnverifiedCount(count)
+                setSubjectList(subject)
+            } else {
+                navigation.replace('Congrats')
+            }
         } else {
 
         }

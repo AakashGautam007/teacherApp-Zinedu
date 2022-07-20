@@ -133,7 +133,7 @@ const CheckQuestion = (props) => {
 
     const moveToNextQuestion = () => {
         questionIdsArray.splice(questionIdsArray.indexOf(Number(questionObject?.question_id)), 1)
-        if (questionIdsArray.length != 0) {
+        if (questionIdsArray.length > 0) {
             if (questionIdsArray?.length) {
                 getQuestionDetails({ questionId: questionIdsArray[0] })
             }
@@ -142,7 +142,7 @@ const CheckQuestion = (props) => {
             questionIdsArray.splice(0, 1)
             setSkipQuestionIdArray([...questionIdsArray])
         } else {
-            navigation.pop(1)
+            navigation.replace('Congrats')
         }
         resetModal()
     }
