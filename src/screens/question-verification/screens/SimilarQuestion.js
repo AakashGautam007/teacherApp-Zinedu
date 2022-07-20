@@ -70,6 +70,7 @@ const SimilarQuestion = (props) => {
   const scrollRef = useRef();
 
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [options, setOptions] = useState([]);
   const [approveModal, setApproveModal] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState({});
@@ -99,42 +100,85 @@ const SimilarQuestion = (props) => {
         chapter_assoc_id,
         duplicate_question_ids,
         duplicate_question_scores,
+        fill_in_the_blank_answer,
+        correct_option,
       } = response?.payload[0];
       setCurrentQuestion(response?.payload[0]);
 
-      // set options to generate HTML content
       let options = [];
-      option1 &&
-        options.push({
-          html: option1,
-          selected: is_option1_correct,
-          prevQuestionHtml: questionObject?.option1,
-        });
-      option2 &&
-        options.push({
-          html: option2,
-          selected: is_option2_correct,
-          prevQuestionHtml: questionObject?.option2,
-        });
-      option3 &&
-        options.push({
-          html: option3,
-          selected: is_option3_correct,
-          prevQuestionHtml: questionObject?.option3,
-        });
-      option4 &&
-        options.push({
-          html: option4,
-          selected: is_option4_correct,
-          prevQuestionHtml: questionObject?.option4,
-        });
-      setOptions(options);
+      if (question_type == "1") {
+        // if Objective
+        option1 &&
+          options.push({
+            html: option1,
+            selected: correct_option === "1",
+            prevQuestionHtml: questionObject?.option1,
+          });
+        option2 &&
+          options.push({
+            html: option2,
+            selected: correct_option === "2",
+            prevQuestionHtml: questionObject?.option2,
+          });
+        option3 &&
+          options.push({
+            html: option3,
+            selected: correct_option === "3",
+            prevQuestionHtml: questionObject?.option3,
+          });
+        option4 &&
+          options.push({
+            html: option4,
+            selected: correct_option === "4",
+            prevQuestionHtml: questionObject?.option4,
+          });
+        setOptions(options);
+      } else if (question_type == "2") {
+        // if Multiple
+        option1 &&
+          options.push({
+            html: option1,
+            selected: is_option1_correct,
+            prevQuestionHtml: questionObject?.option1,
+          });
+        option2 &&
+          options.push({
+            html: option2,
+            selected: is_option2_correct,
+            prevQuestionHtml: questionObject?.option2,
+          });
+        option3 &&
+          options.push({
+            html: option3,
+            selected: is_option3_correct,
+            prevQuestionHtml: questionObject?.option3,
+          });
+        option4 &&
+          options.push({
+            html: option4,
+            selected: is_option4_correct,
+            prevQuestionHtml: questionObject?.option4,
+          });
+        setOptions(options);
+        setOptions(options);
+      } else if (question_type == "3") {
+        // if Fill ups
+        fill_in_the_blank_answer &&
+          options.push({
+            html: fill_in_the_blank_answer,
+            prevQuestionHtml: questionObject?.fill_in_the_blank_answer,
+            selected: true,
+            isFillUps: true,
+          });
+        setOptions(options);
+      }
 
       scrollToTop(scrollRef);
     } else {
       alert("Some error occured");
     }
     setLoading(false);
+    setInitialLoading(false);
   };
 
   useEffect(() => {
@@ -200,6 +244,7 @@ const SimilarQuestion = (props) => {
 
   return (
     <SafeAreaView style={STYLES.safeAreaContainer}>
+      <ActivityIndicatorComponent animating={loading} />
       <HeaderComponent
         text={"Check Similar Question"}
         onPress={navigation.goBack}
@@ -247,98 +292,104 @@ const SimilarQuestion = (props) => {
         </View>
       </Modal>
 
-      <ScrollView
-        ref={scrollRef}
-        scrollsToTop={true}
-        contentContainerStyle={styles.parentContainer}
-        // nestedScrollEnabled={true}
-      >
-        <View
-          style={{
-            paddingHorizontal: 20,
-            paddingBottom: 40,
-          }}
+      {!initialLoading && (
+        <ScrollView
+          ref={scrollRef}
+          scrollsToTop={true}
+          contentContainerStyle={styles.parentContainer}
+          // nestedScrollEnabled={true}
         >
-          <View style={styles.questionBorderContainer}>
-            <View style={styles.container}>
-              <View style={styles.questionContainer}>
-                <View>
-                  <Text style={[styles.heading]}>Question</Text>
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingBottom: 40,
+            }}
+          >
+            <View style={styles.questionBorderContainer}>
+              <View style={styles.container}>
+                <View style={styles.questionContainer}>
+                  <View>
+                    <Text style={[styles.heading]}>Question</Text>
+                  </View>
+                  <View style={styles.questionIdTextContainer}>
+                    <Text style={styles.questionIdText}>
+                      QID {questionObject?.question_id}
+                    </Text>
+                  </View>
                 </View>
-                <View style={styles.questionIdTextContainer}>
-                  <Text style={styles.questionIdText}>
-                    QID {questionObject?.question_id}
-                  </Text>
-                </View>
-              </View>
 
-              <OptionTag
-                verify={true}
-                style={[
-                  styles.tag,
-                  { marginVertical: 5, marginBottom: 0, maxWidth: "27%" },
-                ]}
-              />
-
-              <View
-                style={[
-                  styles.borderContainer,
-                  { borderWidth: 0, padding: 10, paddingHorizontal: 10 },
-                ]}
-              >
-                {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
-
-                <View
-                  style={{
-                    width: width * 0.75,
-                  }}
-                >
-                  <MathJax content={questionObject?.question} />
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.container}>
-              <View style={styles.questionContainer}>
                 <OptionTag
-                  verify={false}
+                  verify={true}
                   style={[
                     styles.tag,
-                    { marginVertical: 5, marginBottom: 0, maxWidth: "60%" },
+                    { marginVertical: 5, marginBottom: 0, maxWidth: "27%" },
                   ]}
-                  text="Similar Question"
                 />
-                <View style={[styles.questionIdTextContainer, { height: 25 }]}>
-                  <Text style={styles.questionIdText}>QID {question_id}</Text>
+
+                <View
+                  style={[
+                    styles.borderContainer,
+                    { borderWidth: 0, padding: 10, paddingHorizontal: 10 },
+                  ]}
+                >
+                  {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+
+                  <View
+                    style={{
+                      width: width * 0.75,
+                    }}
+                  >
+                    <MathJax content={questionObject?.question} />
+                  </View>
                 </View>
               </View>
 
-              <View
-                style={[
-                  styles.borderContainer,
-                  { borderWidth: 0, padding: 10, paddingHorizontal: 10 },
-                ]}
-              >
-                {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+              <View style={styles.container}>
+                <View style={styles.questionContainer}>
+                  <OptionTag
+                    verify={false}
+                    style={[
+                      styles.tag,
+                      { marginVertical: 5, marginBottom: 0, maxWidth: "60%" },
+                    ]}
+                    text="Similar Question"
+                  />
+                  <View
+                    style={[styles.questionIdTextContainer, { height: 25 }]}
+                  >
+                    <Text style={styles.questionIdText}>QID {question_id}</Text>
+                  </View>
+                </View>
+
                 <View
-                  style={{
-                    width: width * 0.75,
-                  }}
+                  style={[
+                    styles.borderContainer,
+                    { borderWidth: 0, padding: 10, paddingHorizontal: 10 },
+                  ]}
                 >
-                  <MathJax content={currentQuestion?.question} />
+                  {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+                  <View
+                    style={{
+                      width: width * 0.75,
+                    }}
+                  >
+                    <MathJax content={currentQuestion?.question} />
+                  </View>
                 </View>
               </View>
             </View>
+
+            <FlatList
+              data={options}
+              renderItem={({ item, index }) => {
+                return <Option item={item} index={index} />;
+              }}
+            />
           </View>
+        </ScrollView>
+      )}
 
-          <FlatList
-            data={options}
-            renderItem={({ item, index }) => {
-              return <Option item={item} index={index} />;
-            }}
-          />
-        </View>
-
+      {!initialLoading && (
         <View
           style={{
             backgroundColor: "white",
@@ -369,9 +420,13 @@ const SimilarQuestion = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
-
-      <ScrollToTop scrollRef={scrollRef} />
+      )}
+      <ScrollToTop
+        scrollRef={scrollRef}
+        style={{
+          bottom: 100,
+        }}
+      />
     </SafeAreaView>
   );
 };

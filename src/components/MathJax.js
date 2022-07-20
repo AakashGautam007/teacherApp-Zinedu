@@ -3,34 +3,34 @@ import { View } from "react-native";
 import { width, height } from "../utils/config";
 import AutoHeightWebView from "react-native-autoheight-webview";
 
-const defaultOptions = {
-  tex: {
-    inlineMath: [
-      ["$", "$"],
-      ["\\(", "\\)"],
-    ],
-    displayMath: [
-      ["$$", "$$"],
-      ["\\[", "\\]"],
-    ],
-    processEscapes: true,
-    packages: ["base", "ams", "noerrors", "noundefined"],
-  },
-  chtml: {
-    scale: 1, // global scaling factor for all expressions
-    minScale: 1, // smallest scaling factor to use
-    mtextInheritFont: false, // true to make mtext elements use surrounding font
-    merrorInheritFont: false, // true to make merror text use surrounding font
-    mtextFont: "", // font to use for mtext, if not inheriting (empty means use MathJax fonts)
-    merrorFont: "serif", // font to use for merror, if not inheriting (empty means use MathJax fonts)
-    unknownFamily: "serif", // font to use for character that aren't in MathJax's fonts
-    mathmlSpacing: false, // true for MathML spacing rules, false for TeX rules
-    skipAttributes: {}, // RFDa and other attributes NOT to copy to the output
-    exFactor: 0.5, // default size of ex in em units
-    displayAlign: "center", // default for indentalign when set to 'auto'
-    displayIndent: "0", // default for indentshift when set to 'auto'
-  },
-};
+// const defaultOptions = {
+//   tex: {
+//     inlineMath: [
+//       ["$", "$"],
+//       ["\\(", "\\)"],
+//     ],
+//     displayMath: [
+//       ["$$", "$$"],
+//       ["\\[", "\\]"],
+//     ],
+//     processEscapes: true,
+//     packages: ["base", "ams", "noerrors", "noundefined"],
+//   },
+//   chtml: {
+//     scale: 1, // global scaling factor for all expressions
+//     minScale: 1, // smallest scaling factor to use
+//     mtextInheritFont: false, // true to make mtext elements use surrounding font
+//     merrorInheritFont: false, // true to make merror text use surrounding font
+//     mtextFont: "", // font to use for mtext, if not inheriting (empty means use MathJax fonts)
+//     merrorFont: "serif", // font to use for merror, if not inheriting (empty means use MathJax fonts)
+//     unknownFamily: "serif", // font to use for character that aren't in MathJax's fonts
+//     mathmlSpacing: false, // true for MathML spacing rules, false for TeX rules
+//     skipAttributes: {}, // RFDa and other attributes NOT to copy to the output
+//     exFactor: 0.5, // default size of ex in em units
+//     displayAlign: "center", // default for indentalign when set to 'auto'
+//     displayIndent: "0", // default for indentshift when set to 'auto'
+//   },
+// };
 
 // class MathJax extends React.Component {
 //   constructor(props) {
@@ -120,6 +120,52 @@ const defaultOptions = {
 
 // export default MathJax;
 
+const defaultOptions = {
+  tex: {
+    inlineMath: [
+      ['$', '$'],
+      ['\\(', '\\)'],
+    ],
+    displayMath: [
+      ['$$', '$$'],
+      ['\\[', '\\]'],
+    ],
+    processEscapes: true,
+    packages: ['base', 'ams', 'noerrors', 'noundefined']
+  },
+  loader: {
+    load: ["input/mml", 'output/svg']
+  },
+  chtml: {
+    scale: 1,                      // global scaling factor for all expressions
+    minScale: 1,                  // smallest scaling factor to use
+    mtextInheritFont: false,       // true to make mtext elements use surrounding font
+    merrorInheritFont: false,      // true to make merror text use surrounding font
+    mtextFont: '',                 // font to use for mtext, if not inheriting (empty means use MathJax fonts)
+    merrorFont: 'serif',           // font to use for merror, if not inheriting (empty means use MathJax fonts)
+    unknownFamily: 'serif',        // font to use for character that aren't in MathJax's fonts
+    mathmlSpacing: false,          // true for MathML spacing rules, false for TeX rules
+    skipAttributes: {},            // RFDa and other attributes NOT to copy to the output
+    exFactor: .5,                  // default size of ex in em units
+    displayAlign: 'center',        // default for indentalign when set to 'auto'
+    displayIndent: '0'             // default for indentshift when set to 'auto'
+  },
+  svg: {
+    scale: 1,                      // global scaling factor for all expressions
+    minScale: .5,                  // smallest scaling factor to use
+    mtextInheritFont: false,       // true to make mtext elements use surrounding font
+    merrorInheritFont: true,       // true to make merror text use surrounding font
+    mathmlSpacing: true,          // true for MathML spacing rules, false for TeX rules
+    skipAttributes: {},            // RFDa and other attributes NOT to copy to the output
+    exFactor: .5,                  // default size of ex in em units
+    displayAlign: 'center',        // default for indentalign when set to 'auto'
+    displayIndent: '0',            // default for indentshift when set to 'auto'
+    fontCache: 'local',            // or 'global' or 'none'
+    localID: null,                 // ID to use for local font cache (for single equation processing)
+    internalSpeechTitles: true,    // insert <title> tags with speech content
+    titleID: 0                     // initial id number to use for aria-labeledby titles
+  }
+};
 
 const wrapMathjax = (props) => {
   const { content, mathJaxOptions, answer1, answer2, answer3, answer4 } = props
@@ -170,7 +216,7 @@ const wrapMathjax = (props) => {
 				};
 				</script>
 				<script id="MathJax-script"
-					src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/mml-chtml.js">
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/mml-svg.js">
 				</script>
 			</head>
      

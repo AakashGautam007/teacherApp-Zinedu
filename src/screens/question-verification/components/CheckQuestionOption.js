@@ -14,10 +14,12 @@ import { getOptionName } from "../utils";
 import Tag from "./Tag";
 
 const CheckQuestionOption = ({ item, index }) => {
-  const { html, selected } = item;
+  const { html, selected, isFillUps } = item;
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>{getOptionName(index)}</Text>
+      <Text style={styles.heading}>
+        {isFillUps ? "Correct Answer" : getOptionName(index)}
+      </Text>
 
       <View style={[styles.borderContainer, { marginTop: 10 }]}>
         {/* <Text style={styles.questionText}>A stem, that’s the question i.e. a problem or an incomplete statement - Make sure that you create a crisp, grammatically error-free and simple stem which has relevant information.</Text> */}

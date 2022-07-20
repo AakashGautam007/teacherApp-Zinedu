@@ -22,6 +22,7 @@ import {
 } from "./src/utils/notificationService";
 import NavigationService from "./src/AppUtils/NavigationService";
 import FlashMessage from "react-native-flash-message";
+import { LOGIN_API } from "./src/screens/auth/api";
 
 LogBox.ignoreAllLogs();
 
@@ -61,83 +62,60 @@ const App = () => {
   const authContext = useMemo(
     () => ({
       signin: async (username, password) => {
-        const response = await fetch(`${ENDPOINT}/login/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password,
-            returnSecureToken: true,
-            // service_provider:'zinedu'
-          }),
-        });
+        // const response = await fetch(`${ENDPOINT}/login/`, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     username: username,
+        //     password: password,
+        //     returnSecureToken: true,
+        //     // service_provider:'zinedu'
+        //   }),
+        // });
+        const params = {
+          username: username,
+          password: password,
+          returnSecureToken: true,
+          // service_provider:'zinedu'
+        }
+        const response = await LOGIN_API(params)
 
-        // if (!response.ok) {
-        //   const errorResData = await response.json();
-        //   const errorId = errorResData.error.message;
-        //   let message = 'Something went wrong!';
-        //   if (errorId === 'EMAIL_NOT_FOUND') {
-        //     message = 'This email could not be found!';
-        //   } else if (errorId === 'INVALID_PASSWORD') {
-        //     message = 'This password is not valid!';
-        //   }
-        //   throw new Error(errorId);
+        // console.log({ response })
+
+        // if (response.status === 400) {
+        //   Alert.alert("Invalid credentials");
+        //   // Toast.show(`Invalid credentials`, Toast.SHORT);
         // }
 
-        // const resData = await response.json();
-        //  console.log(resData);
-        //  console.log(resData.token)
-        // const token = await resData.token;
-        //   if (token!==undefined)
-        // try {
-        //   await AsyncStorage.setItem('userToken', resData.token)
-        //   await AsyncStorage.setItem('userName', username)
-        // } catch (e) {
-        //   // saving error
-        //   console.log(e)
-        // }
-
-        if (response.status === 400) {
-          Alert.alert("Invalid credentials");
-          // Toast.show(`Invalid credentials`, Toast.SHORT);
+        // if (response.ok) {
+        //   const resData = await response.json();
+        //   console.log(resData);
+        //   console.log(resData.token);
+        const token = await response?.token;
+        if (token !== undefined) {
+          try {
+            // await AsyncStorage.setItem("userToken", resData.token);
+            // await AsyncStorage.setItem("userName", username); 
+            setAuthFields({ userToken: token, userName: username });
+            requestUserPermission(token, setAuthFields);
+            Toast.show("Logged In", Toast.SHORT);
+          } catch (e) {
+            // saving error
+            alert("Invalid credentials")
+            console.log('catch', e);
+          }
+        } else {
+          alert("Invalid credentials")
         }
 
-        // if (!response.ok) {
 
-        //   const errorId = errorResData.error.message;
+        // setUserToken(resData.token)
+        // setIsLoading(false)
+        // dispatch({ type: "SIGNIN", username: username, token: token });
 
-        //   if (errorId === 'EMAIL_NOT_FOUND') {
-        //     message = 'This email could not be found!';
-        //   } else if (errorId === 'INVALID_PASSWORD') {
-        //     message = 'This password is not valid!';
-        //   }
-        //   Toast.show(`${message}`, Toast.SHORT);
-        //   throw new Error(errorId);
         // }
-
-        if (response.ok) {
-          const resData = await response.json();
-          console.log(resData);
-          console.log(resData.token);
-          const token = await resData.token;
-          if (token !== undefined)
-            try {
-              // await AsyncStorage.setItem("userToken", resData.token);
-              // await AsyncStorage.setItem("userName", username); 
-              setAuthFields({ userToken: token, userName: username });
-              requestUserPermission(resData.token, setAuthFields);
-            } catch (e) {
-              // saving error
-              console.log(e);
-            }
-
-          // setUserToken(resData.token)
-          // setIsLoading(false)
-          // dispatch({ type: "SIGNIN", username: username, token: token });
-          Toast.show("Logged In", Toast.SHORT);
-        }
       },
 
       logout: async () => {

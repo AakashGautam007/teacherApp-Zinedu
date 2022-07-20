@@ -22,9 +22,9 @@ export default function DoubtStack({navigation}) {
           headerRightContainerStyle:{marginHorizontal:10},
           headerLeftContainerStyle:{marginHorizontal:10},
           title:'Pending Doubts',
-          headerLeft:()=>(
-            <Entypo name="menu" size={24} color="black" onPress={()=>navigation.toggleDrawer()} />
-          ),
+          // headerLeft:()=>(
+          //   <Entypo name="menu" size={24} color="black" onPress={()=>navigation.toggleDrawer()} />
+          // ),
           // headerRight:()=>(
           //   <AntDesign name="logout" size={24} color="black" onPress={logout} />
           // )

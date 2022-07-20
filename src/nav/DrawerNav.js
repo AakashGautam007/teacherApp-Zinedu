@@ -19,7 +19,11 @@ export default function DrawerNav() {
     <Drawer.Navigator
       initialRouteName="Dashboard"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false,
+        swipeEnabled: false,
+      }}
     >
       <Drawer.Screen
         name="Dashboard"

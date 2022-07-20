@@ -90,7 +90,7 @@ export const doFetch = async (url, type, data = null, isFile = false, tempToken 
     })
         // .then(handleCookies)
         .then((res) => {
-            // console.log('response then', res)
+            console.log('response then', res)
             return res.json()
         })
         .then((responseJson) => {

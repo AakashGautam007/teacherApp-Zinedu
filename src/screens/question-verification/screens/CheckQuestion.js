@@ -64,6 +64,7 @@ const CheckQuestion = (props) => {
   const scrollRef = useRef();
 
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [approveModal, setApproveModal] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [questionId, setQuestionId] = useState("");
@@ -79,8 +80,6 @@ const CheckQuestion = (props) => {
   };
 
   const getQuestionIds = async () => {
-    // console.log('getQuestionIds')
-    // const response = await GET_QUESTION_IDS({ subjectId: 2, chapterId: 824 })
     const response = await GET_L3_QUESTION_IDS();
     // console.log('getQuestionIds', JSON.stringify(response))
     if (response?.status) {
@@ -88,6 +87,9 @@ const CheckQuestion = (props) => {
       // console.log('getQuestionIds', { questionIdsArray })
       if (questionIdsArray?.length) {
         getQuestionDetails({ questionId: questionIdsArray[0] });
+      } else {
+        setLoading(false);
+        setInitialLoading(false);
       }
       setQuestionIdsArray([...questionIdsArray]);
       // removing the first index since its used to call the api above, see the skip button onpress
@@ -95,6 +97,7 @@ const CheckQuestion = (props) => {
       setSkipQuestionIdArray([...questionIdsArray]);
     } else {
       setLoading(false);
+      setInitialLoading(false);
     }
   };
 
@@ -123,23 +126,52 @@ const CheckQuestion = (props) => {
         chapter_assoc_id,
         duplicate_question_ids,
         duplicate_question_scores,
+        fill_in_the_blank_answer,
+        correct_option,
       } = response?.payload[0];
       setQuestionId(questionId);
       setQuestionObject(response?.payload[0]);
 
-      // set options to generate HTML content
       let options = [];
-      option1 && options.push({ html: option1, selected: is_option1_correct });
-      option2 && options.push({ html: option2, selected: is_option2_correct });
-      option3 && options.push({ html: option3, selected: is_option3_correct });
-      option4 && options.push({ html: option4, selected: is_option4_correct });
-      setOptions(options);
+      if (question_type == "1") {
+        // if Objective
+        option1 &&
+          options.push({ html: option1, selected: correct_option === "1" });
+        option2 &&
+          options.push({ html: option2, selected: correct_option === "2" });
+        option3 &&
+          options.push({ html: option3, selected: correct_option === "3" });
+        option4 &&
+          options.push({ html: option4, selected: correct_option === "4" });
+        setOptions(options);
+      } else if (question_type == "2") {
+        // if Multiple
+        option1 &&
+          options.push({ html: option1, selected: is_option1_correct });
+        option2 &&
+          options.push({ html: option2, selected: is_option2_correct });
+        option3 &&
+          options.push({ html: option3, selected: is_option3_correct });
+        option4 &&
+          options.push({ html: option4, selected: is_option4_correct });
+        setOptions(options);
+      } else if (question_type == "3") {
+        // if Fill ups
+        fill_in_the_blank_answer &&
+          options.push({
+            html: fill_in_the_blank_answer,
+            selected: true,
+            isFillUps: true,
+          });
+        setOptions(options);
+      }
 
       scrollToTop(scrollRef);
     } else {
       alert("Some error occured");
     }
     setLoading(false);
+    setInitialLoading(false);
   };
 
   useEffect(() => {
@@ -273,107 +305,111 @@ const CheckQuestion = (props) => {
         </View>
       </Modal>
 
-      <ScrollView
-        ref={scrollRef}
-        scrollsToTop={true}
-        contentContainerStyle={styles.parentContainer}
-        // nestedScrollEnabled={true}
-      >
-        <View style={styles.container}>
-          <View style={styles.questionContainer}>
-            <View>
-              <Text style={[styles.heading]}>Question</Text>
+      {!initialLoading && (
+        <ScrollView
+          ref={scrollRef}
+          scrollsToTop={true}
+          contentContainerStyle={styles.parentContainer}
+          // nestedScrollEnabled={true}
+        >
+          <View style={styles.container}>
+            <View style={styles.questionContainer}>
+              <View>
+                <Text style={[styles.heading]}>Question</Text>
+              </View>
+              <View style={styles.questionIdTextContainer}>
+                <Text style={styles.questionIdText}>
+                  QID {questionObject?.question_id}
+                </Text>
+              </View>
             </View>
-            <View style={styles.questionIdTextContainer}>
-              <Text style={styles.questionIdText}>
-                QID {questionObject?.question_id}
-              </Text>
-            </View>
+
+            {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+            {questionObject?.question && (
+              <View
+                style={{
+                  width: width * 0.75,
+                }}
+              >
+                <MathJax content={questionObject?.question} />
+              </View>
+            )}
           </View>
 
-          {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
-          {questionObject?.question && (
-            <View
-              style={{
-                width: width * 0.75,
-              }}
-            >
-              <MathJax content={questionObject?.question} />
-            </View>
-          )}
-        </View>
-
-        <FlatList
-          data={options}
-          renderItem={({ item, index }) => {
-            return <CheckQuestionOption item={item} index={index} />;
-          }}
-        />
-
-        <View style={styles.container}>
-          <View>
-            <Text style={[styles.heading]}>Solution</Text>
-          </View>
-
-          {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
-          {questionObject?.solution?.length > 0 && (
-            <View
-              style={{
-                width: width * 0.75,
-              }}
-            >
-              <MathJax content={questionObject?.solution} />
-            </View>
-          )}
-        </View>
-      </ScrollView>
-
-      <View
-        style={{
-          backgroundColor: "white",
-          alignItems: "center",
-          paddingBottom: 10,
-        }}
-      >
-        <View style={styles.approveRejectContainer}>
-          <TouchableOpacity
-            style={styles.approveButton}
-            onPress={() => setRejectModal(true)}
-          >
-            <Text style={styles.approveText}>Reject</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.approveButton,
-              { backgroundColor: "#2B3789", marginLeft: 40 },
-            ]}
-            onPress={() => setApproveModal(true)}
-          >
-            <Text style={[styles.approveText, { color: "white" }]}>
-              Approve
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {questionIdsArray.length > 1 && (
-          <TouchableOpacity
-            onPress={() => {
-              let tempArray = [];
-              if (skipQuestionIdArray.length) {
-                tempArray = [...skipQuestionIdArray];
-              } else {
-                tempArray = [...questionIdsArray];
-              }
-              let questionId = tempArray?.splice(0, 1);
-              getQuestionDetails({ questionId });
-              setSkipQuestionIdArray([...tempArray]);
+          <FlatList
+            data={options}
+            renderItem={({ item, index }) => {
+              return <CheckQuestionOption item={item} index={index} />;
             }}
-          >
-            <Text style={styles.approveText}>Skip</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+          />
+
+          <View style={styles.container}>
+            <View>
+              <Text style={[styles.heading]}>Solution</Text>
+            </View>
+
+            {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+            {questionObject?.solution?.length > 0 && (
+              <View
+                style={{
+                  width: width * 0.75,
+                }}
+              >
+                <MathJax content={questionObject?.solution} />
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      )}
+
+      {!initialLoading && (
+        <View
+          style={{
+            backgroundColor: "white",
+            alignItems: "center",
+            paddingBottom: 10,
+          }}
+        >
+          <View style={styles.approveRejectContainer}>
+            <TouchableOpacity
+              style={styles.approveButton}
+              onPress={() => setRejectModal(true)}
+            >
+              <Text style={styles.approveText}>Reject</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.approveButton,
+                { backgroundColor: "#2B3789", marginLeft: 40 },
+              ]}
+              onPress={() => setApproveModal(true)}
+            >
+              <Text style={[styles.approveText, { color: "white" }]}>
+                Approve
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {questionIdsArray.length > 1 && (
+            <TouchableOpacity
+              onPress={() => {
+                let tempArray = [];
+                if (skipQuestionIdArray.length) {
+                  tempArray = [...skipQuestionIdArray];
+                } else {
+                  tempArray = [...questionIdsArray];
+                }
+                let questionId = tempArray?.splice(0, 1);
+                getQuestionDetails({ questionId });
+                setSkipQuestionIdArray([...tempArray]);
+              }}
+            >
+              <Text style={styles.approveText}>Skip</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
 
       <ScrollToTop scrollRef={scrollRef} style={{ bottom: 100 }} />
     </SafeAreaView>

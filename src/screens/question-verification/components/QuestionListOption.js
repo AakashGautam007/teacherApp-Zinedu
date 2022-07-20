@@ -14,9 +14,9 @@ import { getOptionName } from "../utils";
 import Tag from "./Tag";
 
 const QuestionListOption = ({ item, index }) => {
-  const { html, selected } = item;
+  const { html, selected, isFillUps } = item;
   return (
-    <TouchableOpacity
+    <View
       style={[
         styles.container,
         selected
@@ -29,7 +29,9 @@ const QuestionListOption = ({ item, index }) => {
       ]}
     >
       <View style={[styles.borderContainer, { marginTop: 5 }]}>
-        <Text style={styles.heading}>{getOptionName(index)}</Text>
+        <Text style={styles.heading}>
+          {isFillUps ? "Correct Answer" : getOptionName(index)}
+        </Text>
         <View
           style={{
             width: width * 0.75,
@@ -38,7 +40,7 @@ const QuestionListOption = ({ item, index }) => {
           <MathJax content={html} />
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

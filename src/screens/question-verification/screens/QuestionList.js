@@ -65,7 +65,8 @@ const QuestionList = (props) => {
   const prevScreenData = route?.params || {};
   const { title, subjectId, chapterId } = prevScreenData;
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [L1, setL1] = useState([]);
   const [L2, setL2] = useState([]);
   const [attachmentFiles, setAttachmentFiles] = useState([]);
@@ -119,7 +120,7 @@ const QuestionList = (props) => {
   const getQuestionIds = async () => {
     // console.log({ subjectId, chapterId })
     const response = await GET_QUESTION_IDS({ subjectId, chapterId });
-    console.log("getQuestionIds", JSON.stringify(response));
+    // console.log('getQuestionIds', JSON.stringify(response))
     if (response?.status) {
       const { L1, L2 } = response?.payload[0];
       let questionIdsArray = [...L1, ...L2];
@@ -128,11 +129,17 @@ const QuestionList = (props) => {
       // console.log('getQuestionIds', { questionIdsArray })
       if (questionIdsArray?.length) {
         getQuestionDetails({ questionId: questionIdsArray[0] });
+      } else {
+        setLoading(false);
+        setInitialLoading(false);
       }
       setQuestionIdsArray([...questionIdsArray]);
       // removing the first index since its used to call the api above, see the skip button onpress
       questionIdsArray.splice(0, 1);
       setSkipQuestionIdArray([...questionIdsArray]);
+    } else {
+      setInitialLoading(false);
+      setLoading(false);
     }
   };
 
@@ -174,6 +181,7 @@ const QuestionList = (props) => {
     // console.log({ questionId })
     setLoading(true);
     const response = await GET_QUESTION_DETAILS({ questionId });
+
     // console.log('1', JSON.stringify(response))
     if (response?.status) {
       const {
@@ -195,6 +203,8 @@ const QuestionList = (props) => {
         chapter_assoc_id,
         duplicate_question_ids,
         duplicate_question_scores,
+        fill_in_the_blank_answer,
+        correct_option,
       } = response?.payload[0];
       setQuestionId(questionId?.toString());
       setQuestionObject(response?.payload[0]);
@@ -204,13 +214,40 @@ const QuestionList = (props) => {
       setModalChapterName(chapter_name);
       setSelectedChapterId(chapter_assoc_id);
       setModalSelectedChapterId(chapter_assoc_id);
-      // set options to generate HTML content
+
       let options = [];
-      option1 && options.push({ html: option1, selected: is_option1_correct });
-      option2 && options.push({ html: option2, selected: is_option2_correct });
-      option3 && options.push({ html: option3, selected: is_option3_correct });
-      option4 && options.push({ html: option4, selected: is_option4_correct });
-      setOptions(options);
+      if (question_type == "1") {
+        // if Objective
+        option1 &&
+          options.push({ html: option1, selected: correct_option === "1" });
+        option2 &&
+          options.push({ html: option2, selected: correct_option === "2" });
+        option3 &&
+          options.push({ html: option3, selected: correct_option === "3" });
+        option4 &&
+          options.push({ html: option4, selected: correct_option === "4" });
+        setOptions(options);
+      } else if (question_type == "2") {
+        // if Multiple
+        option1 &&
+          options.push({ html: option1, selected: is_option1_correct });
+        option2 &&
+          options.push({ html: option2, selected: is_option2_correct });
+        option3 &&
+          options.push({ html: option3, selected: is_option3_correct });
+        option4 &&
+          options.push({ html: option4, selected: is_option4_correct });
+        setOptions(options);
+      } else if (question_type == "3") {
+        // if Fill ups
+        fill_in_the_blank_answer &&
+          options.push({
+            html: fill_in_the_blank_answer,
+            selected: true,
+            isFillUps: true,
+          });
+        setOptions(options);
+      }
 
       // setting tags array
       let tags = [];
@@ -231,6 +268,10 @@ const QuestionList = (props) => {
       setModalSelectedFeature(FEATURE_TYPE.get(feature_type));
 
       // duplicate questions array
+      // let duplicateQuestions = [{
+      //     id: 400127,
+      //     score: 47
+      // }]
       let duplicateQuestions = [];
       duplicateQuestions = duplicate_question_ids?.map((item, index) => {
         return {
@@ -245,6 +286,7 @@ const QuestionList = (props) => {
       alert("Some error occured");
     }
     setLoading(false);
+    setInitialLoading(false);
   };
 
   useEffect(() => {
@@ -292,6 +334,7 @@ const QuestionList = (props) => {
     );
     if (questionIdsArray.length != 0) {
       if (questionIdsArray?.length) {
+        setInitialLoading(true);
         getQuestionDetails({ questionId: questionIdsArray[0] });
       }
       setQuestionIdsArray([...questionIdsArray]);
@@ -380,6 +423,14 @@ const QuestionList = (props) => {
     setLoading(false);
   };
 
+  const resetEditModal = () => {
+    setEditModal(false);
+    setModalSelectedChapterId(selectedChapterId);
+    setModalSelectedDifficulty(selectedDifficulty);
+    setModalSelectedFeature(selectedFeature);
+    setModalSelectedTags(selectedTags);
+  };
+
   return (
     <SafeAreaView style={STYLES.safeAreaContainer}>
       <ActivityIndicatorComponent animating={loading} />
@@ -453,7 +504,7 @@ const QuestionList = (props) => {
         animationType="slide"
         transparent={true}
         visible={editModal}
-        onRequestClose={() => setEditModal(false)}
+        onRequestClose={resetEditModal}
         // style={{ margin: 0, flex: 1 }}
       >
         <View style={styles.editModalParentContainer}>
@@ -887,259 +938,261 @@ const QuestionList = (props) => {
         </View>
       </Modal>
 
-      <ScrollView
-        ref={scrollRef}
-        scrollsToTop={true}
-        contentContainerStyle={styles.parentContainer}
-        // nestedScrollEnabled={true}
-      >
-        <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
-          <View style={styles.container}>
-            <View style={styles.questionContainer}>
-              <View>
-                <Text style={[styles.heading]}>
-                  Question{" "}
-                  {questionObject?.question_id
-                    ? questionIdsArray.indexOf(
-                        Number(questionObject?.question_id)
-                      ) + 1
-                    : ""}
-                </Text>
+      {!initialLoading && (
+        <ScrollView
+          ref={scrollRef}
+          scrollsToTop={true}
+          contentContainerStyle={styles.parentContainer}
+          // nestedScrollEnabled={true}
+        >
+          <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
+            <View style={styles.container}>
+              <View style={styles.questionContainer}>
+                <View>
+                  <Text style={[styles.heading]}>
+                    Question{" "}
+                    {questionObject?.question_id
+                      ? questionIdsArray.indexOf(
+                          Number(questionObject?.question_id)
+                        ) + 1
+                      : ""}
+                  </Text>
+                </View>
+                <View style={styles.questionIdTextContainer}>
+                  <Text style={styles.questionIdText}>QID {questionId}</Text>
+                </View>
               </View>
-              <View style={styles.questionIdTextContainer}>
-                <Text style={styles.questionIdText}>QID {questionId}</Text>
-              </View>
-            </View>
 
-            {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
+              {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
 
-            {questionObject?.question && (
-              <View
-                style={{
-                  width: width * 0.75,
-                }}
-              >
-                <MathJax content={questionObject?.question} />
-              </View>
-            )}
+              {questionObject?.question && (
+                <View
+                  style={{
+                    width: width * 0.75,
+                  }}
+                >
+                  <MathJax content={questionObject?.question} />
+                </View>
+              )}
 
-            <FlatList
-              style={{ marginTop: 10 }}
-              data={options}
-              renderItem={({ item, index }) => {
-                return <QuestionListOption item={item} index={index} />;
-              }}
-            />
-          </View>
-
-          <View style={styles.container}>
-            <View>
-              <Text style={[styles.heading]}>Solution</Text>
-            </View>
-
-            {Boolean(questionObject?.solution) ? (
-              <View
-                style={{
-                  width: width * 0.75,
-                }}
-              >
-                <MathJax content={questionObject?.solution} />
-              </View>
-            ) : null}
-            {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
-          </View>
-
-          <View style={styles.container}>
-            <Text style={[styles.heading]}>Check similar Questions</Text>
-
-            {duplicateQuestions.length > 0 ? (
               <FlatList
                 style={{ marginTop: 10 }}
-                data={duplicateQuestions}
+                data={options}
                 renderItem={({ item, index }) => {
-                  return (
-                    <SimilarQuestionItem
-                      item={item}
-                      index={index}
-                      isVisited={Boolean(visitedQuestionObject[item?.id])}
-                      onPress={() => {
-                        let temp = { ...visitedQuestionObject };
-                        if (!temp[item?.id]) {
-                          temp[item?.id] = item?.score;
-                        }
-                        setVisitedQuestionObject({ ...temp });
-                        navigation.navigate("SimilarQuestion", {
-                          question_id: item?.id,
-                          is_accepted: false,
-                          chapter_id: selectedChapterId,
-                          tag_ids: selectedTags.map((item) => item?.id),
-                          difficulty: selectedDifficulty,
-                          feature_type: selectedFeature
-                            ? getKeyByValueFromMap({
-                                map: FEATURE_TYPE,
-                                searchValue: selectedFeature,
-                              })
-                            : questionObject?.feature_type,
-                          current_level: getCurrentLevel({
-                            L1,
-                            L2,
-                            questionId: questionObject?.question_id,
-                          }),
-                          moveToNextQuestion: moveToNextQuestion,
-                          questionObject,
-                        });
-                      }}
-                    />
-                  );
+                  return <QuestionListOption item={item} index={index} />;
                 }}
               />
-            ) : (
-              <Text style={[styles.subHeadingGray, { marginTop: 10 }]}>
-                No similar questions found
-              </Text>
-            )}
-          </View>
-
-          <View style={styles.container}>
-            <View style={styles.questionPropertiesContainer}>
-              <Text style={[styles.heading]}>Question Properties</Text>
-              <TouchableOpacity
-                style={styles.editContainer}
-                onPress={() => setEditModal(true)}
-              >
-                <Text style={styles.editText}>Edit</Text>
-                <AntDesign
-                  name="edit"
-                  size={15}
-                  color={"#1B3687"}
-                  style={styles.editIcon}
-                />
-              </TouchableOpacity>
             </View>
 
-            <View style={styles.subHeadingContainer}>
-              <Text style={styles.subHeading}>Question Type</Text>
-              <Text style={styles.subHeadingGray}>
-                {QUESTION_TYPE.get(questionObject?.question_type) || ""}
-              </Text>
+            <View style={styles.container}>
+              <View>
+                <Text style={[styles.heading]}>Solution</Text>
+              </View>
+
+              {Boolean(questionObject?.solution) ? (
+                <View
+                  style={{
+                    width: width * 0.75,
+                  }}
+                >
+                  <MathJax content={questionObject?.solution} />
+                </View>
+              ) : null}
+              {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
             </View>
 
-            <View style={styles.subHeadingContainer}>
-              <Text style={styles.subHeading}>Subject Name</Text>
-              <Text style={styles.subHeadingGray}>
-                {questionObject?.subject_name || ""}
-              </Text>
-            </View>
+            <View style={styles.container}>
+              <Text style={[styles.heading]}>Check similar Questions</Text>
 
-            <View style={styles.subHeadingContainer}>
-              <Text style={styles.subHeading}>Chapter Name</Text>
-              <Text style={styles.subHeadingGray}>{chapterName || ""}</Text>
-            </View>
-
-            <View style={styles.subHeadingContainer}>
-              <Text style={styles.subHeading}>Tags</Text>
-              {selectedTags?.length > 0 ? (
+              {duplicateQuestions.length > 0 ? (
                 <FlatList
-                  data={selectedTags}
-                  contentContainerStyle={{
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                  }}
-                  renderItem={({ index, item }) => {
-                    return <Tag text={item?.name} />;
+                  style={{ marginTop: 10 }}
+                  data={duplicateQuestions}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <SimilarQuestionItem
+                        item={item}
+                        index={index}
+                        isVisited={Boolean(visitedQuestionObject[item?.id])}
+                        onPress={() => {
+                          let temp = { ...visitedQuestionObject };
+                          if (!temp[item?.id]) {
+                            temp[item?.id] = item?.score;
+                          }
+                          setVisitedQuestionObject({ ...temp });
+                          navigation.navigate("SimilarQuestion", {
+                            question_id: item?.id,
+                            is_accepted: false,
+                            chapter_id: selectedChapterId,
+                            tag_ids: selectedTags.map((item) => item?.id),
+                            difficulty: selectedDifficulty,
+                            feature_type: selectedFeature
+                              ? getKeyByValueFromMap({
+                                  map: FEATURE_TYPE,
+                                  searchValue: selectedFeature,
+                                })
+                              : questionObject?.feature_type,
+                            current_level: getCurrentLevel({
+                              L1,
+                              L2,
+                              questionId: questionObject?.question_id,
+                            }),
+                            moveToNextQuestion: moveToNextQuestion,
+                            questionObject,
+                          });
+                        }}
+                      />
+                    );
                   }}
                 />
               ) : (
-                <Text style={styles.subHeadingGray}>No Tags Selected</Text>
-              )}
-            </View>
-
-            <View style={styles.subHeadingContainer}>
-              <Text style={styles.subHeading}>Difficulty Level</Text>
-              <FlatList
-                data={[1, 2, 3, 4, 5]}
-                contentContainerStyle={styles.flatlistContentContainer}
-                // numColumns={5}
-                // horizontal={true}
-                renderItem={({ index, item }) => {
-                  return (
-                    <DifficultyLevel
-                      text={item}
-                      index={index}
-                      selectedLevel={selectedDifficulty}
-                    />
-                  );
-                }}
-              />
-            </View>
-
-            <View style={styles.subHeadingContainer}>
-              <Text style={styles.subHeading}>Feature Type</Text>
-              {selectedFeature ? (
-                <Tag text={selectedFeature} />
-              ) : (
-                <Text style={styles.subHeadingGray}>
-                  No Feature Type Selected
+                <Text style={[styles.subHeadingGray, { marginTop: 10 }]}>
+                  No similar questions found
                 </Text>
               )}
-              {/* <FlatList
+            </View>
+
+            <View style={styles.container}>
+              <View style={styles.questionPropertiesContainer}>
+                <Text style={[styles.heading]}>Question Properties</Text>
+                <TouchableOpacity
+                  style={styles.editContainer}
+                  onPress={() => setEditModal(true)}
+                >
+                  <Text style={styles.editText}>Edit</Text>
+                  <AntDesign
+                    name="edit"
+                    size={15}
+                    color={"#1B3687"}
+                    style={styles.editIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.subHeadingContainer}>
+                <Text style={styles.subHeading}>Question Type</Text>
+                <Text style={styles.subHeadingGray}>
+                  {QUESTION_TYPE.get(questionObject?.question_type) || ""}
+                </Text>
+              </View>
+
+              <View style={styles.subHeadingContainer}>
+                <Text style={styles.subHeading}>Subject Name</Text>
+                <Text style={styles.subHeadingGray}>
+                  {questionObject?.subject_name || ""}
+                </Text>
+              </View>
+
+              <View style={styles.subHeadingContainer}>
+                <Text style={styles.subHeading}>Chapter Name</Text>
+                <Text style={styles.subHeadingGray}>{chapterName || ""}</Text>
+              </View>
+
+              <View style={styles.subHeadingContainer}>
+                <Text style={styles.subHeading}>Tags</Text>
+                {selectedTags?.length > 0 ? (
+                  <FlatList
+                    data={selectedTags}
+                    contentContainerStyle={{
+                      flexDirection: "row",
+                      flexWrap: "wrap",
+                    }}
+                    renderItem={({ index, item }) => {
+                      return <Tag text={item?.name} />;
+                    }}
+                  />
+                ) : (
+                  <Text style={styles.subHeadingGray}>No Tags Selected</Text>
+                )}
+              </View>
+
+              <View style={styles.subHeadingContainer}>
+                <Text style={styles.subHeading}>Difficulty Level</Text>
+                <FlatList
+                  data={[1, 2, 3, 4, 5]}
+                  contentContainerStyle={styles.flatlistContentContainer}
+                  // numColumns={5}
+                  // horizontal={true}
+                  renderItem={({ index, item }) => {
+                    return (
+                      <DifficultyLevel
+                        text={item}
+                        index={index}
+                        selectedLevel={selectedDifficulty}
+                      />
+                    );
+                  }}
+                />
+              </View>
+
+              <View style={styles.subHeadingContainer}>
+                <Text style={styles.subHeading}>Feature Type</Text>
+                {selectedFeature ? (
+                  <Tag text={selectedFeature} />
+                ) : (
+                  <Text style={styles.subHeadingGray}>
+                    No Feature Type Selected
+                  </Text>
+                )}
+                {/* <FlatList
                                 data={FEATURE_TYPE.get(questionObject?.feature_type) ? [FEATURE_TYPE.get(questionObject?.feature_type)] : ['Analytical']}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
                                 renderItem={({ index, item }) => {
                                     return <Tag text={item} />
                                 }}
                             /> */}
+              </View>
             </View>
           </View>
-        </View>
 
-        <View
-          style={{
-            backgroundColor: "white",
-            alignItems: "center",
-            paddingBottom: 10,
-          }}
-        >
-          <View style={styles.approveRejectContainer}>
-            <TouchableOpacity
-              style={styles.approveButton}
-              onPress={() => setRejectModal(true)}
-            >
-              <Text style={styles.approveText}>Reject</Text>
-            </TouchableOpacity>
+          <View
+            style={{
+              backgroundColor: "white",
+              alignItems: "center",
+              paddingBottom: 10,
+            }}
+          >
+            <View style={styles.approveRejectContainer}>
+              <TouchableOpacity
+                style={styles.approveButton}
+                onPress={() => setRejectModal(true)}
+              >
+                <Text style={styles.approveText}>Reject</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[
-                styles.approveButton,
-                { backgroundColor: "#2B3789", marginLeft: 40 },
-              ]}
-              onPress={() => setApproveModal(true)}
-            >
-              <Text style={[styles.approveText, { color: "white" }]}>
-                Approve
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.approveButton,
+                  { backgroundColor: "#2B3789", marginLeft: 40 },
+                ]}
+                onPress={() => setApproveModal(true)}
+              >
+                <Text style={[styles.approveText, { color: "white" }]}>
+                  Approve
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {questionIdsArray.length > 1 && (
+              <TouchableOpacity
+                onPress={() => {
+                  let tempArray = [];
+                  if (skipQuestionIdArray.length) {
+                    tempArray = [...skipQuestionIdArray];
+                  } else {
+                    tempArray = [...questionIdsArray];
+                  }
+                  let questionId = tempArray?.splice(0, 1);
+                  getQuestionDetails({ questionId });
+                  setSkipQuestionIdArray([...tempArray]);
+                }}
+              >
+                <Text style={styles.approveText}>Skip</Text>
+              </TouchableOpacity>
+            )}
           </View>
-
-          {questionIdsArray.length > 1 && (
-            <TouchableOpacity
-              onPress={() => {
-                let tempArray = [];
-                if (skipQuestionIdArray.length) {
-                  tempArray = [...skipQuestionIdArray];
-                } else {
-                  tempArray = [...questionIdsArray];
-                }
-                let questionId = tempArray?.splice(0, 1);
-                getQuestionDetails({ questionId });
-                setSkipQuestionIdArray([...tempArray]);
-              }}
-            >
-              <Text style={styles.approveText}>Skip</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
 
       <ScrollToTop scrollRef={scrollRef} style={{ bottom: 100 }} />
     </SafeAreaView>

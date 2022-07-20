@@ -31,7 +31,7 @@ const SubAccordianList = ({ item, subjectId }) => {
       }}
     >
       <Text style={styles.subHeaderText} numberOfLines={1}>
-        {name}121212
+        {name}
       </Text>
       <View style={styles.subHeaderBadgeContainer}>
         <Badge

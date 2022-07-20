@@ -115,28 +115,22 @@ const Dashboard = ({ navigation }) => {
       <View style={{ backgroundColor: "white", width }}>
         <View style={styles.headerParentContainer}>
           <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-              <Image
-                source={require("../../../assets/menu.png")}
-                style={{
-                  height: 44,
-                  width: 44,
-                  marginHorizontal: 8,
-                  marginVertical: 14,
-                }}
-              />
-            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => navigation.toggleDrawer()} >
+                            <Image source={require('../../../assets/menu.png')} style={{ height: 44, width: 44, marginHorizontal: 8, marginVertical: 14 }} />
+                        </TouchableOpacity> */}
             <Image
-              source={require("../../../assets/zinedu.png")}
-              style={{ width: 118, height: 26.08, marginLeft: 8 }}
+              source={require("../../../assets/my-faculty-logo/index.png")}
+              resizeMethod="scale"
+              resizeMode="contain"
+              style={{ width: 150, height: 35.08, marginLeft: 8 }}
             />
           </View>
           <TouchableOpacity onPress={() => setApproveModal(true)}>
             <MaterialIcons
               name="logout"
-              color={"#ADADAD"}
+              color={"#5B5B5B"}
               size={25}
-              style={{ marginRight: 14 }}
+              style={{ marginRight: 16 }}
             />
           </TouchableOpacity>
 
