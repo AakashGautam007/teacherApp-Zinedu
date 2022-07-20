@@ -222,6 +222,11 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
+
+    // For animated GIF support
+    // implementation 'com.facebook.fresco:animated-gif:2.5.0'
+    implementation 'com.facebook.fresco:animated-gif:2.0.0'
+
     addUnimodulesDependencies()
 
     if (enableHermes) {

@@ -44,9 +44,9 @@ const Option = ({ item, index }) => {
             <View style={{
                 width: width * 0.75
             }}>
-                <MathJax
+                {html && <MathJax
                     content={html}
-                />
+                />}
             </View>
         </View>
 
