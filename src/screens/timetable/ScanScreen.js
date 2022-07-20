@@ -20,6 +20,7 @@ import { width } from "../../utils/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ENDPOINT } from "../../utils/config";
 import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
+import { typography } from "../../appStyles";
 
 export default function ScanScreen({ navigation, route }) {
   const { item } = route.params;
@@ -110,7 +111,9 @@ export default function ScanScreen({ navigation, route }) {
                     alignSelf: "center",
                   }}
                 >
-                  <Text>Upload Now</Text>
+                  <Text style={{ fontFamily: typography.montserrat_400 }}>
+                    Upload Now
+                  </Text>
                 </TouchableOpacity>
               ) : (
                 <ActivityIndicator
@@ -120,12 +123,16 @@ export default function ScanScreen({ navigation, route }) {
               )}
             </View>
           ) : (
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <Text
+              style={{ fontSize: 20, fontFamily: typography.montserrat_700 }}
+            >
               {finalMessage}
             </Text>
           )}
-          <Text>{item}</Text>
-          <Text>{foundUrl}</Text>
+          <Text style={{ fontFamily: typography.montserrat_400 }}>{item}</Text>
+          <Text style={{ fontFamily: typography.montserrat_400 }}>
+            {foundUrl}
+          </Text>
         </View>
       )}
     </SafeAreaView>

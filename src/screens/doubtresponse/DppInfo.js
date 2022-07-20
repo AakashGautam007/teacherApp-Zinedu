@@ -1,366 +1,367 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal, ScrollView, Button, SafeAreaView, Alert } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  Button,
+  SafeAreaView,
+  Alert,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import {Picker} from '@react-native-picker/picker';
-import Picker from '@gregfrench/react-native-wheel-picker'
+import Picker from "@gregfrench/react-native-wheel-picker";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-import { width, height, ENDPOINT } from '../../utils/config'
-import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
-
+import { width, height, ENDPOINT } from "../../utils/config";
+import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
+import { typography } from "../../appStyles";
 
 var PickerItem = Picker.Item;
 
-
 const DppInfo = ({ navigation, route }) => {
-
-  const { question, image } = route.params
+  const { question, image } = route.params;
   const { userToken } = useAuthFields();
 
+  const [exrcNo, setExrcNo] = useState("");
+  const [quesNo, setQuesNo] = useState("");
+  const [tags, setTags] = useState("");
 
-  const [exrcNo, setExrcNo] = useState('')
-  const [quesNo, setQuesNo] = useState('')
-  const [tags, setTags] = useState('')
+  const [languageId, setLanguageId] = useState("");
+  const [ClassId, setClassId] = useState("");
+  const [subjectId, setSubjectId] = useState("");
+  const [bookId, setBookId] = useState("");
+  const [chapterId, setChapterId] = useState("");
+  const [difLvlId, setDifLvlId] = useState("");
+  const [typeId, setTypeId] = useState("");
+  const [tagId, setTagId] = useState("");
+  const [dtpId, setDtpId] = useState("");
 
+  const [lang_id, setLang_id] = useState("");
+  const [class_id, setClass_id] = useState("");
+  const [subject_id, setSubject_id] = useState("");
+  const [book_id, setBook_id] = useState("");
+  const [dtp_id, setDtp_id] = useState("");
+  const [chapter_id, setChapter_id] = useState("");
+  const [difLvl_id, setDifLvl_id] = useState("");
+  const [tag_id, setTag_id] = useState("");
 
-  const [languageId, setLanguageId] = useState('')
-  const [ClassId, setClassId] = useState('')
-  const [subjectId, setSubjectId] = useState('')
-  const [bookId, setBookId] = useState('')
-  const [chapterId, setChapterId] = useState('')
-  const [difLvlId, setDifLvlId] = useState('')
-  const [typeId, setTypeId] = useState('')
-  const [tagId, setTagId] = useState('')
-  const [dtpId, setDtpId] = useState('')
+  const [selectedTag, setSelectedTag] = useState([]);
 
-  const [lang_id, setLang_id] = useState('')
-  const [class_id, setClass_id] = useState('')
-  const [subject_id, setSubject_id] = useState('')
-  const [book_id, setBook_id] = useState('')
-  const [dtp_id, setDtp_id] = useState('')
-  const [chapter_id, setChapter_id] = useState('')
-  const [difLvl_id, setDifLvl_id] = useState('')
-  const [tag_id, setTag_id] = useState('')
+  const [lang, setLang] = useState(null);
+  const [Class, setClass] = useState(null);
+  const [subject, setSubject] = useState(null);
+  const [book, setBook] = useState(null);
+  const [chapter, setChapter] = useState(null);
+  const [difLvl, setDifLvl] = useState(null);
+  const [tag, setTag] = useState(null);
+  const [dtp, setDtp] = useState(null);
 
-
-
-  const [selectedTag, setSelectedTag] = useState([])
-
-  const [lang, setLang] = useState(null)
-  const [Class, setClass] = useState(null)
-  const [subject, setSubject] = useState(null)
-  const [book, setBook] = useState(null)
-  const [chapter, setChapter] = useState(null)
-  const [difLvl, setDifLvl] = useState(null)
-  const [tag, setTag] = useState(null)
-  const [dtp, setDtp] = useState(null)
-
-
-  const [langModalVisible, setLangModalVisible] = useState(false)
-  const [ClassModalVisible, setClassModalVisible] = useState(false)
-  const [subjectModalVisible, setSubjectModalVisible] = useState(false)
-  const [bookModalVisible, setBookModalVisible] = useState(false)
-  const [chapterModalVisible, setChapterModalVisible] = useState(false)
-  const [difLvlModalVisible, setDifLvlModalVisible] = useState(false)
-  const [typeModalVisible, setTypeModalVisible] = useState(false)
-  const [tagModalVisible, setTagModalVisible] = useState(false)
-  const [dtpModalVisible, setDtpModalVisible] = useState(false)
-
+  const [langModalVisible, setLangModalVisible] = useState(false);
+  const [ClassModalVisible, setClassModalVisible] = useState(false);
+  const [subjectModalVisible, setSubjectModalVisible] = useState(false);
+  const [bookModalVisible, setBookModalVisible] = useState(false);
+  const [chapterModalVisible, setChapterModalVisible] = useState(false);
+  const [difLvlModalVisible, setDifLvlModalVisible] = useState(false);
+  const [typeModalVisible, setTypeModalVisible] = useState(false);
+  const [tagModalVisible, setTagModalVisible] = useState(false);
+  const [dtpModalVisible, setDtpModalVisible] = useState(false);
 
   const clearForm = () => {
+    setExrcNo("");
+    setQuesNo("");
+    setTags("");
+    setLanguageId("");
+    setClassId("");
+    setSubjectId("");
+    setBookId("");
+    setChapterId("");
+    setDifLvlId("");
+    setTypeId("");
+    setTagId("");
+    setDtpId("");
+    setLang_id("");
+    setClass_id("");
+    setSubject_id("");
+    setBook_id("");
+    setDtp_id("");
+    setChapter_id("");
+    setDifLvl_id("");
+    setTag_id("");
+    setSelectedTag([]);
 
-
-    setExrcNo('')
-    setQuesNo('')
-    setTags('')
-    setLanguageId('')
-    setClassId('')
-    setSubjectId('')
-    setBookId('')
-    setChapterId('')
-    setDifLvlId('')
-    setTypeId('')
-    setTagId('')
-    setDtpId('')
-    setLang_id('')
-    setClass_id('')
-    setSubject_id('')
-    setBook_id('')
-    setDtp_id('')
-    setChapter_id('')
-    setDifLvl_id('')
-    setTag_id('')
-    setSelectedTag([])
-
-    setLang(null)
-    setClass(null)
-    setSubject(null)
-    setBook(null)
-    setChapter(null)
-    setDifLvl(null)
-    setTag(null)
-    setDtp(null)
-
-
-
-
-  }
-
-
-
+    setLang(null);
+    setClass(null);
+    setSubject(null);
+    setBook(null);
+    setChapter(null);
+    setDifLvl(null);
+    setTag(null);
+    setDtp(null);
+  };
 
   const getLanguage = async () => {
     // const userToken = await AsyncStorage.getItem('userToken')
-    console.log(userToken)
+    console.log(userToken);
     var requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/support/get-languages/`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/support/get-languages/`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D)
-    setLang(D)
-  }
+    console.log(D);
+    setLang(D);
+  };
 
   const getClass = async () => {
     // const userToken = await AsyncStorage.getItem('userToken')
-    console.log(userToken)
+    console.log(userToken);
     var requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/support/get-class/`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/support/get-class/`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D)
-    setClass(D)
-
-  }
+    console.log(D);
+    setClass(D);
+  };
 
   const getSubject = async (id) => {
     // const userToken = await AsyncStorage.getItem('userToken')
-    console.log(userToken)
+    console.log(userToken);
     var requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/support/get-subject-class-binding/?class_id=${id}&is_main_subject=true`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/support/get-subject-class-binding/?class_id=${id}&is_main_subject=true`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D)
-    setSubject(D)
-  }
-
-
+    console.log(D);
+    setSubject(D);
+  };
 
   const getBook = async (sub, class_id) => {
     // const userToken = await AsyncStorage.getItem('userToken')
     var requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/support/get-books-info/?class=${class_id}&subject=${sub}`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/support/get-books-info/?class=${class_id}&subject=${sub}`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D)
-    setBook(D)
-  }
-
-
-
+    console.log(D);
+    setBook(D);
+  };
 
   const getChapter = async (sub) => {
     // const userToken = await AsyncStorage.getItem('userToken')
-    console.log(userToken)
+    console.log(userToken);
     var requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/support/get-chapters/?subject=${sub}`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/support/get-chapters/?subject=${sub}`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D)
-    setChapter(D)
-  }
-
-
-
+    console.log(D);
+    setChapter(D);
+  };
 
   const getDifLvl = async () => {
     // const userToken = await AsyncStorage.getItem('userToken')
-    console.log(userToken)
+    console.log(userToken);
     var requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/support/get-difficulty/`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/support/get-difficulty/`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D)
-    setDifLvl(D)
-  }
-
+    console.log(D);
+    setDifLvl(D);
+  };
 
   const getTags = async (ch) => {
     // const userToken = await AsyncStorage.getItem('userToken')
-    console.log(userToken)
+    console.log(userToken);
     var requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/support/get-tags/?chapter=${ch}`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/support/get-tags/?chapter=${ch}`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D)
-    setTag(D)
-  }
-
-
-
-
+    console.log(D);
+    setTag(D);
+  };
 
   const getDtpInfo = async (ch) => {
     // const userToken = await AsyncStorage.getItem('userToken')
-    console.log(userToken)
+    console.log(userToken);
     var requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/users/get-data-entry-users/`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/users/get-data-entry-users/`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D)
-    setDtp(D)
-  }
-
-
-
+    console.log(D);
+    setDtp(D);
+  };
 
   //not complete
   const sendToDtp = async () => {
     let formdata = new FormData();
-    let l = 1
-    formdata.append('language', l)
-    formdata.append('question_number', '1'
+    let l = 1;
+    formdata.append("language", l);
+    formdata.append(
+      "question_number",
+      "1"
       // quesNo
-    )
-    formdata.append('exercise_number', '1'
+    );
+    formdata.append(
+      "exercise_number",
+      "1"
       // exrcNo
-    )
-    formdata.append('class', class_id)
-    formdata.append('subject', subject_id)
-    formdata.append('book', '21'
+    );
+    formdata.append("class", class_id);
+    formdata.append("subject", subject_id);
+    formdata.append(
+      "book",
+      "21"
       // book_id
-    )
-    formdata.append('chapter', '15'
+    );
+    formdata.append(
+      "chapter",
+      "15"
       // chapter_id
-    )
-    formdata.append('message', 'abc')
-    formdata.append('pending_doubt_id', question.id)
-    formdata.append('dte_id', dtp_id)
-    formdata.append('level', typeId)
-    formdata.append('difficulty', difLvl_id)
+    );
+    formdata.append("message", "abc");
+    formdata.append("pending_doubt_id", question.id);
+    formdata.append("dte_id", dtp_id);
+    formdata.append("level", typeId);
+    formdata.append("difficulty", difLvl_id);
     // selectedTag.map((item)=>{ formdata.append('tag',item)})
-    formdata.append('tag', '1')
-    const response = await fetch(`${ENDPOINT}/support/allot-pending-doubt-dte/`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': "multipart/form-data",
-      },
-      body: formdata,
-    })
+    formdata.append("tag", "1");
+    const response = await fetch(
+      `${ENDPOINT}/support/allot-pending-doubt-dte/`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+        },
+        body: formdata,
+      }
+    );
     const D = await response.json();
-    console.log(D)
-    clearForm()
+    console.log(D);
+    clearForm();
     if (response.ok) {
       if (D.Success) {
-        Alert.alert(`${D.Success}`)
-        navigation.navigate('PendingDoubts')
+        Alert.alert(`${D.Success}`);
+        navigation.navigate("PendingDoubts");
       } else if (D.Error) {
-        Alert.alert(`${D.Error}`)
+        Alert.alert(`${D.Error}`);
       }
     } else {
-      Alert.alert(`${D.Error}`)
+      Alert.alert(`${D.Error}`);
     }
-
-  }
-
+  };
 
   const getData = async () => {
-    getLanguage()
-    getClass()
+    getLanguage();
+    getClass();
     // getSubject()
     // getBook('1')
     // getChapter()
-    getDifLvl()
-    getDtpInfo()
+    getDifLvl();
+    getDtpInfo();
     // getType()
-  }
-
-
-
+  };
 
   useEffect(() => {
-    getData()
-  }, [])
-
+    getData();
+  }, []);
 
   return (
     // <ScrollView>
     <SafeAreaView style={styles.container}>
-
       {/* <Text>Enter Dpp info</Text> */}
       {/* <TextInput style={styles.inp} value={} onChangeText={} />
             <TextInput style={styles.inp} value={} onChangeText={} />
             <TextInput style={styles.inp} value={} onChangeText={} /> */}
 
-
-
-      <View style={styles.viewOuter} >
+      <View style={styles.viewOuter}>
         <View style={styles.viewInner}>
-          <Text style={styles.textSel} >
-            Select lang
-          </Text>
-          {lang != null && lang !== [] ?
-            <TouchableOpacity style={styles.touchableStyle}
-              onPress={() => setLangModalVisible(!langModalVisible)}>
-              <Text style={styles.textSel} >
-                {languageId}
-              </Text>
+          <Text style={styles.textSel}>Select lang</Text>
+          {lang != null && lang !== [] ? (
+            <TouchableOpacity
+              style={styles.touchableStyle}
+              onPress={() => setLangModalVisible(!langModalVisible)}
+            >
+              <Text style={styles.textSel}>{languageId}</Text>
               <Modal
                 animationType="slide"
                 transparent={false}
@@ -369,58 +370,68 @@ const DppInfo = ({ navigation, route }) => {
                   setLangModalVisible(!langModalVisible);
                 }}
               >
-                <ScrollView >
-                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60, paddingHorizontal: 7 }}>
-
+                <ScrollView>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      paddingTop: 60,
+                      paddingHorizontal: 7,
+                    }}
+                  >
                     <TouchableOpacity
                       onPress={() => setLangModalVisible(!langModalVisible)}
-                      style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(56, 62, 136, 0.1)', margin: 15, borderRadius: 25 }} >
-                      <Text>
+                      style={{
+                        padding: 10,
+                        paddingHorizontal: 15,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(56, 62, 136, 0.1)",
+                        margin: 15,
+                        borderRadius: 25,
+                      }}
+                    >
+                      <Text style={{ fontFamily: typography.montserrat_400 }}>
                         Close
                       </Text>
                     </TouchableOpacity>
                     {lang.map((value, i) => (
-                      <TouchableOpacity key={i}
+                      <TouchableOpacity
+                        key={i}
                         style={styles.modalItems}
                         onPress={() => {
-                          setLanguageId(value.language)
-                          setLang_id(value.id)
-                          setLangModalVisible(!langModalVisible)
-                        }}>
-
-                        <Text>{value.language}</Text>
-
-
+                          setLanguageId(value.language);
+                          setLang_id(value.id);
+                          setLangModalVisible(!langModalVisible);
+                        }}
+                      >
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          {value.language}
+                        </Text>
                       </TouchableOpacity>
                     ))}
                   </View>
                 </ScrollView>
               </Modal>
             </TouchableOpacity>
-            : null}
+          ) : null}
         </View>
       </View>
 
-
-
-
-      <View style={styles.viewOuter} >
+      <View style={styles.viewOuter}>
         <View style={styles.viewInner}>
-          <Text style={styles.textSel} >
-            Select Class
-          </Text>
-          {Class != null && Class !== [] ?
-            <TouchableOpacity style={styles.touchableStyle}
+          <Text style={styles.textSel}>Select Class</Text>
+          {Class != null && Class !== [] ? (
+            <TouchableOpacity
+              style={styles.touchableStyle}
               onPress={() => {
-                setClassModalVisible(!ClassModalVisible)
-                setSubjectId('')
-                setSubject(null)
-
-              }}>
-
-              <Text style={styles.textSel} >
-                {ClassId}
-              </Text>
+                setClassModalVisible(!ClassModalVisible);
+                setSubjectId("");
+                setSubject(null);
+              }}
+            >
+              <Text style={styles.textSel}>{ClassId}</Text>
 
               <Modal
                 animationType="slide"
@@ -428,59 +439,72 @@ const DppInfo = ({ navigation, route }) => {
                 visible={ClassModalVisible}
                 onRequestClose={() => {
                   setClassModalVisible(!ClassModalVisible);
-
                 }}
               >
-                <ScrollView >
-                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60, paddingHorizontal: 7 }}>
-
+                <ScrollView>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      paddingTop: 60,
+                      paddingHorizontal: 7,
+                    }}
+                  >
                     <TouchableOpacity
                       onPress={() => setClassModalVisible(!ClassModalVisible)}
-                      style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(56, 62, 136, 0.1)', margin: 15, borderRadius: 25 }} >
-                      <Text>
+                      style={{
+                        padding: 10,
+                        paddingHorizontal: 15,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(56, 62, 136, 0.1)",
+                        margin: 15,
+                        borderRadius: 25,
+                      }}
+                    >
+                      <Text style={{ fontFamily: typography.montserrat_400 }}>
                         Close
                       </Text>
                     </TouchableOpacity>
                     {Class.map((value, i) => (
                       <TouchableOpacity
                         style={styles.modalItems}
-                        key={i} onPress={() => {
-                          setClassId(value.class_name)
-                          setClass_id(value.id)
-                          setSubject_id(value.id)
-                          getSubject(value.id)
-                          setClassModalVisible(!ClassModalVisible)
-                        }}>
-                        <Text>{value.class_name}</Text>
+                        key={i}
+                        onPress={() => {
+                          setClassId(value.class_name);
+                          setClass_id(value.id);
+                          setSubject_id(value.id);
+                          getSubject(value.id);
+                          setClassModalVisible(!ClassModalVisible);
+                        }}
+                      >
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          {value.class_name}
+                        </Text>
                       </TouchableOpacity>
                     ))}
                   </View>
                 </ScrollView>
               </Modal>
             </TouchableOpacity>
-            : null}
+          ) : null}
         </View>
       </View>
 
-
-
-
-
-      {subject != null && Class != null && ClassId !== '' ?
-        <View style={styles.viewOuter} >
+      {subject != null && Class != null && ClassId !== "" ? (
+        <View style={styles.viewOuter}>
           <View style={styles.viewInner}>
-            <Text style={styles.textSel} >
-              Select subject
-            </Text>
-            <TouchableOpacity style={styles.touchableStyle}
+            <Text style={styles.textSel}>Select subject</Text>
+            <TouchableOpacity
+              style={styles.touchableStyle}
               onPress={() => {
-                setSubjectModalVisible(!subjectModalVisible)
-                setBook(null)
-                setBookId('')
-              }}>
-              <Text style={styles.textSel} >
-                {subjectId}
-              </Text>
+                setSubjectModalVisible(!subjectModalVisible);
+                setBook(null);
+                setBookId("");
+              }}
+            >
+              <Text style={styles.textSel}>{subjectId}</Text>
               <Modal
                 animationType="slide"
                 transparent={false}
@@ -489,28 +513,48 @@ const DppInfo = ({ navigation, route }) => {
                   setSubjectModalVisible(!subjectModalVisible);
                 }}
               >
-                <ScrollView >
-                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60, paddingHorizontal: 7 }}>
-
+                <ScrollView>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      paddingTop: 60,
+                      paddingHorizontal: 7,
+                    }}
+                  >
                     <TouchableOpacity
-                      onPress={() => setSubjectModalVisible(!subjectModalVisible)}
-                      style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(56, 62, 136, 0.1)', margin: 15, borderRadius: 25 }} >
-                      <Text>
+                      onPress={() =>
+                        setSubjectModalVisible(!subjectModalVisible)
+                      }
+                      style={{
+                        padding: 10,
+                        paddingHorizontal: 15,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(56, 62, 136, 0.1)",
+                        margin: 15,
+                        borderRadius: 25,
+                      }}
+                    >
+                      <Text style={{ fontFamily: typography.montserrat_400 }}>
                         Close
                       </Text>
                     </TouchableOpacity>
                     {subject.map((value, i) => (
                       <TouchableOpacity
                         style={styles.modalItems}
-                        key={i} onPress={() => {
-                          setSubjectId(value.subject_name)
-                          setSubject_id(value.id)
-                          getBook(value.id, class_id)
-                          setSubjectModalVisible(!subjectModalVisible)
-                        }}>
-
-                        <Text>{value.subject_name}</Text>
-
+                        key={i}
+                        onPress={() => {
+                          setSubjectId(value.subject_name);
+                          setSubject_id(value.id);
+                          getBook(value.id, class_id);
+                          setSubjectModalVisible(!subjectModalVisible);
+                        }}
+                      >
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          {value.subject_name}
+                        </Text>
                       </TouchableOpacity>
                     ))}
                   </View>
@@ -519,9 +563,7 @@ const DppInfo = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
-        : null}
-
-
+      ) : null}
 
       {/* 
 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width,height:70,paddingHorizontal:30}} >
@@ -697,28 +739,19 @@ const DppInfo = ({ navigation, route }) => {
 </View>
  */}
 
-
-
-
-
-      <View style={styles.viewOuter} >
+      <View style={styles.viewOuter}>
         <View style={styles.viewInner}>
-          <Text style={styles.textSel} >
-
-            Select Difficulty level
-          </Text>
-          {difLvl != null ?
-            <TouchableOpacity style={styles.touchableStyle}
+          <Text style={styles.textSel}>Select Difficulty level</Text>
+          {difLvl != null ? (
+            <TouchableOpacity
+              style={styles.touchableStyle}
               onPress={() => {
-                setDifLvlModalVisible(!difLvlModalVisible)
+                setDifLvlModalVisible(!difLvlModalVisible);
                 // setChapter(null)
                 // setChapterId('')
-
-              }}>
-
-              <Text style={styles.textSel} >
-                {difLvlId}
-              </Text>
+              }}
+            >
+              <Text style={styles.textSel}>{difLvlId}</Text>
 
               <Modal
                 animationType="slide"
@@ -728,57 +761,67 @@ const DppInfo = ({ navigation, route }) => {
                   setDifLvlModalVisible(!difLvlModalVisible);
                 }}
               >
-                <ScrollView >
-                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60, paddingHorizontal: 7 }}>
-
+                <ScrollView>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      paddingTop: 60,
+                      paddingHorizontal: 7,
+                    }}
+                  >
                     <TouchableOpacity
                       onPress={() => setDifLvlModalVisible(!difLvlModalVisible)}
-                      style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(56, 62, 136, 0.1)', margin: 15, borderRadius: 25 }} >
-                      <Text>
+                      style={{
+                        padding: 10,
+                        paddingHorizontal: 15,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(56, 62, 136, 0.1)",
+                        margin: 15,
+                        borderRadius: 25,
+                      }}
+                    >
+                      <Text style={{ fontFamily: typography.montserrat_400 }}>
                         Close
                       </Text>
                     </TouchableOpacity>
                     {difLvl.map((value, i) => (
                       <TouchableOpacity
                         style={styles.modalItems}
-                        key={i} onPress={() => {
-                          setDifLvlId(value.difficulty_level)
-                          setDifLvl_id(value.id)
-                          setDifLvlModalVisible(!difLvlModalVisible)
-                        }}>
-
-                        <Text>{value.difficulty_level}</Text>
-
-
+                        key={i}
+                        onPress={() => {
+                          setDifLvlId(value.difficulty_level);
+                          setDifLvl_id(value.id);
+                          setDifLvlModalVisible(!difLvlModalVisible);
+                        }}
+                      >
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          {value.difficulty_level}
+                        </Text>
                       </TouchableOpacity>
                     ))}
                   </View>
                 </ScrollView>
               </Modal>
             </TouchableOpacity>
-            : null}
+          ) : null}
         </View>
       </View>
 
-
-
-      <View style={styles.viewOuter} >
+      <View style={styles.viewOuter}>
         <View style={styles.viewInner}>
-          <Text style={styles.textSel} >
-
-            Select type
-          </Text>
-          <TouchableOpacity style={styles.touchableStyle}
+          <Text style={styles.textSel}>Select type</Text>
+          <TouchableOpacity
+            style={styles.touchableStyle}
             onPress={() => {
-              setTypeModalVisible(!typeModalVisible)
+              setTypeModalVisible(!typeModalVisible);
               // setChapter(null)
               // setChapterId('')
-
-            }}>
-
-            <Text style={styles.textSel} >
-              {typeId}
-            </Text>
+            }}
+          >
+            <Text style={styles.textSel}>{typeId}</Text>
 
             <Modal
               animationType="slide"
@@ -788,12 +831,29 @@ const DppInfo = ({ navigation, route }) => {
                 setTypeModalVisible(!typeModalVisible);
               }}
             >
-              <ScrollView >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60, paddingHorizontal: 7 }}>
+              <ScrollView>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingTop: 60,
+                    paddingHorizontal: 7,
+                  }}
+                >
                   <TouchableOpacity
                     onPress={() => setTypeModalVisible(!typeModalVisible)}
-                    style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(56, 62, 136, 0.1)', margin: 15, borderRadius: 25 }} >
-                    <Text>
+                    style={{
+                      padding: 10,
+                      paddingHorizontal: 15,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: "rgba(56, 62, 136, 0.1)",
+                      margin: 15,
+                      borderRadius: 25,
+                    }}
+                  >
+                    <Text style={{ fontFamily: typography.montserrat_400 }}>
                       Close
                     </Text>
                   </TouchableOpacity>
@@ -801,42 +861,41 @@ const DppInfo = ({ navigation, route }) => {
                   <TouchableOpacity
                     style={styles.modalItems}
                     onPress={() => {
-                      setTypeId('Conceptual')
+                      setTypeId("Conceptual");
                       // getChapter(value.id)
-                      setTypeModalVisible(!typeModalVisible)
-                    }}>
-
-                    <Text>Conceptual</Text>
-
+                      setTypeModalVisible(!typeModalVisible);
+                    }}
+                  >
+                    <Text style={{ fontFamily: typography.montserrat_400 }}>
+                      Conceptual
+                    </Text>
                   </TouchableOpacity>
-
 
                   <TouchableOpacity
                     style={styles.modalItems}
                     onPress={() => {
-                      setTypeId('Analytical')
+                      setTypeId("Analytical");
                       // getChapter(value.id)
-                      setTypeModalVisible(!typeModalVisible)
-                    }}>
-
-                    <Text>Analytical</Text>
-
+                      setTypeModalVisible(!typeModalVisible);
+                    }}
+                  >
+                    <Text style={{ fontFamily: typography.montserrat_400 }}>
+                      Analytical
+                    </Text>
                   </TouchableOpacity>
-
 
                   <TouchableOpacity
                     style={styles.modalItems}
                     onPress={() => {
-                      setTypeId('Memory')
+                      setTypeId("Memory");
                       // getChapter(value.id)
-                      setTypeModalVisible(!typeModalVisible)
-                    }}>
-
-                    <Text>Memory</Text>
-
+                      setTypeModalVisible(!typeModalVisible);
+                    }}
+                  >
+                    <Text style={{ fontFamily: typography.montserrat_400 }}>
+                      Memory
+                    </Text>
                   </TouchableOpacity>
-
-
                 </View>
               </ScrollView>
             </Modal>
@@ -844,24 +903,19 @@ const DppInfo = ({ navigation, route }) => {
         </View>
       </View>
 
-
-      <View style={styles.viewOuter} >
+      <View style={styles.viewOuter}>
         <View style={styles.viewInner}>
-          <Text style={styles.textSel} >
-
-            Select Dtp
-          </Text>
-          {dtp != null ?
-            <TouchableOpacity style={styles.touchableStyle}
+          <Text style={styles.textSel}>Select Dtp</Text>
+          {dtp != null ? (
+            <TouchableOpacity
+              style={styles.touchableStyle}
               onPress={() => {
-                setDtpModalVisible(!dtpModalVisible)
+                setDtpModalVisible(!dtpModalVisible);
                 // setChapter(null)
                 // setChapterId('')
-
-              }}>
-              <Text style={styles.textSel} >
-                {dtpId}
-              </Text>
+              }}
+            >
+              <Text style={styles.textSel}>{dtpId}</Text>
               <Modal
                 animationType="slide"
                 transparent={false}
@@ -870,99 +924,149 @@ const DppInfo = ({ navigation, route }) => {
                   setDtpModalVisible(!dtpModalVisible);
                 }}
               >
-                <ScrollView >
-                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60, paddingHorizontal: 7 }}>
+                <ScrollView>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      paddingTop: 60,
+                      paddingHorizontal: 7,
+                    }}
+                  >
                     {/* <Button title="close" /> */}
                     <TouchableOpacity
                       onPress={() => setDtpModalVisible(!dtpModalVisible)}
-                      style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(56, 62, 136, 0.1)', margin: 15, borderRadius: 25 }} >
-                      <Text>
+                      style={{
+                        padding: 10,
+                        paddingHorizontal: 15,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(56, 62, 136, 0.1)",
+                        margin: 15,
+                        borderRadius: 25,
+                      }}
+                    >
+                      <Text style={{ fontFamily: typography.montserrat_400 }}>
                         Close
                       </Text>
                     </TouchableOpacity>
                     {dtp.map((value, i) => (
                       <TouchableOpacity
                         style={styles.modalItems}
-                        key={i} onPress={() => {
-                          setDtpId(value.name)
-                          setDtp_id(value.id)
-                          setDtpModalVisible(!dtpModalVisible)
-                          console.log(value.id)
-                        }}>
-
-                        <Text>Dtp Name : {value.name}</Text>
-                        <Text>Mobile Number : {value.mobile_number}</Text>
-                        <Text>Subject : {value.subject}</Text>
-                        <Text>Email id : {value.email}</Text>
+                        key={i}
+                        onPress={() => {
+                          setDtpId(value.name);
+                          setDtp_id(value.id);
+                          setDtpModalVisible(!dtpModalVisible);
+                          console.log(value.id);
+                        }}
+                      >
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          Dtp Name : {value.name}
+                        </Text>
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          Mobile Number : {value.mobile_number}
+                        </Text>
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          Subject : {value.subject}
+                        </Text>
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          Email id : {value.email}
+                        </Text>
                         {/* <Text>{value.id}</Text> */}
-
-
                       </TouchableOpacity>
                     ))}
                   </View>
                 </ScrollView>
               </Modal>
             </TouchableOpacity>
-            : null}
+          ) : null}
         </View>
       </View>
 
-
-
-
       {/* <TextInput placeholder="Enter Exercise Number" style={styles.inp} value={exrcNo} onChangeText={setExrcNo}/> */}
       {/* <TextInput placeholder="Enter Question Number" style={styles.inp} value={quesNo} onChangeText={setQuesNo}/> */}
-
 
       {/* <Button title="Sent to Dtp"  /> */}
 
       <TouchableOpacity
         onPress={sendToDtp}
-        style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2A304E', margin: 15, borderRadius: 25, height: 50 }} >
-        <Text style={styles.textSel} >
-          Send To DTP
-        </Text>
+        style={{
+          padding: 10,
+          paddingHorizontal: 15,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#2A304E",
+          margin: 15,
+          borderRadius: 25,
+          height: 50,
+        }}
+      >
+        <Text style={styles.textSel}>Send To DTP</Text>
       </TouchableOpacity>
-
     </SafeAreaView>
     // </ScrollView>
-  )
-}
+  );
+};
 
-export default DppInfo
+export default DppInfo;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   inp: {
     width: width * 0.85,
-    backgroundColor: '#E9E9E9',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#E9E9E9",
+    alignItems: "center",
+    justifyContent: "center",
     height: 52,
     borderRadius: 10,
     paddingHorizontal: 20,
     fontSize: 16,
-    marginVertical: 8
+    marginVertical: 8,
   },
   modalItems: {
-    backgroundColor: 'rgba(56, 62, 136, 0.1)', margin: 5, width: '100%', padding: 8, borderRadius: 10, paddingHorizontal: 8
+    backgroundColor: "rgba(56, 62, 136, 0.1)",
+    margin: 5,
+    width: "100%",
+    padding: 8,
+    borderRadius: 10,
+    paddingHorizontal: 8,
   },
   viewOuter: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: 70, paddingHorizontal: 30, backgroundColor: 'white'
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    height: 70,
+    paddingHorizontal: 30,
+    backgroundColor: "white",
   },
   viewInner: {
-    flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#EA7A26', borderRadius: 25, paddingLeft: 10
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#EA7A26",
+    borderRadius: 25,
+    paddingLeft: 10,
   },
   touchableStyle: {
-    flex: 1, height: 52, backgroundColor: '#2A304E', justifyContent: 'center', alignItems: 'center', borderRadius: 25
+    flex: 1,
+    height: 52,
+    backgroundColor: "#2A304E",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 25,
   },
   textSel: {
-    paddingHorizontal: 12, color: 'white', fontWeight: '700'
+    paddingHorizontal: 12,
+    color: "white",
+    fontFamily: typography.montserrat_700,
   },
-
 });

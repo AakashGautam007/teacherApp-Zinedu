@@ -1,121 +1,147 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Modal, Button, Alert } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Picker from '@gregfrench/react-native-wheel-picker'
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  Button,
+  Alert,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Picker from "@gregfrench/react-native-wheel-picker";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { ENDPOINT, width } from '../../utils/config'
-import { useAuthFields } from '../../AppUtils/hooks/useAuthFields';
+import { ENDPOINT, width } from "../../utils/config";
+import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
+import { typography } from "../../appStyles";
 
 const Tags = ({ navigation, route }) => {
-  const { item } = route.params
+  const { item } = route.params;
   const { userToken } = useAuthFields();
 
-  const liveClassid = item.id
+  const liveClassid = item.id;
 
-  const [selectedTag, setSelectedTag] = useState([])
-  const [tag, setTag] = useState([])
-  const [tagModalVisible, setTagModalVisible] = useState(false)
-  const [currentTags, setCurrentTags] = useState([])
-  const [message, setMessage] = useState()
-
-
+  const [selectedTag, setSelectedTag] = useState([]);
+  const [tag, setTag] = useState([]);
+  const [tagModalVisible, setTagModalVisible] = useState(false);
+  const [currentTags, setCurrentTags] = useState([]);
+  const [message, setMessage] = useState();
 
   const clearTags = () => {
-
-    setTag([])
-
-  }
+    setTag([]);
+  };
 
   const updateTags = async () => {
-    console.log(selectedTag, item.id)
+    console.log(selectedTag, item.id);
     // const userToken = await AsyncStorage.getItem('userToken')
     const formdata = new FormData();
-    selectedTag.map((item) => { formdata.append('tag', item) })
-    const response = await fetch(`${ENDPOINT}/student/update-scheduled-live-class/${item.id}/`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': "multipart/form-data",
-        'Authorization': `Token ${userToken}`,
-
-      },
-      method: `PUT`,
-      body: formdata,
-    })
+    selectedTag.map((item) => {
+      formdata.append("tag", item);
+    });
+    const response = await fetch(
+      `${ENDPOINT}/student/update-scheduled-live-class/${item.id}/`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+          Authorization: `Token ${userToken}`,
+        },
+        method: `PUT`,
+        body: formdata,
+      }
+    );
     const D = await response.json();
-    console.log(D)
+    console.log(D);
     if (response.ok) {
-      Alert.alert(`${D.Success}`)
-      setMessage(D)
-    }
-    else (
-      Alert.alert('something went wrong')
-    )
-  }
-
+      Alert.alert(`${D.Success}`);
+      setMessage(D);
+    } else Alert.alert("something went wrong");
+  };
 
   const getTags = async () => {
     // const userToken = await AsyncStorage.getItem('userToken')
     // console.log(userToken)
     let requestOptions = {
-      redirect: 'follow',
-      method: 'GET',
+      redirect: "follow",
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/support/get-tags/?chapter=${item.chapter_assoc.id}`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/support/get-tags/?chapter=${item.chapter_assoc.id}`,
+      requestOptions
+    );
     const D = await response.json();
     // console.log('this tag',D)
-    setTag(D)
-
-  }
+    setTag(D);
+  };
 
   const getCurrentTags = async () => {
     // const userToken = await AsyncStorage.getItem('userToken')
     // console.log(userToken)
-    console.log(item.id)
+    console.log(item.id);
     let requestOptions = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Token ${userToken}`,
       },
     };
-    const response = await fetch(`${ENDPOINT}/student/get-live-class-tags/?id=${item.id}`, requestOptions)
+    const response = await fetch(
+      `${ENDPOINT}/student/get-live-class-tags/?id=${item.id}`,
+      requestOptions
+    );
     const D = await response.json();
-    console.log(D, 'CurrentTags')
-    setCurrentTags(D)
-
-  }
-
-
+    console.log(D, "CurrentTags");
+    setCurrentTags(D);
+  };
 
   useEffect(() => {
     // console.log(item,'this item in tag')
-    getTags()
-    getCurrentTags()
-  }, [message])
-
+    getTags();
+    getCurrentTags();
+  }, [message]);
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width, height: 70, paddingHorizontal: 30 }} >
-        <Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width,
+          height: 70,
+          paddingHorizontal: 30,
+        }}
+      >
+        <Text style={{ fontFamily: typography.montserrat_400 }}>
           Select New Tags
         </Text>
 
-        <TouchableOpacity onPress={() => {
-          setSelectedTag([])
-          setTagModalVisible(!tagModalVisible)
-          // setChapter(null)
-          // setChapterId('')
-
-        }}>
-          <View style={{ width: 120, height: 52, backgroundColor: '#ECECEC', justifyContent: 'center', alignItems: 'center', borderRadius: 12 }} >
-            <Text>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedTag([]);
+            setTagModalVisible(!tagModalVisible);
+            // setChapter(null)
+            // setChapterId('')
+          }}
+        >
+          <View
+            style={{
+              width: 120,
+              height: 52,
+              backgroundColor: "#ECECEC",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 12,
+            }}
+          >
+            <Text style={{ fontFamily: typography.montserrat_400 }}>
               {/* {selectedTag.length} */}
               TAG LIST
             </Text>
@@ -128,39 +154,92 @@ const Tags = ({ navigation, route }) => {
               setTagModalVisible(!tagModalVisible);
             }}
           >
-            <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', paddingTop: 60 }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "flex-start",
+                alignItems: "center",
+                paddingTop: 60,
+              }}
+            >
               {/* <Button title="close" onPress={()=>{
                     setTagModalVisible(!tagModalVisible)
                     clearTags
                   }} /> */}
 
-              <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', }}>
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                  alignItems: "center",
+                }}
+              >
                 <TouchableOpacity
                   onPress={() => {
-                    setTagModalVisible(!tagModalVisible)
-                    clearTags
+                    setTagModalVisible(!tagModalVisible);
+                    clearTags;
                   }}
-                  style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ECECEC', borderRadius: 25, height: 42, marginVertical: 15 }} >
-                  <Text style={{ color: 'black', textAlign: 'center', fontWeight: '600' }} >
+                  style={{
+                    padding: 10,
+                    paddingHorizontal: 15,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#ECECEC",
+                    borderRadius: 25,
+                    height: 42,
+                    marginVertical: 15,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "black",
+                      textAlign: "center",
+                      fontFamily: typography.montserrat_500,
+                    }}
+                  >
                     Close
                   </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => {
-                    updateTags()
-                    setTagModalVisible(!tagModalVisible)
-                    clearTags()
+                    updateTags();
+                    setTagModalVisible(!tagModalVisible);
+                    clearTags();
                   }}
-                  style={{ padding: 10, paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center', backgroundColor: '#EA7A26', borderRadius: 25, height: 42, marginVertical: 15 }} >
-                  <Text style={{ color: 'white', textAlign: 'center', fontWeight: '600' }} >
+                  style={{
+                    padding: 10,
+                    paddingHorizontal: 15,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#EA7A26",
+                    borderRadius: 25,
+                    height: 42,
+                    marginVertical: 15,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      textAlign: "center",
+                      fontFamily: typography.montserrat_600,
+                    }}
+                  >
                     Update Tags
                   </Text>
                 </TouchableOpacity>
               </View>
 
-              <ScrollView >
-                <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', paddingVertical: 10 }}>
+              <ScrollView>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    paddingVertical: 10,
+                  }}
+                >
                   {tag.map((value, i) => (
                     <BouncyCheckbox
                       key={i}
@@ -173,14 +252,16 @@ const Tags = ({ navigation, route }) => {
                       onPress={(isChecked) => {
                         if (isChecked) {
                           var a = selectedTag;
-                          a.push(value.id)
-                          setSelectedTag(a)
+                          a.push(value.id);
+                          setSelectedTag(a);
                         }
                         if (!isChecked) {
-                          var a = value.id
-                          setSelectedTag(() => selectedTag.filter((item) => {
-                            return item !== `${value.id}`
-                          }))
+                          var a = value.id;
+                          setSelectedTag(() =>
+                            selectedTag.filter((item) => {
+                              return item !== `${value.id}`;
+                            })
+                          );
                         }
                       }}
                     />
@@ -221,23 +302,47 @@ const Tags = ({ navigation, route }) => {
                     </Text>
                   </TouchableOpacity> */}
 
-      <View style={{ width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 20 }} >
-        <Text style={{ color: 'black', paddingVertical: 5, fontWeight: '700' }}  >Current Tags : </Text>
-        {currentTags.map((item, i) =>
-          <Text style={{ paddingVertical: 1, color: 'black' }} key={i} >
+      <View
+        style={{
+          width: "100%",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          paddingHorizontal: 20,
+        }}
+      >
+        <Text
+          style={{
+            color: "black",
+            paddingVertical: 5,
+            fontFamily: typography.montserrat_700,
+          }}
+        >
+          Current Tags :{" "}
+        </Text>
+        {currentTags.map((item, i) => (
+          <Text
+            style={{
+              paddingVertical: 1,
+              color: "black",
+              fontFamily: typography.montserrat_400,
+            }}
+            key={i}
+          >
             {item.name}
           </Text>
-        )}
+        ))}
       </View>
-
     </View>
-  )
-}
+  );
+};
 
-export default Tags
+export default Tags;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'white', flex: 1
-  }
-})
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "white",
+    flex: 1,
+  },
+});

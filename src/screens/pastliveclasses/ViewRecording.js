@@ -100,6 +100,7 @@ import WebView from "react-native-webview";
 import MediaControls, { PLAYER_STATES } from "react-native-media-controls";
 import YoutubePlayer from "react-native-youtube-iframe";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { typography } from "../../appStyles";
 
 export default function PlayPastLiveClass({ navigation, route }) {
   const { link } = route.params;
@@ -336,6 +337,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 5,
+    fontFamily: typography.montserrat_400,
   },
   mediaPlayer: {
     width: width,

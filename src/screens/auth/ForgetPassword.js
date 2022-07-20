@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { width, height, ENDPOINT } from "../../utils/config";
+import { typography } from "../../appStyles";
 
 export default function ForgetPassword({ navigation }) {
   const [mobileNumber, setMobileNumber] = useState("");
