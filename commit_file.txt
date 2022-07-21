@@ -2,3 +2,6 @@
 Arun:
 Completed ENG-534, 535, 536, 511, 544
 Discussed with Akshat regarding Final screen, post verifying all Questions by a faculty
+
+21.07.2022:
+Fresh commit from new mac
