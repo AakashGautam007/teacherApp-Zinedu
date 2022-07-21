@@ -17,7 +17,9 @@ export default function DoubtStack({navigation}) {
   const { logout } = useContext(AuthContext);
 
     return (
-        <Stack.Navigator initialRouteName="PendingDoubts" >
+        <Stack.Navigator initialRouteName="PendingDoubts" screenOptions={{
+          headerShown: false
+        }}>
         <Stack.Screen name="PendingDoubts" component={PendingDoubts} options={{
           headerRightContainerStyle:{marginHorizontal:10},
           headerLeftContainerStyle:{marginHorizontal:10},

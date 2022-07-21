@@ -1,6 +1,6 @@
 
 import { StyleSheet } from 'react-native'
-import { STYLES } from '../../../appStyles';
+import { STYLES, typography } from '../../../appStyles';
 import { width } from '../../../utils/config'
 
 const styles = StyleSheet.create({
@@ -12,7 +12,9 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     heading: {
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: typography.montserrat_500,
+        color: '#595959'
     },
     tag: {
         marginVertical: 10
@@ -21,8 +23,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#BDBDBD',
         borderRadius: 8,
-        padding: 5,
-        paddingHorizontal: 20
+        paddingBottom: 10,
+        paddingHorizontal: 5,
+        marginTop: 10
     },
     questionText: {
         color: '#5B5B5B',

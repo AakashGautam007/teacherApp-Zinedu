@@ -17,7 +17,9 @@ const Stack = createStackNavigator();
 
 export default function MyScheduleStack({ navigation }) {
   return (
-    <Stack.Navigator initialRouteName="TimeTable">
+    <Stack.Navigator initialRouteName="TimeTable" screenOptions={{
+      headerShown: false
+    }}>
       <Stack.Screen
         name="TimeTable"
         component={TimeTable}

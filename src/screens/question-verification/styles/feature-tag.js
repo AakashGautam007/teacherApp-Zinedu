@@ -23,11 +23,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#929292",
     marginTop: -2,
+    fontFamily: typography.montserrat_400,
   },
   selectedText: {
     color: "white",
     fontSize: 14,
     marginTop: -2,
+    fontFamily: typography.montserrat_400,
   },
 });
 

@@ -5,3 +5,8 @@ Discussed with Akshat regarding Final screen, post verifying all Questions by a 
 
 21.07.2022:
 Fresh commit from new mac
+10.02pm:
+Drawer Menu Fonts
+ENG-546,557, 558, 549
+ENG-285(myfaculty app code cleanup in progress)
+Font changes in Question verification flow

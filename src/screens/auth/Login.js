@@ -36,11 +36,10 @@ export default function Login({ navigation }) {
     // const [username, setUsername] = useState('8787888888')
 
     // const [username, setUsername] = useState('9595954446')
+    // const [username, setUsername] = useState('0909090981')
     // const [password, setPassword] = useState('checkA@BC@2021')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-
-    const { value, range } = useSelector((state) => state.counter)
     const dispatch = useDispatch()
 
     // const { LOGIN } = React.useContext(AuthContext);
@@ -85,12 +84,12 @@ export default function Login({ navigation }) {
             </View>
 
             <View>
-                <TextInput placeholder="Username" placeholderTextColor="#6A7180" style={[styles.textinp, {fontFamily: typography.montserrat_400}]}
+                <TextInput placeholder="Username" placeholderTextColor="#6A7180" style={[styles.textinp, { fontFamily: typography.montserrat_400 }]}
                     onChangeText={text => setUsername(text)}
                     value={username}
                     autoCapitalize='none'
                 />
-                <TextInput placeholder="Password" placeholderTextColor="#6A7180" style={[styles.textinp, {fontFamily: typography.montserrat_400}]}
+                <TextInput placeholder="Password" placeholderTextColor="#6A7180" style={[styles.textinp, { fontFamily: typography.montserrat_400 }]}
                     onChangeText={text => setPassword(text)}
                     value={password}
                     secureTextEntry={true}
@@ -98,7 +97,7 @@ export default function Login({ navigation }) {
                 />
                 <View style={{ justifyContent: 'flex-end', flexDirection: 'row', paddingVertical: 7 }} >
 
-                    <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')} ><Text style={{ color: '#2C3687', fontSize: 16 , fontFamily: typography.montserrat_500}} > Forgot Password?</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')} ><Text style={{ color: '#2C3687', fontSize: 16, fontFamily: typography.montserrat_500 }} > Forgot Password?</Text></TouchableOpacity>
                 </View>
             </View>
 
@@ -107,7 +106,7 @@ export default function Login({ navigation }) {
                 <TouchableOpacity onPress={() => signin(username, password)} style={{ width: (width * 0.8), height: 48, justifyContent: 'center', borderRadius: 8, backgroundColor: '#EA7A26' }} >
                     <Text style={{ color: 'white', textAlign: 'center', fontSize: 18, fontFamily: typography.montserrat_600 }} >Login</Text>
                 </TouchableOpacity>
-{/* 
+                {/* 
                 <Text>{value} {range}</Text>
 
                 <TouchableOpacity onPress={() => {

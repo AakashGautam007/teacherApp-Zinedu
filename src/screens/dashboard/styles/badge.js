@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     countText: {
         color: 'white',
         fontSize: 12,
+        fontFamily: typography.montserrat_500
         // margin: 5
     }
 })

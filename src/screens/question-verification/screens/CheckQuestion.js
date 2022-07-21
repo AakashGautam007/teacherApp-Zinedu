@@ -13,33 +13,6 @@ import styles from '../styles/check-question'
 import { getCurrentLevel, getKeyByValueFromMap, showApproveMessage, showRejectMessage, showSkipMessage } from '../utils'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
-const response = [
-    {
-        option: 'Option A',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option B',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option C',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option D',
-        badge: '9',
-        question: '',
-        answer: ''
-    }
-]
-
 const CheckQuestion = (props) => {
     const { navigation, route } = props
     const prevScreenData = route?.params || {}

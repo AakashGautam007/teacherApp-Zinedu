@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Button,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
@@ -33,7 +34,8 @@ import Svg, {
 } from "react-native-svg";
 import { width, height, ENDPOINT } from "../../utils/config";
 import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
-import { typography } from "../../appStyles";
+import { STYLES, typography } from "../../appStyles";
+import HeaderComponent from "../../components/HeaderComponent";
 // const {width,height} = Dimensions.get('window')
 
 const PendingDoubts = ({ navigation }) => {
@@ -70,7 +72,11 @@ const PendingDoubts = ({ navigation }) => {
   }, [isFocused]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={STYLES.container}>
+      <HeaderComponent
+        text="Pending Doubts"
+        onPress={navigation.goBack}
+      />
       <ScrollView style={{ flex: 1 }}>
         <View
           style={{ justifyContent: "center", flex: 1, alignItems: "center" }}
@@ -178,7 +184,7 @@ const PendingDoubts = ({ navigation }) => {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

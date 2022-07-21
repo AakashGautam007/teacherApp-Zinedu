@@ -10,9 +10,9 @@ import {
 import styles from "../styles/info-text";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
-const InfoText = ({ text }) => {
+const InfoText = ({ text, style }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <AntDesign name="exclamationcircleo" color={"#1B3687"} size={20} />
       <View style={{ flex: 1 }}>
         <Text style={styles.text}>{text}</Text>

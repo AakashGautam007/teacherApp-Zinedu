@@ -5,40 +5,12 @@ import Feather from 'react-native-vector-icons/Feather'
 import HeaderComponent from '../../../components/HeaderComponent'
 import { Badge } from '../../dashboard/components/Badge'
 import Accordian from '../components/Accordian'
-import { STYLES } from '../../../appStyles'
+import { STYLES, typography } from '../../../appStyles'
 import ScrollToTop from '../../../components/ScrollToTop'
 import { GET_CHAPTERS_AND_SUBJECTS } from '../api'
 import { generateSubjectList } from '../utils'
 import { useFocusEffect } from '@react-navigation/native'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
-
-const response = [
-    {
-        class: 'Maths XI',
-        badge: '9',
-        subjects: [
-            {
-                subject: 'Laws of motion',
-                badge: '6'
-            },
-            {
-                subject: 'Integration',
-                badge: '3'
-            }
-        ]
-    },
-    {
-        class: 'Physics XI',
-        badge: '5',
-        subjects: [
-            {
-                subject: 'Laws of motion II',
-                badge: '3'
-            }
-        ]
-    }
-]
-
 
 const Filter = (props) => {
     const { navigation } = props
@@ -94,7 +66,7 @@ const Filter = (props) => {
                 <View style={styles.infoContainer}>
                     <Feather name='info' color={'#012C63'} size={20} />
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.unverifiedCardText}>To verify questions, select the subject and chapter</Text>
+                        <Text style={[styles.unverifiedCardText, { fontFamily: typography.montserrat_500 }]}>To verify questions, select the subject and chapter</Text>
                     </View>
                 </View>
 

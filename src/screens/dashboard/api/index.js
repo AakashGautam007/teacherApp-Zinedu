@@ -20,3 +20,13 @@ export const GET_VISIBILITY_CHECK_COUNT = async () => {
         console.log(e)
     }
 };
+
+// Get Level Permissions
+export const GET_LEVEL_PERMISSIONS = async () => {
+    try {
+        let url = ENDPOINT + '/test/get-faculty-permissions/'
+        return await doFetch(url, 'GET');
+    } catch (e) {
+        console.log(e)
+    }
+};

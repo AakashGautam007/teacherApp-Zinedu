@@ -15,6 +15,8 @@ import { ENDPOINT, width } from "../../utils/config";
 import dateFormat from "dateformat";
 import ClassCard from "../common/ClassCard";
 import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
+import HeaderComponent from "../../components/HeaderComponent";
+import { STYLES } from "../../appStyles";
 
 const PastLiveClasses = ({ navigation }) => {
   const { userToken, userName: username } = useAuthFields();
@@ -104,37 +106,44 @@ const PastLiveClasses = ({ navigation }) => {
   if (data.length == 0) {
     return (
       <SafeAreaView
-        style={{
-          ...styles.container,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+      style={STYLES.safeAreaContainer}
       >
-        <Text style={{ fontSize: 16 }}>No Past Live Classes!!!!!</Text>
+        <HeaderComponent
+          text="Past Classes"
+          onPress={navigation.goBack}
+        />
+        <View style={styles.container}>
+          <Text style={{ fontSize: 16 }}>No Past Classes!!!!!</Text>
+        </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <Text style={{ fontSize: 22 }} >Live Classes Schedule</Text> */}
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={data}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        renderItem={({ item, i }) => {
-          return (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("PastLiveClassInfo", { item })}
-            >
-              <ClassCard item={item} isPastClassPage={true} />
-            </TouchableOpacity>
-          );
-        }}
-        keyExtractor={(item) => `${item.live_class_id}`}
+    <SafeAreaView
+      style={STYLES.safeAreaContainer}
+    >
+      <HeaderComponent
+        text="Past Classes"
+        onPress={navigation.goBack}
       />
+      <FlatList
+          showsVerticalScrollIndicator={false}
+          data={data}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          renderItem={({ item, i }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("PastLiveClassInfo", { item })}
+              >
+                <ClassCard item={item} isPastClassPage={true} />
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={(item) => `${item.live_class_id}`}
+        />
     </SafeAreaView>
   );
 };
@@ -144,7 +153,7 @@ export default PastLiveClasses;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
   },
   txt: {

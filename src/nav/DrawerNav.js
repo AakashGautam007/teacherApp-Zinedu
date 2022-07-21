@@ -11,6 +11,7 @@ import PastClassesStack from "./PastClassesStack";
 import SearchQuestionStack from "./SearchQuestionStack";
 import Filter from "../screens/question-verification/screens/Filter";
 import DashboardStack from "./DashboardStack";
+import styles from "./styles/drawer-nav";
 
 const Drawer = createDrawerNavigator();
 
@@ -28,27 +29,42 @@ export default function DrawerNav() {
       <Drawer.Screen
         name="Dashboard"
         component={DashboardStack}
-        options={{ title: "Home" }}
+        options={{
+          title: "Home",
+          headerTitleStyle: styles.header
+        }}
       />
       <Drawer.Screen
         name="MyScheduleStack"
         component={MyScheduleStack}
-        options={{ title: "My Schedule" }}
+        options={{
+          title: "My Schedule",
+          headerTitleStyle: styles.header
+        }}
       />
       <Drawer.Screen
         name="PastClassesStack"
         component={PastClassesStack}
-        options={{ title: "My Past Classes" }}
+        options={{
+          title: "My Past Classes",
+          headerTitleStyle: styles.header
+        }}
       />
       <Drawer.Screen
         name="DoubtStack"
         component={DoubtStack}
-        options={{ title: "Student Doubts" }}
+        options={{
+          title: "Student Doubts",
+          headerTitleStyle: styles.header
+        }}
       />
       <Drawer.Screen
         name="SearchQuestionStack"
         component={SearchQuestionStack}
-        options={{ title: "Search Question" }}
+        options={{
+          title: "Search Question",
+          headerTitleStyle: styles.header
+        }}
       />
     </Drawer.Navigator>
   );

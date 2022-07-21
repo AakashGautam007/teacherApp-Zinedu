@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     borderRadius: 47,
     backgroundColor: "#E8E8E8",
     padding: 6,
-    maxWidth: "25%",
+    maxWidth: "26%",
   },
   text: {
     fontSize: 10,

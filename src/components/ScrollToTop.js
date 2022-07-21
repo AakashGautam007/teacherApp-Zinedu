@@ -4,10 +4,12 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import { STYLES } from '../appStyles'
 
 export const scrollToTop = (scrollRef) => {
-    scrollRef && scrollRef.current?.scrollTo({
-        y: 0,
-        animated: true,
-    });
+    setTimeout(() => {
+        scrollRef && scrollRef.current?.scrollTo({
+            y: 0,
+            animated: true,
+        });
+    }, 100)
 };
 
 const ScrollToTop = ({ onPress, scrollRef, style }) => {

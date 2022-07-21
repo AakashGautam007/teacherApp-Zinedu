@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 16,
     marginBottom: 5,
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_500,
   },
   tag: {
     marginVertical: 10,

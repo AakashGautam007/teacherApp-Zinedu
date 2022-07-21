@@ -67,17 +67,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   cardText: {
-    width: 65,
+    width: 70,
     textAlign: "center",
     fontSize: 14,
     color: "black",
-    fontFamily: typography.montserrat_400
+    fontFamily: typography.montserrat_500
   },
   cardInactiveText: {
-    width: 65,
+    width: 70,
     textAlign: "center",
     color: "#ADADAD",
-    fontFamily: typography.montserrat_400
+    fontFamily: typography.montserrat_500
   },
   questionVerificationParentContainer: {
     ...STYLES.elevation,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   approveText: {
     color: "#2B3789",
     fontSize: 14,
-    fontFamily: typography.montserrat_400
+    fontFamily: typography.montserrat_600
   },
   modalParentContainer: {
     flex: 1,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 14,
     textAlign: "center",
-    fontFamily: typography.montserrat_400
+    fontFamily: typography.montserrat_500
   },
 });
 

@@ -14,7 +14,7 @@ import styles from "../styles";
 import { STYLES } from "../../../appStyles";
 import { Badge } from "../components/Badge";
 import { useAuthFields } from "../../../AppUtils/hooks/useAuthFields";
-import { GET_REVIEW_QUESTION_COUNT, GET_VISIBILITY_CHECK_COUNT } from "../api";
+import { GET_LEVEL_PERMISSIONS, GET_REVIEW_QUESTION_COUNT, GET_VISIBILITY_CHECK_COUNT } from "../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { ActivityIndicatorComponent } from "../../../components/ActivityIndicatorComponent";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -28,6 +28,8 @@ const Dashboard = ({ navigation }) => {
   const [reviewCount, setReviewCount] = useState(0);
   const [visibilityCheckCount, setVisibilityCheckCount] = useState(0);
   const [approveModal, setApproveModal] = useState(false);
+  const [l1AndL2Permission, setL1AndL2Permission] = useState(false);
+  const [l3Permission, setL3Permission] = useState(false);
 
   const getReviewQuestionCount = async () => {
     setLoading(true);
@@ -45,12 +47,25 @@ const Dashboard = ({ navigation }) => {
     setLoading(false);
   };
 
+  const getPermissions = async () => {
+    setLoading(true);
+    const response = await GET_LEVEL_PERMISSIONS();
+    console.log('2', JSON.stringify(response))
+    if (response?.status) {
+      const { is_l1_allowed, is_l2_allowed, is_l3_allowed } = response?.payload[0]
+      setL1AndL2Permission(is_l1_allowed || is_l2_allowed)
+      setL3Permission(is_l3_allowed)
+    }
+    setLoading(false);
+  };
+
   useFocusEffect(
     useCallback(() => {
       Promise.all[
         (getReviewQuestionCount(),
-        getVisibilityCheckCount(),
-        checkCodePushUpdate())
+          getVisibilityCheckCount(),
+          getPermissions(),
+          checkCodePushUpdate())
       ];
     }, [])
   );
@@ -68,7 +83,7 @@ const Dashboard = ({ navigation }) => {
         transparent={true}
         visible={approveModal}
         onRequestClose={resetModal}
-        // style={{ margin: 0, flex: 1 }}
+      // style={{ margin: 0, flex: 1 }}
       >
         <View style={styles.modalParentContainer}>
           <View style={styles.modalContainer}>
@@ -115,14 +130,14 @@ const Dashboard = ({ navigation }) => {
             {/* <TouchableOpacity onPress={() => navigation.toggleDrawer()} >
                             <Image source={require('../../../assets/menu.png')} style={{ height: 44, width: 44, marginHorizontal: 8, marginVertical: 14 }} />
                         </TouchableOpacity> */}
-                        <Image source={require('../../../assets/my-faculty-logo/index.png')}
-                            resizeMethod='scale'
-                            resizeMode='contain'
-                            style={{ width: 150, height: 35.08, marginLeft: 8 }} />
-                    </View>
-                    <TouchableOpacity onPress={() => setApproveModal(true)}>
-                        <MaterialIcons name='logout' color={'#5B5B5B'} size={25} style={{ marginRight: 16 }} />
-                    </TouchableOpacity>
+            <Image source={require('../../../assets/my-faculty-logo/index.png')}
+              resizeMethod='scale'
+              resizeMode='contain'
+              style={{ width: 150, height: 35.08, marginLeft: 8 }} />
+          </View>
+          <TouchableOpacity onPress={() => setApproveModal(true)}>
+            <MaterialIcons name='logout' color={'#5B5B5B'} size={25} style={{ marginRight: 16 }} />
+          </TouchableOpacity>
 
           {/* <Image source={require('../../../assets/bell.png')} style={{ width: 22, height: 26, marginRight: 14 }} /> */}
         </View>
@@ -152,110 +167,56 @@ const Dashboard = ({ navigation }) => {
                 </View>
                 </TouchableOpacity> */}
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.navigate("DoubtStack")}
             style={styles.card}
           >
             <Text style={styles.cardText}>Student Doubts</Text>
+          </TouchableOpacity> */}
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SearchQuestionStack')}
+            style={styles.card}
+          >
+            <Text style={styles.cardText}>Search Question</Text>
           </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('PastClassesStack')}
-                        style={styles.card}
-                    >
-                        <Text style={styles.cardText}>
-                            My Past Classes
-                        </Text>
-                    </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PastClassesStack')}
+            style={styles.card}
+          >
+            <Text style={styles.cardText}>
+              My Past Classes
+            </Text>
+          </TouchableOpacity>
 
-                </View>
-
-                <View style={styles.questionVerificationParentContainer}>
-                    <Text style={styles.questionVerificationText}>
-                        Question Verification
-                    </Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={styles.questionVerificationContainer}>
-                            <TouchableOpacity
-                                // onPress={() => navigation.navigate('SearchQuestionStack')}
-                                // disabled={reviewCount == 0}
-                                onPress={() => {
-                                    reviewCount == 0 ?
-                                        navigation.navigate('Congrats')
-                                        :
-                                        navigation.navigate('Filter')
-                                }}
-                                style={false ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard}>
-                                <Badge
-                                    count={reviewCount}
-                                    viewStyle={{
-                                        position: 'absolute',
-                                        top: -8,
-                                        right: -10,
-                                    }}
-                                />
-                                <Text style={false ? styles.cardInactiveText : styles.cardText}>
-                                    Review Question
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.questionVerificationContainer}>
-                            <TouchableOpacity
-                                // disabled={visibilityCheckCount == 0}
-                                onPress={() => {
-                                    visibilityCheckCount == 0 ?
-                                        navigation.navigate('Congrats')
-                                        :
-                                        navigation.navigate('CheckQuestion')
-                                }}
-
-                                style={false ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard} >
-                                <Badge
-                                    count={visibilityCheckCount}
-                                    viewStyle={{
-                                        position: 'absolute',
-                                        top: -8,
-                                        right: -10,
-                                    }}
-                                />
-                                <Text style={false ? styles.cardInactiveText : styles.cardText}>
-                                    Visibility Check
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
+        </View>
 
         <View style={styles.questionVerificationParentContainer}>
           <Text style={styles.questionVerificationText}>
             Question Verification
           </Text>
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: 'row' }}>
             <View style={styles.questionVerificationContainer}>
               <TouchableOpacity
                 // onPress={() => navigation.navigate('SearchQuestionStack')}
-                disabled={reviewCount == 0}
-                onPress={() => navigation.navigate("Filter")}
-                style={
-                  reviewCount == 0
-                    ? styles.questionVerificationInactiveCard
-                    : styles.questionVerificationActiveCard
-                }
-              >
-                <Badge
+                disabled={!l1AndL2Permission}
+                onPress={() => {
+                  reviewCount == 0 ?
+                    navigation.navigate('Congrats')
+                    :
+                    navigation.navigate('Filter')
+                }}
+                style={!l1AndL2Permission ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard}>
+                {l1AndL2Permission && <Badge
                   count={reviewCount}
                   viewStyle={{
-                    position: "absolute",
+                    position: 'absolute',
                     top: -8,
                     right: -10,
                   }}
-                />
-                <Text
-                  style={
-                    reviewCount == 0 ? styles.cardInactiveText : styles.cardText
-                  }
-                >
+                />}
+                <Text style={!l1AndL2Permission ? styles.cardInactiveText : styles.cardText}>
                   Review Question
                 </Text>
               </TouchableOpacity>
@@ -263,35 +224,31 @@ const Dashboard = ({ navigation }) => {
 
             <View style={styles.questionVerificationContainer}>
               <TouchableOpacity
-                disabled={visibilityCheckCount == 0}
-                onPress={() => navigation.navigate("CheckQuestion")}
-                style={
-                  visibilityCheckCount == 0
-                    ? styles.questionVerificationInactiveCard
-                    : styles.questionVerificationActiveCard
-                }
-              >
-                <Badge
+                disabled={!l3Permission}
+                onPress={() => {
+                  visibilityCheckCount == 0 ?
+                    navigation.navigate('Congrats')
+                    :
+                    navigation.navigate('CheckQuestion')
+                }}
+
+                style={!l3Permission ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard} >
+                {l3Permission && <Badge
                   count={visibilityCheckCount}
                   viewStyle={{
-                    position: "absolute",
+                    position: 'absolute',
                     top: -8,
                     right: -10,
                   }}
-                />
-                <Text
-                  style={
-                    visibilityCheckCount == 0
-                      ? styles.cardInactiveText
-                      : styles.cardText
-                  }
-                >
+                />}
+                <Text style={!l3Permission ? styles.cardInactiveText : styles.cardText}>
                   Visibility Check
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
+
       </View>
     </SafeAreaView>
   );

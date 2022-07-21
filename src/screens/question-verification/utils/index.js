@@ -1,30 +1,72 @@
 import { StyleSheet } from "react-native";
 import { showMessage } from "react-native-flash-message";
 
+// export const generateSubjectList = (chapterDetails = []) => {
+//     let overallTotal = 0;
+//     const subjectMap = {};
+//     for (const chapterData of chapterDetails) {
+//         const chapterEntry = {
+//             id: chapterData.chapter_assoc_id,
+//             name: chapterData.chapter_name,
+//             total: chapterData.total,
+//         };
+
+//         if (chapterData.subject_assoc_id in subjectMap) {
+//             subjectMap[chapterData.subject_assoc_id].chapters.push(chapterEntry);
+//             subjectMap[chapterData.subject_assoc_id].total += chapterData.total;
+//         } else {
+//             subjectMap[chapterData.subject_assoc_id] = {
+//                 id: chapterData.subject_assoc_id,
+//                 name: chapterData.subject_name,
+//                 total: chapterData.total || 0,
+//                 chapters: [chapterEntry],
+//             };
+//         }
+//         overallTotal += chapterData.total;
+//     }
+//     return [overallTotal, Object.values(subjectMap)];
+// };
+
 export const generateSubjectList = (chapterDetails = []) => {
     let overallTotal = 0;
     const subjectMap = {};
+    const subjectChapterMap = {};
     for (const chapterData of chapterDetails) {
         const chapterEntry = {
             id: chapterData.chapter_assoc_id,
             name: chapterData.chapter_name,
             total: chapterData.total,
         };
-
         if (chapterData.subject_assoc_id in subjectMap) {
-            subjectMap[chapterData.subject_assoc_id].chapters.push(chapterEntry);
+            let newCount = chapterEntry.total;
+            if (subjectMap[chapterData.subject_assoc_id].chapters[chapterData.chapter_assoc_id]) {
+                newCount += subjectMap[chapterData.subject_assoc_id].chapters[chapterData.chapter_assoc_id].total || 0;
+            }
+            subjectMap[chapterData.subject_assoc_id].chapters = {
+                ...subjectMap[chapterData.subject_assoc_id].chapters,
+                [chapterData.chapter_assoc_id]: {
+                    ...chapterEntry,
+                    total: newCount,
+                },
+            }
             subjectMap[chapterData.subject_assoc_id].total += chapterData.total;
         } else {
             subjectMap[chapterData.subject_assoc_id] = {
                 id: chapterData.subject_assoc_id,
                 name: chapterData.subject_name,
                 total: chapterData.total || 0,
-                chapters: [chapterEntry],
+                chapters: {
+                    [chapterData.chapter_assoc_id]: chapterEntry,
+                },
             };
         }
         overallTotal += chapterData.total;
     }
-    return [overallTotal, Object.values(subjectMap)];
+    const subjectList = Object.values(subjectMap).map(subject => ({
+        ...subject,
+        chapters: Object.values(subject.chapters),
+    }))
+    return [overallTotal, subjectList];
 };
 
 export const FEATURE_TYPE = new Map([

@@ -15,27 +15,24 @@ import SubjectEdit from "../screens/timetable/SubjectEdit";
 import SearchQuestion from "../screens/timetable/SearchQuestion";
 import AddPpt from "../screens/timetable/AddPpt";
 import ScanScreen from "../screens/timetable/ScanScreen";
+import styles from "./styles/drawer-nav";
 
 const Stack = createStackNavigator();
 
 export default function PastClassesStack({ navigation }) {
   return (
-    <Stack.Navigator initialRouteName="TimeTable">
+    <Stack.Navigator initialRouteName="TimeTable" 
+    screenOptions={{
+      headerShown: false
+    }}>
       <Stack.Screen
         name="PastLiveClasses"
         component={PastLiveClasses}
-        options={{
-          headerLeftContainerStyle: { marginHorizontal: 10 },
-          title: "Past Classes",
-          // headerLeft: () => (
-          //   <Entypo
-          //     name="menu"
-          //     size={24}
-          //     color="black"
-          //     onPress={() => navigation.toggleDrawer()}
-          //   />
-          // ),
-        }}
+        // options={{
+        //   headerLeftContainerStyle: { marginHorizontal: 10 },
+        //   title: "Past Classes",
+        //   headerTitleStyle: styles.header
+        // }}
       />
       <Stack.Screen name="Tags" component={Tags} options={{ title: "Tags" }} />
       <Stack.Screen

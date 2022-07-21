@@ -16,36 +16,6 @@ import MathJax from '../../../components/MathJax'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 import { showRejectMessage } from '../utils'
 
-const response = [
-    {
-        option: 'Option A',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option B',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option C',
-        badge: '9',
-        question: '',
-        answer: ''
-    },
-    {
-        option: 'Option D',
-        badge: '9',
-        question: '',
-        answer: ''
-    }
-]
-
-
-
-
 const SimilarQuestion = (props) => {
     const { navigation, route } = props
     const prevScreenData = route?.params
@@ -248,7 +218,7 @@ const SimilarQuestion = (props) => {
 
                         <View style={styles.container}>
                             <View style={styles.questionContainer}>
-                                <OptionTag verify={false} style={[styles.tag, { marginVertical: 5, marginBottom: 0, maxWidth: '60%' }]} text='Similar Question' />
+                                <OptionTag verify={false} style={[styles.tag, { marginVertical: 5, marginBottom: 0, maxWidth: '62%' }]} text='Similar Question' />
                                 <View style={[styles.questionIdTextContainer, { height: 25 }]}>
                                     <Text style={styles.questionIdText}>QID {question_id}</Text>
                                 </View>
@@ -282,7 +252,7 @@ const SimilarQuestion = (props) => {
             </ScrollView>}
 
             {!initialLoading && <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
-                <Text style={[styles.approveText, { color: 'black' }]}>Is the question duplicate?</Text>
+                <Text style={[styles.approveText, { color: 'black', marginTop: 10 }]}>Is the question duplicate?</Text>
 
                 <View style={styles.approveRejectContainer}>
                     <TouchableOpacity style={styles.approveButton} onPress={() => navigation.goBack()}>

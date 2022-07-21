@@ -5,8 +5,8 @@
     <!-- Staging -->
     <!-- <string moduleConfig="true" name="CodePushDeploymentKey">4hEZnbKCPuZ1syFjMrdrCSUeY4mSWR05f4zjT</string> -->
     <!-- QA -->
-    <!-- <string moduleConfig="true" name="CodePushDeploymentKey">0YGdnLdsNJp35iZ78wvBK_wCNnpriAon8Hg0S</string> -->
+    <string moduleConfig="true" name="CodePushDeploymentKey">0YGdnLdsNJp35iZ78wvBK_wCNnpriAon8Hg0S</string>
     <!-- Dev -->
-    <string moduleConfig="true" name="CodePushDeploymentKey">GAe8rUmuQcf_alcVjFmQASt4qrOxg-_l46ZpQ</string>
+    <!-- <string moduleConfig="true" name="CodePushDeploymentKey">GAe8rUmuQcf_alcVjFmQASt4qrOxg-_l46ZpQ</string> -->
 
 </resources>

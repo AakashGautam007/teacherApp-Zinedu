@@ -11,7 +11,7 @@ const CheckQuestionOption = ({ item, index }) => {
     return <View style={[styles.container, selected ? { backgroundColor: '#E3FFDA', borderWidth: 1, borderColor: '#2EB100' } : {}]}>
         <Text style={styles.heading}>{isFillUps ? 'Correct Answer' : getOptionName(index)}</Text>
 
-        <View>
+        <View style={styles.borderContainer}>
             {/* <Text style={styles.questionText}>A stem, that’s the question i.e. a problem or an incomplete statement - Make sure that you create a crisp, grammatically error-free and simple stem which has relevant information.</Text> */}
             <View style={{
                 width: width * 0.8

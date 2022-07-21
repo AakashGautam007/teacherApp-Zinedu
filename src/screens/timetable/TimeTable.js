@@ -15,7 +15,8 @@ import { ENDPOINT, width } from "../../utils/config";
 import dateFormat from "dateformat";
 import ClassCard from "../common/ClassCard";
 import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
-import { typography } from "../../appStyles";
+import { STYLES, typography } from "../../appStyles";
+import HeaderComponent from "../../components/HeaderComponent";
 
 const TimeTable = ({ navigation }) => {
   const { userToken, userName: username } = useAuthFields();
@@ -112,18 +113,27 @@ const TimeTable = ({ navigation }) => {
 
   if ((data === undefined && !isLoading) || data.length === 0) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontFamily: typography.montserrat_400 }}>
-          {" "}
-          No live classes scheduled
-        </Text>
-      </View>
+      <SafeAreaView style={STYLES.safeAreaContainer}>
+        <HeaderComponent
+          text="My Schedule"
+          onPress={navigation.goBack}
+        />
+        <View style={styles.container}>
+          <Text style={{ fontFamily: typography.montserrat_400 }}>
+            {" "}
+            No live classes scheduled
+          </Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <Text style={{fontSize:22}} >Live Classes Schedule</Text> */}
+    <SafeAreaView style={STYLES.container}>
+      <HeaderComponent
+        text="My Schedule"
+        onPress={navigation.goBack}
+      />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={data}
@@ -150,7 +160,7 @@ export default TimeTable;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
   },
   txt: {

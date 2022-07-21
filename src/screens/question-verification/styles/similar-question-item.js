@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#1F3061",
     marginLeft: 5,
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_500,
   },
 });
 

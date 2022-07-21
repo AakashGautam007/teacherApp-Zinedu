@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         marginLeft: 13,
         color: '#201F1F',
         fontSize: 16,
-        fontFamily: typography.montserrat_600,
+        fontFamily: typography.montserrat_500,
         maxWidth: '65%'
     },
     badge: {
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
         marginRight: 15
     },
     badgeText: {
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: typography.montserrat_500
     },
     subHeader: {
         height: 54,
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         color: '#535353',
         fontSize: 16,
-        fontFamily: typography.montserrat_600,
+        fontFamily: typography.montserrat_500,
         maxWidth: '65%'
     },
     subHeaderBadgeContainer: {
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     subHeaderBadgeText: {
         color: 'black',
         fontSize: 16,
-        fontFamily: typography.montserrat_400,
+        fontFamily: typography.montserrat_500,
     }
 })
 

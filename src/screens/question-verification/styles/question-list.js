@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 16,
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_500,
+    color: '#595959'
   },
   tag: {
     marginVertical: 10,
@@ -53,12 +54,13 @@ const styles = StyleSheet.create({
   },
   questionIdText: {
     color: "#595959",
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_500,
   },
   questionContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 10
   },
   questionBorderContainer: {
     borderRadius: 8,
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
   approveText: {
     color: "#2B3789",
     fontSize: 14,
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_600,
   },
   modalParentContainer: {
     flex: 1,
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 18,
     textAlign: "center",
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_500,
   },
   questionPropertiesContainer: {
     flexDirection: "row",
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
   editText: {
     color: "#1B3687",
     fontSize: 14,
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_500,
   },
   editIcon: {
     marginLeft: 5,
@@ -136,7 +138,14 @@ const styles = StyleSheet.create({
   subHeading: {
     fontSize: 14,
     marginBottom: 10,
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_500,
+    color: '#393939'
+  },
+  modalSubHeading: {
+    fontSize: 14,
+    marginBottom: 10,
+    fontFamily: typography.montserrat_500,
+    color: '#101010'
   },
   subHeadingGray: {
     fontSize: 16,
@@ -234,6 +243,10 @@ const styles = StyleSheet.create({
     maxWidth: "70%",
     fontFamily: typography.montserrat_400,
   },
+  dropDownText: {
+    fontFamily: typography.montserrat_500,
+    color: '#343434'
+  }
 });
 
 export default styles;

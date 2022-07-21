@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
     color: "#101010",
-    fontFamily: typography.montserrat_400,
+    fontFamily: typography.montserrat_500,
   },
   mandatory: {
     color: "#D00A0A",

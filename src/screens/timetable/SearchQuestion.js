@@ -24,7 +24,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { width, height, ENDPOINT } from "../../utils/config";
 import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
-import { typography } from "../../appStyles";
+import { STYLES, typography } from "../../appStyles";
+import HeaderComponent from "../../components/HeaderComponent";
 
 var PickerItem = Picker.Item;
 
@@ -383,554 +384,571 @@ const SearchQuestion = ({ navigation, route }) => {
 
   if (questionBank != null && questionBank.length == 0) {
     return (
-      <View style={styles.container}>
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "flex-end",
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => setQuestionBank(null)}
-            style={{ padding: 5 }}
+      <SafeAreaView style={[STYLES.safeAreaContainer, { backgroundColor: 'white' }]}>
+        <HeaderComponent
+          text="Search Question"
+          onPress={navigation.goBack}
+        />
+        <View style={styles.container}>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "flex-end",
+            }}
           >
-            <Entypo name="circle-with-cross" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              onPress={() => setQuestionBank(null)}
+              style={{ padding: 5 }}
+            >
+              <Entypo name="circle-with-cross" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
 
-        {/* <Button title="back" onPress={() => setQuestionBank(null)} /> */}
-        <Text style={{ fontFamily: typography.montserrat_400 }}>
-          No Questions Found
-        </Text>
-      </View>
+          {/* <Button title="back" onPress={() => setQuestionBank(null)} /> */}
+          <Text style={{ fontFamily: typography.montserrat_400 }}>
+            No Questions Found
+          </Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
   if (questionBank != null && questionBank.length != 0) {
     return (
-      <View style={styles.container}>
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "flex-end",
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => setQuestionBank(null)}
-            style={{ padding: 5 }}
+      <SafeAreaView style={[STYLES.safeAreaContainer, { backgroundColor: 'white' }]}>
+        <HeaderComponent
+          text="Search Question"
+          onPress={navigation.goBack}
+        />
+        <View style={styles.container}>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "flex-end",
+            }}
           >
-            <Entypo name="circle-with-cross" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              onPress={() => setQuestionBank(null)}
+              style={{ padding: 5 }}
+            >
+              <Entypo name="circle-with-cross" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
 
-        {/* <Button title="back" onPress={() => setQuestionBank(null)} /> */}
-        <ScrollView style={{ flex: 1 }}>
-          {questionBank.map((item, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  flex: 1,
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  borderWidth: 2,
-                  borderColor: "black",
-                  marginVertical: 3,
-                  paddingVertical: 5,
-                }}
-              >
-                <Text style={{ fontFamily: typography.montserrat_400 }}>
-                  Question {index + 1} :{" "}
-                </Text>
-                <RenderHtml
-                  contentWidth={width - 10}
-                  source={{ html: item.question_text }}
-                  // ignoredStyles={["font-family"]}
-                  ignoredDomTags={["font"]}
-                />
-                {item.correct_option === "1" ? (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "green",
-                      width: "96%",
-                      marginHorizontal: "2%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <RenderHtml
-                      contentWidth={width - 10}
-                      source={{ html: item.option1_text }}
-                      // ignoredStyles={["font-family"]}
-                      ignoredDomTags={["font"]}
-                    />
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "red",
-                      width: "96%",
-                      marginHorizontal: "2%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <RenderHtml
-                      contentWidth={width - 10}
-                      source={{ html: item.option1_text }}
-                      // ignoredStyles={["font-family"]}
-                      ignoredDomTags={["font"]}
-                    />
-                  </View>
-                )}
+          {/* <Button title="back" onPress={() => setQuestionBank(null)} /> */}
+          <ScrollView style={{ flex: 1 }}>
+            {questionBank.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flex: 1,
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    borderWidth: 2,
+                    borderColor: "black",
+                    marginVertical: 3,
+                    paddingVertical: 5,
+                  }}
+                >
+                  <Text style={{ fontFamily: typography.montserrat_400 }}>
+                    Question {index + 1} :{" "}
+                  </Text>
+                  <RenderHtml
+                    contentWidth={width - 10}
+                    source={{ html: item.question_text }}
+                    // ignoredStyles={["font-family"]}
+                    ignoredDomTags={["font"]}
+                  />
+                  {item.correct_option === "1" ? (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "green",
+                        width: "96%",
+                        marginHorizontal: "2%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RenderHtml
+                        contentWidth={width - 10}
+                        source={{ html: item.option1_text }}
+                        // ignoredStyles={["font-family"]}
+                        ignoredDomTags={["font"]}
+                      />
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "red",
+                        width: "96%",
+                        marginHorizontal: "2%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RenderHtml
+                        contentWidth={width - 10}
+                        source={{ html: item.option1_text }}
+                        // ignoredStyles={["font-family"]}
+                        ignoredDomTags={["font"]}
+                      />
+                    </View>
+                  )}
 
-                {/* <RenderHtml
+                  {/* <RenderHtml
                 contentWidth={width}
                 source={{ html: item.option2_text }}
                 ignoredStyles={["font-family"]}
               /> */}
-                {item.correct_option === "2" ? (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "green",
-                      width: "96%",
-                      marginHorizontal: "2%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <RenderHtml
-                      contentWidth={width - 10}
-                      source={{ html: item.option2_text }}
-                      // ignoredStyles={["font-family"]}
-                      ignoredDomTags={["font"]}
-                    />
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "red",
-                      width: "96%",
-                      marginHorizontal: "2%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <RenderHtml
-                      contentWidth={width - 10}
-                      source={{ html: item.option2_text }}
-                      // ignoredStyles={["font-family"]}
-                      ignoredDomTags={["font"]}
-                    />
-                  </View>
-                )}
+                  {item.correct_option === "2" ? (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "green",
+                        width: "96%",
+                        marginHorizontal: "2%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RenderHtml
+                        contentWidth={width - 10}
+                        source={{ html: item.option2_text }}
+                        // ignoredStyles={["font-family"]}
+                        ignoredDomTags={["font"]}
+                      />
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "red",
+                        width: "96%",
+                        marginHorizontal: "2%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RenderHtml
+                        contentWidth={width - 10}
+                        source={{ html: item.option2_text }}
+                        // ignoredStyles={["font-family"]}
+                        ignoredDomTags={["font"]}
+                      />
+                    </View>
+                  )}
 
-                {/* <RenderHtml
+                  {/* <RenderHtml
                 contentWidth={width}
                 source={{ html: item.option3_text }}
                 ignoredStyles={["font-family"]}
               /> */}
 
-                {item.correct_option === "3" ? (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "green",
-                      width: "96%",
-                      marginHorizontal: "2%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <RenderHtml
-                      contentWidth={width - 10}
-                      source={{ html: item.option3_text }}
-                      // ignoredStyles={["font-family"]}
-                      ignoredDomTags={["font"]}
-                    />
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "red",
-                      width: "96%",
-                      marginHorizontal: "2%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <RenderHtml
-                      contentWidth={width - 10}
-                      source={{ html: item.option3_text }}
-                      // ignoredStyles={["font-family"]}
-                      ignoredDomTags={["font"]}
-                    />
-                  </View>
-                )}
+                  {item.correct_option === "3" ? (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "green",
+                        width: "96%",
+                        marginHorizontal: "2%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RenderHtml
+                        contentWidth={width - 10}
+                        source={{ html: item.option3_text }}
+                        // ignoredStyles={["font-family"]}
+                        ignoredDomTags={["font"]}
+                      />
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "red",
+                        width: "96%",
+                        marginHorizontal: "2%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RenderHtml
+                        contentWidth={width - 10}
+                        source={{ html: item.option3_text }}
+                        // ignoredStyles={["font-family"]}
+                        ignoredDomTags={["font"]}
+                      />
+                    </View>
+                  )}
 
-                {/* <RenderHtml
+                  {/* <RenderHtml
                 contentWidth={width}
                 source={{ html: item.option4_text }}
                 ignoredStyles={["font-family"]}
               /> */}
-                {item.correct_option === "4" ? (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "green",
-                      width: "96%",
-                      marginHorizontal: "2%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <RenderHtml
-                      contentWidth={width - 10}
-                      source={{ html: item.option4_text }}
-                      // ignoredStyles={["font-family"]}
-                      ignoredDomTags={["font"]}
-                    />
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "red",
-                      width: "96%",
-                      marginHorizontal: "2%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <RenderHtml
-                      contentWidth={width - 10}
-                      source={{ html: item.option4_text }}
-                      // ignoredStyles={["font-family"]}
-                      ignoredDomTags={["font"]}
-                    />
-                  </View>
-                )}
+                  {item.correct_option === "4" ? (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "green",
+                        width: "96%",
+                        marginHorizontal: "2%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RenderHtml
+                        contentWidth={width - 10}
+                        source={{ html: item.option4_text }}
+                        // ignoredStyles={["font-family"]}
+                        ignoredDomTags={["font"]}
+                      />
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "red",
+                        width: "96%",
+                        marginHorizontal: "2%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <RenderHtml
+                        contentWidth={width - 10}
+                        source={{ html: item.option4_text }}
+                        // ignoredStyles={["font-family"]}
+                        ignoredDomTags={["font"]}
+                      />
+                    </View>
+                  )}
 
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    marginTop: 5,
-                  }}
-                >
-                  <Text style={{ fontFamily: typography.montserrat_400 }}>
-                    Difficulty : {item.difficulty_level}
-                  </Text>
-                  <Text style={{ fontFamily: typography.montserrat_400 }}>
-                    Concept Id : {item.level_i}
-                  </Text>
-                  <Text style={{ fontFamily: typography.montserrat_400 }}>
-                    Created on : {dateFormat(item.created_on)}
-                  </Text>
-                  <Text style={{ fontFamily: typography.montserrat_400 }}>
-                    Chapter Name : {item.chapter_name}
-                  </Text>
-                  <Text style={{ fontFamily: typography.montserrat_400 }}>
-                    Tags :{" "}
-                  </Text>
                   <View
                     style={{
                       flex: 1,
                       justifyContent: "flex-start",
                       alignItems: "flex-start",
-                    }}
-                  >
-                    {item.tags.map((Item) => (
-                      <Text style={{ fontFamily: typography.montserrat_400 }}>
-                        {Item.tag_name}
-                      </Text>
-                    ))}
-                  </View>
-                </View>
-                {item.solution_video != null ? (
-                  // <Button title='view video solution' onPress={()=>
-
-                  //     navigation.navigate('ViewRecording',{link:item.solution_video})
-                  //     // console.log('go to recording')
-                  // } />
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("ViewRecording", {
-                        link: item.solution_video,
-                      })
-                    }
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 6,
-                      paddingHorizontal: 20,
-                      backgroundColor: "rgba(56, 62, 136, 0.1)",
-                      borderRadius: 25,
-                      marginVertical: 5,
+                      marginTop: 5,
                     }}
                   >
                     <Text style={{ fontFamily: typography.montserrat_400 }}>
-                      View Video Solution
+                      Difficulty : {item.difficulty_level}
                     </Text>
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-            );
-          })}
-        </ScrollView>
-      </View>
+                    <Text style={{ fontFamily: typography.montserrat_400 }}>
+                      Concept Id : {item.level_i}
+                    </Text>
+                    <Text style={{ fontFamily: typography.montserrat_400 }}>
+                      Created on : {dateFormat(item.created_on)}
+                    </Text>
+                    <Text style={{ fontFamily: typography.montserrat_400 }}>
+                      Chapter Name : {item.chapter_name}
+                    </Text>
+                    <Text style={{ fontFamily: typography.montserrat_400 }}>
+                      Tags :{" "}
+                    </Text>
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: "flex-start",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      {item.tags.map((Item) => (
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          {Item.tag_name}
+                        </Text>
+                      ))}
+                    </View>
+                  </View>
+                  {item.solution_video != null ? (
+                    // <Button title='view video solution' onPress={()=>
+
+                    //     navigation.navigate('ViewRecording',{link:item.solution_video})
+                    //     // console.log('go to recording')
+                    // } />
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("ViewRecording", {
+                          link: item.solution_video,
+                        })
+                      }
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: 6,
+                        paddingHorizontal: 20,
+                        backgroundColor: "rgba(56, 62, 136, 0.1)",
+                        borderRadius: 25,
+                        marginVertical: 5,
+                      }}
+                    >
+                      <Text style={{ fontFamily: typography.montserrat_400 }}>
+                        View Video Solution
+                      </Text>
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
+              );
+            })}
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        {/* <Text>Enter Dpp info</Text> */}
-        {/* <TextInput style={styles.inp} value={} onChangeText={} />
+    <SafeAreaView style={[STYLES.safeAreaContainer, { backgroundColor: 'white' }]}>
+      <HeaderComponent
+        text="Search Question"
+        onPress={navigation.goBack}
+      />
+      <ScrollView>
+        <SafeAreaView style={styles.container}>
+          {/* <Text>Enter Dpp info</Text> */}
+          {/* <TextInput style={styles.inp} value={} onChangeText={} />
             <TextInput style={styles.inp} value={} onChangeText={} />
             <TextInput style={styles.inp} value={} onChangeText={} /> */}
 
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "flex-end",
-          }}
-        >
-          <TouchableOpacity onPress={() => clearForm()} style={{ padding: 8 }}>
-            <Ionicons name="refresh" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.viewOuter}>
-          <View style={styles.viewInner}>
-            <Text style={styles.textSel}>Select lang</Text>
-            {lang != null && lang !== [] ? (
-              <TouchableOpacity
-                style={styles.touchableStyle}
-                onPress={() => setLangModalVisible(!langModalVisible)}
-              >
-                <Text style={styles.textSel}>{languageId}</Text>
-                <Modal
-                  animationType="slide"
-                  transparent={false}
-                  visible={langModalVisible}
-                  onRequestClose={() => {
-                    setLangModalVisible(!langModalVisible);
-                  }}
-                >
-                  <ScrollView>
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        paddingTop: 60,
-                        paddingHorizontal: 7,
-                      }}
-                    >
-                      <TouchableOpacity
-                        onPress={() => setLangModalVisible(!langModalVisible)}
-                        style={{
-                          padding: 10,
-                          paddingHorizontal: 15,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          backgroundColor: "rgba(56, 62, 136, 0.1)",
-                          margin: 15,
-                          borderRadius: 25,
-                        }}
-                      >
-                        <Text style={{ fontFamily: typography.montserrat_400 }}>
-                          Close
-                        </Text>
-                      </TouchableOpacity>
-                      {lang.map((value, i) => (
-                        <TouchableOpacity
-                          key={i}
-                          style={styles.modalItems}
-                          onPress={() => {
-                            setLanguageId(value.language);
-                            setLang_id(value.id);
-                            setLangModalVisible(!langModalVisible);
-                          }}
-                        >
-                          <Text
-                            style={{ fontFamily: typography.montserrat_400 }}
-                          >
-                            {value.language}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </ScrollView>
-                </Modal>
-              </TouchableOpacity>
-            ) : null}
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "flex-end",
+            }}
+          >
+            <TouchableOpacity onPress={() => clearForm()} style={{ padding: 8 }}>
+              <Ionicons name="refresh" size={30} color="black" />
+            </TouchableOpacity>
           </View>
-        </View>
 
-        <View style={styles.viewOuter}>
-          <View style={styles.viewInner}>
-            <Text style={styles.textSel}>Select Class</Text>
-            {Class != null && Class !== [] ? (
-              <TouchableOpacity
-                style={styles.touchableStyle}
-                onPress={() => {
-                  setClassModalVisible(!ClassModalVisible);
-                  setSubjectId("");
-                  setSubject(null);
-                }}
-              >
-                <Text style={styles.textSel}>{ClassId}</Text>
-
-                <Modal
-                  animationType="slide"
-                  transparent={false}
-                  visible={ClassModalVisible}
-                  onRequestClose={() => {
-                    setClassModalVisible(!ClassModalVisible);
-                  }}
-                >
-                  <ScrollView>
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        paddingTop: 60,
-                        paddingHorizontal: 7,
-                      }}
-                    >
-                      <TouchableOpacity
-                        onPress={() => setClassModalVisible(!ClassModalVisible)}
-                        style={{
-                          padding: 10,
-                          paddingHorizontal: 15,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          backgroundColor: "rgba(56, 62, 136, 0.1)",
-                          margin: 15,
-                          borderRadius: 25,
-                        }}
-                      >
-                        <Text style={{ fontFamily: typography.montserrat_400 }}>
-                          Close
-                        </Text>
-                      </TouchableOpacity>
-                      {Class.map((value, i) => (
-                        <TouchableOpacity
-                          style={styles.modalItems}
-                          key={i}
-                          onPress={() => {
-                            setClassId(value.class_name);
-                            setClass_id(value.id);
-                            setSubject_id(value.id);
-                            getSubject(value.id);
-                            setClassModalVisible(!ClassModalVisible);
-                          }}
-                        >
-                          <Text
-                            style={{ fontFamily: typography.montserrat_400 }}
-                          >
-                            {value.class_name}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </ScrollView>
-                </Modal>
-              </TouchableOpacity>
-            ) : null}
-          </View>
-        </View>
-
-        {subject != null && Class != null && ClassId !== "" ? (
           <View style={styles.viewOuter}>
             <View style={styles.viewInner}>
-              <Text style={styles.textSel}>Select Subject</Text>
-              <TouchableOpacity
-                style={styles.touchableStyle}
-                onPress={() => {
-                  setSubjectModalVisible(!subjectModalVisible);
-                  setChapter(null);
-                  setChapterId("");
-                  setChapter_id("");
-                }}
-              >
-                <Text style={styles.textSel}>{subjectId}</Text>
-                <Modal
-                  animationType="slide"
-                  transparent={false}
-                  visible={subjectModalVisible}
-                  onRequestClose={() => {
-                    setSubjectModalVisible(!subjectModalVisible);
-                  }}
+              <Text style={styles.textSel}>Select lang</Text>
+              {lang != null && lang !== [] ? (
+                <TouchableOpacity
+                  style={styles.touchableStyle}
+                  onPress={() => setLangModalVisible(!langModalVisible)}
                 >
-                  <ScrollView>
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        paddingTop: 60,
-                        paddingHorizontal: 7,
-                      }}
-                    >
-                      <TouchableOpacity
-                        onPress={() =>
-                          setSubjectModalVisible(!subjectModalVisible)
-                        }
+                  <Text style={styles.textSel}>{languageId}</Text>
+                  <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={langModalVisible}
+                    onRequestClose={() => {
+                      setLangModalVisible(!langModalVisible);
+                    }}
+                  >
+                    <ScrollView>
+                      <View
                         style={{
-                          padding: 10,
-                          paddingHorizontal: 15,
+                          flex: 1,
                           justifyContent: "center",
                           alignItems: "center",
-                          backgroundColor: "rgba(56, 62, 136, 0.1)",
-                          margin: 15,
-                          borderRadius: 25,
+                          paddingTop: 60,
+                          paddingHorizontal: 7,
                         }}
                       >
-                        <Text style={{ fontFamily: typography.montserrat_400 }}>
-                          Close
-                        </Text>
-                      </TouchableOpacity>
-                      {subject.map((value, i) => (
                         <TouchableOpacity
-                          style={styles.modalItems}
-                          key={i}
-                          onPress={() => {
-                            setSubjectId(value.subject_name);
-                            setSubject_id(value.id);
-                            // getBook(value.id,class_id)
-                            getChapter(value.id);
-                            setSubjectModalVisible(!subjectModalVisible);
+                          onPress={() => setLangModalVisible(!langModalVisible)}
+                          style={{
+                            padding: 10,
+                            paddingHorizontal: 15,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "rgba(56, 62, 136, 0.1)",
+                            margin: 15,
+                            borderRadius: 25,
                           }}
                         >
-                          <Text
-                            style={{ fontFamily: typography.montserrat_400 }}
-                          >
-                            {value.subject_name}
+                          <Text style={{ fontFamily: typography.montserrat_400 }}>
+                            Close
                           </Text>
                         </TouchableOpacity>
-                      ))}
-                    </View>
-                  </ScrollView>
-                </Modal>
-              </TouchableOpacity>
+                        {lang.map((value, i) => (
+                          <TouchableOpacity
+                            key={i}
+                            style={styles.modalItems}
+                            onPress={() => {
+                              setLanguageId(value.language);
+                              setLang_id(value.id);
+                              setLangModalVisible(!langModalVisible);
+                            }}
+                          >
+                            <Text
+                              style={{ fontFamily: typography.montserrat_400 }}
+                            >
+                              {value.language}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </ScrollView>
+                  </Modal>
+                </TouchableOpacity>
+              ) : null}
             </View>
           </View>
-        ) : null}
 
-        {/* <View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width,height:70,paddingHorizontal:30}} >
+          <View style={styles.viewOuter}>
+            <View style={styles.viewInner}>
+              <Text style={styles.textSel}>Select Class</Text>
+              {Class != null && Class !== [] ? (
+                <TouchableOpacity
+                  style={styles.touchableStyle}
+                  onPress={() => {
+                    setClassModalVisible(!ClassModalVisible);
+                    setSubjectId("");
+                    setSubject(null);
+                  }}
+                >
+                  <Text style={styles.textSel}>{ClassId}</Text>
+
+                  <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={ClassModalVisible}
+                    onRequestClose={() => {
+                      setClassModalVisible(!ClassModalVisible);
+                    }}
+                  >
+                    <ScrollView>
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          paddingTop: 60,
+                          paddingHorizontal: 7,
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() => setClassModalVisible(!ClassModalVisible)}
+                          style={{
+                            padding: 10,
+                            paddingHorizontal: 15,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "rgba(56, 62, 136, 0.1)",
+                            margin: 15,
+                            borderRadius: 25,
+                          }}
+                        >
+                          <Text style={{ fontFamily: typography.montserrat_400 }}>
+                            Close
+                          </Text>
+                        </TouchableOpacity>
+                        {Class.map((value, i) => (
+                          <TouchableOpacity
+                            style={styles.modalItems}
+                            key={i}
+                            onPress={() => {
+                              setClassId(value.class_name);
+                              setClass_id(value.id);
+                              setSubject_id(value.id);
+                              getSubject(value.id);
+                              setClassModalVisible(!ClassModalVisible);
+                            }}
+                          >
+                            <Text
+                              style={{ fontFamily: typography.montserrat_400 }}
+                            >
+                              {value.class_name}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </ScrollView>
+                  </Modal>
+                </TouchableOpacity>
+              ) : null}
+            </View>
+          </View>
+
+          {subject != null && Class != null && ClassId !== "" ? (
+            <View style={styles.viewOuter}>
+              <View style={styles.viewInner}>
+                <Text style={styles.textSel}>Select Subject</Text>
+                <TouchableOpacity
+                  style={styles.touchableStyle}
+                  onPress={() => {
+                    setSubjectModalVisible(!subjectModalVisible);
+                    setChapter(null);
+                    setChapterId("");
+                    setChapter_id("");
+                  }}
+                >
+                  <Text style={styles.textSel}>{subjectId}</Text>
+                  <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={subjectModalVisible}
+                    onRequestClose={() => {
+                      setSubjectModalVisible(!subjectModalVisible);
+                    }}
+                  >
+                    <ScrollView>
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          paddingTop: 60,
+                          paddingHorizontal: 7,
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() =>
+                            setSubjectModalVisible(!subjectModalVisible)
+                          }
+                          style={{
+                            padding: 10,
+                            paddingHorizontal: 15,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "rgba(56, 62, 136, 0.1)",
+                            margin: 15,
+                            borderRadius: 25,
+                          }}
+                        >
+                          <Text style={{ fontFamily: typography.montserrat_400 }}>
+                            Close
+                          </Text>
+                        </TouchableOpacity>
+                        {subject.map((value, i) => (
+                          <TouchableOpacity
+                            style={styles.modalItems}
+                            key={i}
+                            onPress={() => {
+                              setSubjectId(value.subject_name);
+                              setSubject_id(value.id);
+                              // getBook(value.id,class_id)
+                              getChapter(value.id);
+                              setSubjectModalVisible(!subjectModalVisible);
+                            }}
+                          >
+                            <Text
+                              style={{ fontFamily: typography.montserrat_400 }}
+                            >
+                              {value.subject_name}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </ScrollView>
+                  </Modal>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : null}
+
+          {/* <View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width,height:70,paddingHorizontal:30}} >
   <Text>
      Select Book
   </Text>
@@ -977,74 +995,74 @@ const SearchQuestion = ({ navigation, route }) => {
   :null}
 </View> */}
 
-        {chapter != null && subjectId != "" && ClassId != "" ? (
-          <View style={styles.viewOuter}>
-            <View style={styles.viewInner}>
-              <Text style={styles.textSel}>Select Chapter</Text>
-              <TouchableOpacity
-                style={styles.touchableStyle}
-                onPress={() => {
-                  setChapterModalVisible(!chapterModalVisible);
-                  // setChapter(null)
-                  // setChapterId('')
-                }}
-              >
-                {/* <View style={{width:120,height:52,backgroundColor:'red',justifyContent:'center',alignItems: 'center',borderRadius:12}} > */}
-                <Text style={styles.textSel}>{chapterId}</Text>
-
-                {/* </View> */}
-                <Modal
-                  animationType="slide"
-                  transparent={false}
-                  visible={chapterModalVisible}
-                  onRequestClose={() => {
+          {chapter != null && subjectId != "" && ClassId != "" ? (
+            <View style={styles.viewOuter}>
+              <View style={styles.viewInner}>
+                <Text style={styles.textSel}>Select Chapter</Text>
+                <TouchableOpacity
+                  style={styles.touchableStyle}
+                  onPress={() => {
                     setChapterModalVisible(!chapterModalVisible);
+                    // setChapter(null)
+                    // setChapterId('')
                   }}
                 >
-                  <ScrollView>
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        paddingTop: 60,
-                        paddingHorizontal: 7,
-                      }}
-                    >
-                      <Button
-                        title="close"
-                        onPress={() =>
-                          setChapterModalVisible(!chapterModalVisible)
-                        }
-                      />
-                      {chapter.map((value, i) => (
-                        <TouchableOpacity
-                          key={i}
-                          onPress={() => {
-                            setChapterId(value.chapter_name);
-                            setChapter_id(value.id);
-                            // getTags(value.id)
-                            setChapterModalVisible(!chapterModalVisible);
-                          }}
-                          style={styles.modalItems}
-                        >
-                          <Text
-                            style={{ fontFamily: typography.montserrat_400 }}
-                          >
-                            {value.chapter_name}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </ScrollView>
-                </Modal>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : null}
-        {/* </View> */}
+                  {/* <View style={{width:120,height:52,backgroundColor:'red',justifyContent:'center',alignItems: 'center',borderRadius:12}} > */}
+                  <Text style={styles.textSel}>{chapterId}</Text>
 
-        {/* 
+                  {/* </View> */}
+                  <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={chapterModalVisible}
+                    onRequestClose={() => {
+                      setChapterModalVisible(!chapterModalVisible);
+                    }}
+                  >
+                    <ScrollView>
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          paddingTop: 60,
+                          paddingHorizontal: 7,
+                        }}
+                      >
+                        <Button
+                          title="close"
+                          onPress={() =>
+                            setChapterModalVisible(!chapterModalVisible)
+                          }
+                        />
+                        {chapter.map((value, i) => (
+                          <TouchableOpacity
+                            key={i}
+                            onPress={() => {
+                              setChapterId(value.chapter_name);
+                              setChapter_id(value.id);
+                              // getTags(value.id)
+                              setChapterModalVisible(!chapterModalVisible);
+                            }}
+                            style={styles.modalItems}
+                          >
+                            <Text
+                              style={{ fontFamily: typography.montserrat_400 }}
+                            >
+                              {value.chapter_name}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </ScrollView>
+                  </Modal>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : null}
+          {/* </View> */}
+
+          {/* 
 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width,height:70,paddingHorizontal:30}} >
   <Text>
      Select tag
@@ -1116,26 +1134,102 @@ const SearchQuestion = ({ navigation, route }) => {
   :null}
 </View> */}
 
-        <View style={styles.viewOuter}>
-          <View style={styles.viewInner}>
-            <Text style={styles.textSel}>Select Difficulty level</Text>
-            {difLvl != null ? (
+          <View style={styles.viewOuter}>
+            <View style={styles.viewInner}>
+              <Text style={styles.textSel}>Select Difficulty level</Text>
+              {difLvl != null ? (
+                <TouchableOpacity
+                  style={styles.touchableStyle}
+                  onPress={() => {
+                    setDifLvlModalVisible(!difLvlModalVisible);
+                    // setChapter(null)
+                    // setChapterId('')
+                  }}
+                >
+                  <Text style={styles.textSel}>{difLvlId}</Text>
+
+                  <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={difLvlModalVisible}
+                    onRequestClose={() => {
+                      setDifLvlModalVisible(!difLvlModalVisible);
+                    }}
+                  >
+                    <ScrollView>
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          paddingTop: 60,
+                          paddingHorizontal: 7,
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() => {
+                            setDifLvlModalVisible(!difLvlModalVisible);
+                            setDifLvl_id("");
+                            setDifLvlId("");
+                          }}
+                          style={{
+                            padding: 10,
+                            paddingHorizontal: 15,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "rgba(56, 62, 136, 0.1)",
+                            margin: 15,
+                            borderRadius: 25,
+                          }}
+                        >
+                          <Text style={{ fontFamily: typography.montserrat_400 }}>
+                            Close
+                          </Text>
+                        </TouchableOpacity>
+                        {difLvl.map((value, i) => (
+                          <TouchableOpacity
+                            style={styles.modalItems}
+                            key={i}
+                            onPress={() => {
+                              setDifLvlId(value.difficulty_level);
+                              setDifLvl_id(value.id);
+                              setDifLvlModalVisible(!difLvlModalVisible);
+                            }}
+                          >
+                            <Text
+                              style={{ fontFamily: typography.montserrat_400 }}
+                            >
+                              {value.difficulty_level}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </ScrollView>
+                  </Modal>
+                </TouchableOpacity>
+              ) : null}
+            </View>
+          </View>
+
+          <View style={styles.viewOuter}>
+            <View style={styles.viewInner}>
+              <Text style={styles.textSel}>Select Concept Id</Text>
               <TouchableOpacity
                 style={styles.touchableStyle}
                 onPress={() => {
-                  setDifLvlModalVisible(!difLvlModalVisible);
+                  setTypeModalVisible(!typeModalVisible);
                   // setChapter(null)
                   // setChapterId('')
                 }}
               >
-                <Text style={styles.textSel}>{difLvlId}</Text>
+                <Text style={styles.textSel}>{typeId}</Text>
 
                 <Modal
                   animationType="slide"
                   transparent={false}
-                  visible={difLvlModalVisible}
+                  visible={typeModalVisible}
                   onRequestClose={() => {
-                    setDifLvlModalVisible(!difLvlModalVisible);
+                    setTypeModalVisible(!typeModalVisible);
                   }}
                 >
                   <ScrollView>
@@ -1150,9 +1244,8 @@ const SearchQuestion = ({ navigation, route }) => {
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          setDifLvlModalVisible(!difLvlModalVisible);
-                          setDifLvl_id("");
-                          setDifLvlId("");
+                          setTypeModalVisible(!typeModalVisible);
+                          setTypeId("");
                         }}
                         style={{
                           padding: 10,
@@ -1168,151 +1261,76 @@ const SearchQuestion = ({ navigation, route }) => {
                           Close
                         </Text>
                       </TouchableOpacity>
-                      {difLvl.map((value, i) => (
-                        <TouchableOpacity
-                          style={styles.modalItems}
-                          key={i}
-                          onPress={() => {
-                            setDifLvlId(value.difficulty_level);
-                            setDifLvl_id(value.id);
-                            setDifLvlModalVisible(!difLvlModalVisible);
-                          }}
-                        >
-                          <Text
-                            style={{ fontFamily: typography.montserrat_400 }}
-                          >
-                            {value.difficulty_level}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
+
+                      <TouchableOpacity
+                        style={styles.modalItems}
+                        onPress={() => {
+                          setTypeId("Conceptual");
+                          // getChapter(value.id)
+                          setTypeModalVisible(!typeModalVisible);
+                        }}
+                      >
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          Conceptual
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={styles.modalItems}
+                        onPress={() => {
+                          setTypeId("Analytical");
+                          // getChapter(value.id)
+                          setTypeModalVisible(!typeModalVisible);
+                        }}
+                      >
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          Analytical
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={styles.modalItems}
+                        onPress={() => {
+                          setTypeId("Memory");
+                          // getChapter(value.id)
+                          setTypeModalVisible(!typeModalVisible);
+                        }}
+                      >
+                        <Text style={{ fontFamily: typography.montserrat_400 }}>
+                          Memory
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </ScrollView>
                 </Modal>
               </TouchableOpacity>
-            ) : null}
+            </View>
           </View>
-        </View>
-
-        <View style={styles.viewOuter}>
-          <View style={styles.viewInner}>
-            <Text style={styles.textSel}>Select Concept Id</Text>
-            <TouchableOpacity
-              style={styles.touchableStyle}
-              onPress={() => {
-                setTypeModalVisible(!typeModalVisible);
-                // setChapter(null)
-                // setChapterId('')
-              }}
-            >
-              <Text style={styles.textSel}>{typeId}</Text>
-
-              <Modal
-                animationType="slide"
-                transparent={false}
-                visible={typeModalVisible}
-                onRequestClose={() => {
-                  setTypeModalVisible(!typeModalVisible);
-                }}
-              >
-                <ScrollView>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      paddingTop: 60,
-                      paddingHorizontal: 7,
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={() => {
-                        setTypeModalVisible(!typeModalVisible);
-                        setTypeId("");
-                      }}
-                      style={{
-                        padding: 10,
-                        paddingHorizontal: 15,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "rgba(56, 62, 136, 0.1)",
-                        margin: 15,
-                        borderRadius: 25,
-                      }}
-                    >
-                      <Text style={{ fontFamily: typography.montserrat_400 }}>
-                        Close
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={styles.modalItems}
-                      onPress={() => {
-                        setTypeId("Conceptual");
-                        // getChapter(value.id)
-                        setTypeModalVisible(!typeModalVisible);
-                      }}
-                    >
-                      <Text style={{ fontFamily: typography.montserrat_400 }}>
-                        Conceptual
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={styles.modalItems}
-                      onPress={() => {
-                        setTypeId("Analytical");
-                        // getChapter(value.id)
-                        setTypeModalVisible(!typeModalVisible);
-                      }}
-                    >
-                      <Text style={{ fontFamily: typography.montserrat_400 }}>
-                        Analytical
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={styles.modalItems}
-                      onPress={() => {
-                        setTypeId("Memory");
-                        // getChapter(value.id)
-                        setTypeModalVisible(!typeModalVisible);
-                      }}
-                    >
-                      <Text style={{ fontFamily: typography.montserrat_400 }}>
-                        Memory
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </ScrollView>
-              </Modal>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            paddingHorizontal: "5%",
-            width: "100%",
-            alignItems: "center",
-            marginVertical: 7,
-          }}
-        >
-          <Text
-            style={{ fontFamily: typography.montserrat_600, marginRight: 15 }}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              paddingHorizontal: "5%",
+              width: "100%",
+              alignItems: "center",
+              marginVertical: 7,
+            }}
           >
-            Video Solution Compulsary ?
-          </Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#EA7A26" }}
-            thumbColor={isEnabled ? "#2A304E" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-          />
-        </View>
+            <Text
+              style={{ fontFamily: typography.montserrat_600, marginRight: 15 }}
+            >
+              Video Solution Compulsary ?
+            </Text>
+            <Switch
+              trackColor={{ false: "#767577", true: "#EA7A26" }}
+              thumbColor={isEnabled ? "#2A304E" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+            />
+          </View>
 
-        {/* <View style={styles.viewOuter} >
+          {/* <View style={styles.viewOuter} >
   <View style={styles.viewInner}>    
   <Text style={styles.textSel} >
 
@@ -1374,32 +1392,33 @@ const SearchQuestion = ({ navigation, route }) => {
   </View>
 </View> */}
 
-        {/* <TextInput placeholder="Enter Exercise Number" style={styles.inp} value={exrcNo} onChangeText={setExrcNo}/> */}
-        {/* <TextInput placeholder="Enter Question Number" style={styles.inp} value={quesNo} onChangeText={setQuesNo}/> */}
+          {/* <TextInput placeholder="Enter Exercise Number" style={styles.inp} value={exrcNo} onChangeText={setExrcNo}/> */}
+          {/* <TextInput placeholder="Enter Question Number" style={styles.inp} value={quesNo} onChangeText={setQuesNo}/> */}
 
-        {/* <Button title="Sent to Dtp"  /> */}
+          {/* <Button title="Sent to Dtp"  /> */}
 
-        <TouchableOpacity
-          onPress={() =>
-            chapter_id != ""
-              ? getQuestionBank(chapter_id)
-              : Alert.alert("select a chapter first")
-          }
-          style={{
-            padding: 10,
-            paddingHorizontal: 15,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#2A304E",
-            margin: 15,
-            borderRadius: 25,
-            height: 50,
-          }}
-        >
-          <Text style={styles.textSel}>Search Question</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </ScrollView>
+          <TouchableOpacity
+            onPress={() =>
+              chapter_id != ""
+                ? getQuestionBank(chapter_id)
+                : Alert.alert("select a chapter first")
+            }
+            style={{
+              padding: 10,
+              paddingHorizontal: 15,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#2A304E",
+              margin: 15,
+              borderRadius: 25,
+              height: 50,
+            }}
+          >
+            <Text style={styles.textSel}>Search Question</Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

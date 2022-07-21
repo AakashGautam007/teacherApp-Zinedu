@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 16,
-        fontFamily: typography.montserrat_400,
+        fontFamily: typography.montserrat_600,
+        color: '#595959'
     },
     tag: {
         marginVertical: 10
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     },
     questionIdText: {
         color: '#595959',
-        fontFamily: typography.montserrat_400,
+        fontFamily: typography.montserrat_500,
     },
     questionContainer: {
         flexDirection: 'row',
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     approveText: {
         color: '#2B3789',
         fontSize: 14,
-        fontFamily: typography.montserrat_400,
+        fontFamily: typography.montserrat_600,
     },
     modalParentContainer: {
         flex: 1,
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     modalText: {
         fontSize: 18,
         textAlign: 'center',
-        fontFamily: typography.montserrat_400,
+        fontFamily: typography.montserrat_500,
     }
 })
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FlatList, Modal, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { STYLES } from '../../../appStyles'
+import { STYLES, typography } from '../../../appStyles'
 import HeaderComponent from '../../../components/HeaderComponent'
 import ScrollToTop, { scrollToTop } from '../../../components/ScrollToTop'
 import CheckQuestionOption from '../components/CheckQuestionOption'
@@ -225,6 +225,7 @@ const QuestionList = (props) => {
 
             isSkip && showSkipMessage()
             scrollToTop(scrollRef)
+            setVisitedQuestionObject({})
         } else {
             alert('Some error occured')
         }
@@ -262,10 +263,19 @@ const QuestionList = (props) => {
 
     const validateRejectModal = () => {
         let validated = true
-        if (rejectReasonText.trim().length < 3) {
-            alert('Please enter valid reason')
+        if (rejectReasonText.trim().length == 0 && attachmentFiles.length == 0) {
+            alert('Please provide a valid reason or atleast one image to proceed')
             validated = false
         }
+        // else {
+        //     if (rejectReasonText.trim().length == 0) {
+        //         alert('Please enter valid reason')
+        //         validated = false
+        //     } else if (attachmentFiles.length == 0) {
+        //         alert('Please enter valid reason')
+        //         validated = false
+        //     }
+        // }
         !validated && setLoading(false)
         return validated
     }
@@ -324,7 +334,7 @@ const QuestionList = (props) => {
                 question_id: questionObject.question_id,
                 is_accepted: false,
                 chapter_id: selectedChapterId,
-                tag_ids: selectedTags.map(item => item?.id),
+                tag_ids: selectedTags.map(item => Number(item?.id)),
                 difficulty: selectedDifficulty,
                 feature_type: selectedFeature ? getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }) : questionObject?.feature_type,
                 current_level: getCurrentLevel({ L1, L2, questionId: questionObject?.question_id }),
@@ -347,6 +357,7 @@ const QuestionList = (props) => {
             const response = await REJECT_QUESTION({ params: bodyData })
             // console.log('rejectApi', JSON.stringify(response))
             if (response?.status) {
+                resetRejectModal()
                 showRejectMessage()
                 moveToNextQuestion()
             } else {
@@ -363,6 +374,12 @@ const QuestionList = (props) => {
         setModalSelectedDifficulty(selectedDifficulty)
         setModalSelectedFeature(selectedFeature)
         setModalSelectedTags(selectedTags)
+    }
+
+    const resetRejectModal = () => {
+        setRejectModal(false)
+        setRejectReasonText('')
+        setAttachmentFiles([])
     }
 
     return (
@@ -421,18 +438,18 @@ const QuestionList = (props) => {
             >
                 <View style={styles.editModalParentContainer}>
                     <View style={styles.editModalContainer}>
-                        <Text style={[styles.subHeading, { marginTop: 30, marginBottom: 0, fontSize: 16, marginLeft: 20, fontWeight: '600' }]}>Edit Question Properties</Text>
+                        <Text style={[styles.modalSubHeading, { marginTop: 30, marginBottom: 0, fontSize: 16, marginLeft: 20, fontFamily: typography.montserrat_600 }]}>Edit Question Properties</Text>
                         <ScrollView
                             nestedScrollEnabled={true}
                             contentContainerStyle={{ width: '100%', paddingHorizontal: 20 }}>
 
                             <View style={[styles.subHeadingContainer, { marginTop: 10 }]}>
-                                <Text style={styles.subHeading}>Question Type</Text>
+                                <Text style={styles.modalSubHeading}>Question Type</Text>
                                 <Text style={styles.subHeadingGray}>{QUESTION_TYPE.get(questionObject?.question_type) || ''}</Text>
                             </View>
 
                             <View style={styles.subHeadingContainer}>
-                                <Text style={styles.subHeading}>Subject Name</Text>
+                                <Text style={styles.modalSubHeading}>Subject Name</Text>
                                 <Text style={styles.subHeadingGray}>{questionObject?.subject_name || ''}</Text>
                             </View>
 
@@ -463,6 +480,7 @@ const QuestionList = (props) => {
                                     flatListProps={{
                                         nestedScrollEnabled: true
                                     }}
+                                    textStyle={styles.dropDownText}
                                 />
 
                             </View>
@@ -541,7 +559,7 @@ const QuestionList = (props) => {
                                 />
                             </View>
 
-                            {(FEATURE_TYPE.get(questionObject?.feature_type) != modalSelectedFeature) && <InfoText text={'You have changed the feature type'} />}
+                            {(FEATURE_TYPE.get(questionObject?.feature_type) != modalSelectedFeature) && <InfoText style={{ marginTop: -1 }} text={'You have changed the feature type'} />}
                         </ScrollView>
 
                         <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 20, width: '22%', marginVertical: 10 }]} onPress={() => {
@@ -651,18 +669,13 @@ const QuestionList = (props) => {
                 animationType="slide"
                 transparent={true}
                 visible={rejectModal}
-                onRequestClose={() => {
-                    setRejectModal(false)
-                    setAttachmentFiles([])
-                }}
-                onDismiss={() => {
-                    setAttachmentFiles([])
-                }}
+                onRequestClose={resetRejectModal}
+                onDismiss={resetRejectModal}
             >
                 <View style={styles.editModalParentContainer}>
                     <View style={styles.rejectModalContainer}>
                         <ActivityIndicatorComponent animating={loading} />
-                        <Text style={[styles.subHeading, { marginTop: 30, marginBottom: 0, fontSize: 16, marginLeft: 20, fontWeight: '600' }]}>What do you want to change in the question?</Text>
+                        <Text style={[styles.subHeading, { marginTop: 30, marginBottom: 0, fontSize: 16, marginLeft: 20, fontFamily: typography.montserrat_600 }]}>What do you want to change in the question?</Text>
                         <View style={styles.rejectReasonContainer}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <TextInput
@@ -703,7 +716,7 @@ const QuestionList = (props) => {
                                     return <View style={styles.screenshotContainer}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                             <Feather name='image' size={20} color='#606060' />
-                                            <Text numberOfLines={1} style={styles.screenshotText}>{item?.fileName}</Text>
+                                            <Text numberOfLines={1} style={styles.screenshotText}> {item?.fileName}</Text>
                                         </View>
                                         <TouchableOpacity onPress={() => {
                                             let temp = [...attachmentFiles]
@@ -746,7 +759,7 @@ const QuestionList = (props) => {
                     <View style={styles.container}>
                         <View style={styles.questionContainer}>
                             <View>
-                                <Text style={[styles.heading]}>Question {questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}</Text>
+                                <Text style={[styles.heading, { fontFamily: typography.montserrat_600 }]}>Question {questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}</Text>
                             </View>
                             <View style={styles.questionIdTextContainer}>
                                 <Text style={styles.questionIdText}>QID {questionId}</Text>
@@ -814,7 +827,7 @@ const QuestionList = (props) => {
                                             question_id: item?.id,
                                             is_accepted: false,
                                             chapter_id: selectedChapterId,
-                                            tag_ids: selectedTags.map(item => item?.id),
+                                            tag_ids: selectedTags.map(item => Number(item?.id)),
                                             difficulty: selectedDifficulty,
                                             feature_type: selectedFeature ? getKeyByValueFromMap({ map: FEATURE_TYPE, searchValue: selectedFeature }) : questionObject?.feature_type,
                                             current_level: getCurrentLevel({ L1, L2, questionId: questionObject?.question_id }),
@@ -831,7 +844,7 @@ const QuestionList = (props) => {
 
                     <View style={styles.container}>
                         <View style={styles.questionPropertiesContainer}>
-                            <Text style={[styles.heading]}>Question Properties</Text>
+                            <Text style={[styles.heading, { color: '#393939' }]}>Question Properties</Text>
                             <TouchableOpacity style={styles.editContainer} onPress={() => setEditModal(true)}>
                                 <Text style={styles.editText}>Edit</Text>
                                 <AntDesign name='edit' size={15} color={'#1B3687'} style={styles.editIcon} />
@@ -926,7 +939,7 @@ const QuestionList = (props) => {
                         getQuestionDetails({ questionId, isSkip: true })
                         setSkipQuestionIdArray([...tempArray])
                     }}>
-                        <Text style={styles.approveText}>Skip</Text>
+                        <Text style={[styles.approveText, { fontFamily: typography.montserrat_400 }]}>Skip</Text>
                     </TouchableOpacity>}
                 </View>
             </ScrollView>}
