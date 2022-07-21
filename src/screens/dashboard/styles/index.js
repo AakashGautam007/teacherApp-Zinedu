@@ -43,13 +43,13 @@ const styles = StyleSheet.create({
   },
   classesText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: typography.montserrat_600,
     marginBottom: 15,
   },
   viewScheduleText: {
     color: "#1C3687",
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: typography.montserrat_500
   },
   cardsContainer: {
     flexDirection: "row",
@@ -71,11 +71,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 14,
     color: "black",
+    fontFamily: typography.montserrat_400
   },
   cardInactiveText: {
     width: 65,
     textAlign: "center",
     color: "#ADADAD",
+    fontFamily: typography.montserrat_400
   },
   questionVerificationParentContainer: {
     ...STYLES.elevation,
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
   },
   questionVerificationText: {
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: typography.montserrat_500
   },
   questionVerificationActiveCard: {
     width: "100%",
@@ -144,6 +146,7 @@ const styles = StyleSheet.create({
   approveText: {
     color: "#2B3789",
     fontSize: 14,
+    fontFamily: typography.montserrat_400
   },
   modalParentContainer: {
     flex: 1,
@@ -161,6 +164,7 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 14,
     textAlign: "center",
+    fontFamily: typography.montserrat_400
   },
 });
 
