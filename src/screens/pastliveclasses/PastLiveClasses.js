@@ -110,7 +110,7 @@ const PastLiveClasses = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 16 }}>No Past Live Classes</Text>
+        <Text style={{ fontSize: 16 }}>No Past Live Classes!!!!!</Text>
       </SafeAreaView>
     );
   }

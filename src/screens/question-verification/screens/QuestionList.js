@@ -156,7 +156,7 @@ const QuestionList = (props) => {
     const getQuestionDetails = async ({ questionId, isSkip = false }) => {
         // console.log({ questionId })
         setLoading(true)
-        const response = await GET_QUESTION_DETAILS({ questionId: '86788' })
+        const response = await GET_QUESTION_DETAILS({ questionId })
 
         // console.log('1', JSON.stringify(response))
         if (response?.status) {
