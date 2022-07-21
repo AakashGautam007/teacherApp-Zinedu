@@ -80,12 +80,30 @@ export const showApproveMessage = () => {
 }
 
 export const showRejectMessage = () => {
+    // showMessage({
+    //     message: "Question sent for correction",
+    //     type: "success",
+    //     style: styles.popup,
+    //     backgroundColor: "#012C63",
+    //     icon: 'success'
+    // });
     showMessage({
-        message: "Question sent for correction",
-        type: "success",
+        message: "Question Rejected",
+        type: "danger",
         style: styles.popup,
-        backgroundColor: "#012C63",
+        backgroundColor: "#C80000",
         icon: 'success'
+    });
+}
+
+export const showSkipMessage = () => {
+    showMessage({
+        message: "Question Skipped",
+        // type: "skip",
+        style: styles.popup,
+        color: '#2B3789',
+        backgroundColor: "#D6DBF9",
+        icon: 'skip',
     });
 }
 

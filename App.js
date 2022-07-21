@@ -21,8 +21,9 @@ import {
   requestUserPermission
 } from "./src/utils/notificationService";
 import NavigationService from "./src/AppUtils/NavigationService";
-import FlashMessage from "react-native-flash-message";
+import FlashMessage, { renderFlashMessageIcon } from "react-native-flash-message";
 import { LOGIN_API } from "./src/screens/auth/api";
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 LogBox.ignoreAllLogs();
 
@@ -175,10 +176,33 @@ const App = () => {
     );
   }
 
+  const renderCustomFlashMessageIcon = (icon = 'success', style = {}, customProps = {}) => {
+    switch (icon) {
+      case 'skip': // casting for your custom icons and render then
+        return (
+          <View
+            style={{
+              marginRight: 7,
+              width: 21, // thats the recomended size of icons
+              height: 21, // thats the recomended size of icons
+            }}>
+            <AntDesign
+              name="checkcircle"
+              color="#2B3789"
+              size={21} // thats the recomended size of icons
+            />
+          </View>
+        );
+      default:
+        // if not a custom icon render the default ones...
+        return renderFlashMessageIcon(icon, style, customProps);
+    }
+  }
+
   return (
     <InternetConnectionAlert
       onChange={(connectionState) => {
-        console.log("Connection State: ", connectionState);
+        // console.log("Connection State: ", connectionState);
       }}
     >
       {/* {... Your whole application should be here ... } */}
@@ -194,7 +218,7 @@ const App = () => {
           )}
         </NavigationContainer>
       </AuthContext.Provider>
-      <FlashMessage position="top" />
+      <FlashMessage position="top" renderFlashMessageIcon={renderCustomFlashMessageIcon} />
     </InternetConnectionAlert>
   );
 }

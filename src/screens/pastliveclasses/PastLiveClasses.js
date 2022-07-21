@@ -15,7 +15,6 @@ import { ENDPOINT, width } from "../../utils/config";
 import dateFormat from "dateformat";
 import ClassCard from "../common/ClassCard";
 import { useAuthFields } from "../../AppUtils/hooks/useAuthFields";
-import { typography } from "../../appStyles";
 
 const PastLiveClasses = ({ navigation }) => {
   const { userToken, userName: username } = useAuthFields();
@@ -57,8 +56,23 @@ const PastLiveClasses = ({ navigation }) => {
       }
     );
     const D = await response.json();
-    console.log(D.payload.liveclasses, "Past classes data");
-    setData(D.payload.liveclasses);
+    if (response.ok) {
+      // if (D.status === false) {
+      //   alert(D.payload.message);
+      // } else {
+      //   console.log(D.payload.liveclasses, "Past classes data");
+      //   setData(D.payload.liveclasses);
+      // }
+
+      if (D?.payload?.liveclasses) {
+        console.log(D.payload.liveclasses, "Past classes data");
+        setData(D.payload.liveclasses);
+      } else {
+        alert(D?.payload?.message);
+      }
+    } else {
+      alert("Some error occured");
+    }
 
     setIsLoading(false);
     setRefreshing(false);
@@ -96,9 +110,7 @@ const PastLiveClasses = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 16, fontFamily: typography.montserrat_400 }}>
-          No Past Live Classes
-        </Text>
+        <Text style={{ fontSize: 16 }}>No Past Live Classes!!!!!</Text>
       </SafeAreaView>
     );
   }

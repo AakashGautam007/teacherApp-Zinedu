@@ -55,9 +55,6 @@ const Dashboard = ({ navigation }) => {
     }, [])
   );
 
-  useEffect(() => {
-    postAnalytics("teacher-dashboard", logout);
-  }, []);
 
   const resetModal = () => {
     setApproveModal(false);
@@ -118,21 +115,14 @@ const Dashboard = ({ navigation }) => {
             {/* <TouchableOpacity onPress={() => navigation.toggleDrawer()} >
                             <Image source={require('../../../assets/menu.png')} style={{ height: 44, width: 44, marginHorizontal: 8, marginVertical: 14 }} />
                         </TouchableOpacity> */}
-            <Image
-              source={require("../../../assets/my-faculty-logo/index.png")}
-              resizeMethod="scale"
-              resizeMode="contain"
-              style={{ width: 150, height: 35.08, marginLeft: 8 }}
-            />
-          </View>
-          <TouchableOpacity onPress={() => setApproveModal(true)}>
-            <MaterialIcons
-              name="logout"
-              color={"#5B5B5B"}
-              size={25}
-              style={{ marginRight: 16 }}
-            />
-          </TouchableOpacity>
+                        <Image source={require('../../../assets/my-faculty-logo/index.png')}
+                            resizeMethod='scale'
+                            resizeMode='contain'
+                            style={{ width: 150, height: 35.08, marginLeft: 8 }} />
+                    </View>
+                    <TouchableOpacity onPress={() => setApproveModal(true)}>
+                        <MaterialIcons name='logout' color={'#5B5B5B'} size={25} style={{ marginRight: 16 }} />
+                    </TouchableOpacity>
 
           {/* <Image source={require('../../../assets/bell.png')} style={{ width: 22, height: 26, marginRight: 14 }} /> */}
         </View>
@@ -169,13 +159,73 @@ const Dashboard = ({ navigation }) => {
             <Text style={styles.cardText}>Student Doubts</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => navigation.navigate("PastClassesStack")}
-            style={styles.card}
-          >
-            <Text style={styles.cardText}>My Past Classes</Text>
-          </TouchableOpacity>
-        </View>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('PastClassesStack')}
+                        style={styles.card}
+                    >
+                        <Text style={styles.cardText}>
+                            My Past Classes
+                        </Text>
+                    </TouchableOpacity>
+
+                </View>
+
+                <View style={styles.questionVerificationParentContainer}>
+                    <Text style={styles.questionVerificationText}>
+                        Question Verification
+                    </Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.questionVerificationContainer}>
+                            <TouchableOpacity
+                                // onPress={() => navigation.navigate('SearchQuestionStack')}
+                                // disabled={reviewCount == 0}
+                                onPress={() => {
+                                    reviewCount == 0 ?
+                                        navigation.navigate('Congrats')
+                                        :
+                                        navigation.navigate('Filter')
+                                }}
+                                style={false ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard}>
+                                <Badge
+                                    count={reviewCount}
+                                    viewStyle={{
+                                        position: 'absolute',
+                                        top: -8,
+                                        right: -10,
+                                    }}
+                                />
+                                <Text style={false ? styles.cardInactiveText : styles.cardText}>
+                                    Review Question
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.questionVerificationContainer}>
+                            <TouchableOpacity
+                                // disabled={visibilityCheckCount == 0}
+                                onPress={() => {
+                                    visibilityCheckCount == 0 ?
+                                        navigation.navigate('Congrats')
+                                        :
+                                        navigation.navigate('CheckQuestion')
+                                }}
+
+                                style={false ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard} >
+                                <Badge
+                                    count={visibilityCheckCount}
+                                    viewStyle={{
+                                        position: 'absolute',
+                                        top: -8,
+                                        right: -10,
+                                    }}
+                                />
+                                <Text style={false ? styles.cardInactiveText : styles.cardText}>
+                                    Visibility Check
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
 
         <View style={styles.questionVerificationParentContainer}>
           <Text style={styles.questionVerificationText}>
