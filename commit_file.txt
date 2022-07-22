@@ -16,6 +16,9 @@ Font changes in Question verification flow
 Provided Staging apk
 To work on rendering issue, checking out to another branch(webview)
 webview render issue in progress
-
+5.46pm:
+Fixed ENG-575
 8.21pm:
 Optimised to single webview in L3 flow for Objective type question
+8.28pm:
+merged with arun branch
