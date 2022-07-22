@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { width, height } from "../utils/config";
 import AutoHeightWebView from "react-native-autoheight-webview";
 import { typography } from "../appStyles";
+import { getOptionName } from "../screens/question-verification/utils";
 
 // const defaultOptions = {
 //   tex: {
@@ -230,6 +231,7 @@ const CheckQuestionOption = ({ item, index }) => {
 
 const wrapMathjax = (props) => {
   const { question, options, solution } = props
+  const [option1, option2, option3, option4] = options
   const mathJaxOptions = JSON.stringify(
     Object.assign({}, defaultOptions)
   );
@@ -271,6 +273,11 @@ const wrapMathjax = (props) => {
 			<html lang="en-US">
 			<head>
 				<meta charset="utf-8"/>
+        <link
+href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
+rel="stylesheet"
+type="text/css"
+/>
 				<script>
 				MathJax = {
 					${mathJaxOptions}
@@ -281,82 +288,213 @@ const wrapMathjax = (props) => {
 				</script>
         <style>
 
-.container {
-  background-color: white;
-        // padding: 10;
-        // border-radius: 8;
-  width: 100%;
-}
-.questionContainer {
-  display: flex;
-  flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        font-family: Montserrat-SemiBold;
-        background-color: white;
-}
-.heading {
-  font-size: 16px;
-        font-family: Montserrat-SemiBold;
-        color: #595959;
-}
-.questionIdTextContainer {
-  border-radius: 10px;
-  background-color: #E7E7E7;
-  // padding: 0px 10px;
-  align-items: center;
-  justify-content: center;
-  // line-height: 0.7;
-  height: 30px;
-  display: flex;
-}
-.questionIdText {
-  color: #595959;
-}
+        body {
+          // background-color: red;
+          box-sizing: content-box;
+          margin: 0px;
+          padding: 0px 40px;
+          width: calc(100vw - 1px);
+        }
+        
+        // .viewport-native {
+        //   /* Don't edit*/
+        
+        //   width: 392px;
+        //   height: 95vh;
+        //   margin: 0 auto;
+        //   overflow-y: auto;
+        //   background-color: #F5F5F5;
+        // }
+        
+        .container {
+          background-color: white;
+          padding: 5px 10px;
+          border-radius: 8px;
+          // margin: 10px 16px;
+          margin-top: 10px;
+        }
+        
+        .questionCard {
+          background-color: #fff;
+          border-radius: 10px;
+          margin-bottom: 10px;
+        }
+        
+        .questionInfo {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 5px;
+        }
+        
+        .heading {
+          font-size: 16px;
+          font-family: Montserrat-SemiBold;
+          color: #595959;
+          font-family: Montserrat;
+          font-weight: 600;
+        }
+        
+        .questionText {
+          font-size: 16px;
+          color: #5b5b5b;
+          margin-bottom: 10px;
+          margin-top: 10px;
+          overflow-x: auto;
+        }
+        
+        .questionIdTextContainer {
+          border-radius: 8px;
+          background-color: #e7e7e7;
+          align-items: center;
+          justify-content: center;
+          height: 15px;
+          display: flex;
+          padding: 2px 10px;
+        }
+        
+        .questionIdText {
+          color: #595959;
+          font-size: 12px;
+          font-family: Montserrat;
+          font-weight: 500;
+        }
+        
+        .option {
+          background-color: white;
+          font-family: Montserrat-SemiBold;
+          padding: 5px 10px;
+          border-radius: 8px;
+          margin: 20px 0px;
+        }
+
+        .selected-option {
+          background: #e3ffda;
+          font-family: Montserrat-SemiBold;
+          padding: 5px 10px;
+          border-radius: 8px;
+          margin: 20px 0px;
+          border: 1px solid #2eb100;
+        }
+        
+        .option-name {
+          color: #595959;
+          font-size: 16px;
+          margin-top: 5px;
+          font-family: Montserrat;
+          font-weight: 500;
+        }
+        
+        .option-text {
+          font-size: 16px;
+          color: #5b5b5b;
+          border-radius: 8px;
+          border: 1px solid #bdbdbd;
+          padding: 5px 5px;
+          margin-bottom: 10px;
+          margin-top: 10px;
+          overflow-x: auto;
+        }
+        
+        .solution {
+          background-color: white;
+          font-family: Montserrat-SemiBold;
+          padding: 5px 10px;
+          border-radius: 8px;
+          margin: 12px 0px;
+        }
+        
+        .solution-header {
+          color: #595959;
+          font-size: 16px;
+          margin-top: 5px;
+          font-family: Montserrat;
+          font-weight: 500;
+        }
+        
+        .solution-text {
+          font-size: 16px;
+          color: #5b5b5b;
+          margin-bottom: 10px;
+          margin-top: 10px;
+          overflow-x: auto;
+        }
         </style>
 			</head>
      
 			<body>
-				<div class="container">
-          <div class="questionContainer">
-            <div>
-              <p class="heading">Question 1 </p>
-            </div>
-
-            <div class="questionIdTextContainer">
-              <div class="questionIdText">QID 12345</div>
-            </div>
-				  </div>
-
+      <div class="container">
+      <div class="questionCard">
+        <div class="questionInfo">
           <div>
-            ${question}
+            <div class="heading">Question 1 </div>
+          </div>
+  
+          <div class="questionIdTextContainer">
+            <div class="questionIdText">QID 12345</div>
           </div>
         </div>
-        <div>
-        <div id="formula">
-          Option 1
-          ${options[0]?.html}
+      </div>
+  
+      <div class='questionText'>
+          ${question}
+      </div>
+  
+    </div>
+    
+    <div>
+      <div class=${option1?.selected ? "selected-option" : "option"}>
+        <div class="option-name">
+          ${getOptionName(0)}
         </div>
-
-        <div id="formula">
-          Option 2
-          ${options[1]?.html}
+  
+        <div class="option-text" >
+          ${option1?.html}
         </div>
-
-        <div id="formula">
-          Option 3
-          ${options[2]?.html}
+      </div>
+  
+      <div class=${option2?.selected ? "selected-option" : "option"}>
+        <div class="option-name">
+          ${getOptionName(1)}
         </div>
-
-        <div id="formula">
-          Option 4
-          ${options[3]?.html}
+  
+        <div class="option-text" >
+          ${option2?.html}
         </div>
+      </div>
 
-        <div id="formula">
-          solution
+      <div class=${option3?.selected ? "selected-option" : "option"}>
+        <div class="option-name">
+          ${getOptionName(2)}
+        </div>
+  
+        <div class="option-text" >
+          ${option3?.html}
+        </div>
+      </div>
+
+      <div class=${option4?.selected ? "selected-option" : "option"}>
+        <div class="option-name">
+          ${getOptionName(3)}
+        </div>
+  
+        <div class="option-text" >
+          ${option4?.html}
+        </div>
+      </div>
+  
+      <div class="solution">
+  
+        <div class="solution-header">
+          Solution
+        </div>
+        <div class="solution-text">
           ${solution}
         </div>
+      </div>
+  
+    </div>
 			</body>
 			</html>
 		`;

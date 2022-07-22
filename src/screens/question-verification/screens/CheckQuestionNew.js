@@ -229,6 +229,8 @@ const CheckQuestionNew = (props) => {
             >
                 {questionObject?.question && <View style={{
                             // width: width * 0.75
+                            // width: width,
+                            marginVertical: 20
                         }}>
                             <MathJaxNew
                                 question={questionObject?.question}

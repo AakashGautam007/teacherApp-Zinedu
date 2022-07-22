@@ -29,14 +29,14 @@ export default function Login({ navigation }) {
 
 
     // const [username, setUsername] = useState('5454555555')
-    // const [username, setUsername] = useState('7024140855')
+    const [username, setUsername] = useState('7024140855')
     // const [username, setUsername] = useState('9111799551')
     // const [username, setUsername] = useState('9595954445')
     // const [username, setUsername] = useState('5656565601')
     // const [username, setUsername] = useState('8787888888')
 
     // const [username, setUsername] = useState('9595954446')
-    const [username, setUsername] = useState('0909090981')
+    // const [username, setUsername] = useState('0909090981')
     const [password, setPassword] = useState('checkA@BC@2021')
     // staging
     // 5555500111
