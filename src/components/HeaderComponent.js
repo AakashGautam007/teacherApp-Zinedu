@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: typography.montserrat_600,
     marginLeft: 15,
+    maxWidth: '80%',
   },
 });
 
