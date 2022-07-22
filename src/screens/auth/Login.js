@@ -36,10 +36,12 @@ export default function Login({ navigation }) {
     // const [username, setUsername] = useState('8787888888')
 
     // const [username, setUsername] = useState('9595954446')
-    // const [username, setUsername] = useState('0909090981')
-    // const [password, setPassword] = useState('checkA@BC@2021')
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('0909090981')
+    const [password, setPassword] = useState('checkA@BC@2021')
+    // staging
+    // 5555500111
+    // const [username, setUsername] = useState('')
+    // const [password, setPassword] = useState('')
     const dispatch = useDispatch()
 
     // const { LOGIN } = React.useContext(AuthContext);

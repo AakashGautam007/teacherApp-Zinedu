@@ -9,11 +9,12 @@ import ScrollToTop, { scrollToTop } from '../../../components/ScrollToTop'
 import { width } from '../../../utils/config'
 import { APPROVE_QUESTION, GET_L3_QUESTION_IDS, GET_QUESTION_DETAILS, GET_QUESTION_IDS, REJECT_QUESTION } from '../api'
 import CheckQuestionOption from '../components/CheckQuestionOption'
-import styles from '../styles/check-question'
+import styles from '../styles/check-question-new'
 import { getCurrentLevel, getKeyByValueFromMap, showApproveMessage, showRejectMessage, showSkipMessage } from '../utils'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import MathJaxNew from '../../../components/MathJaxNew'
 
-const CheckQuestion = (props) => {
+const CheckQuestionNew = (props) => {
     const { navigation, route } = props
     const prevScreenData = route?.params || {}
     const { title } = prevScreenData
@@ -57,7 +58,6 @@ const CheckQuestion = (props) => {
             setLoading(false)
             setInitialLoading(false)
         }
-
     }
 
     const getQuestionDetails = async ({ questionId, isSkip = false }) => {
@@ -184,7 +184,7 @@ const CheckQuestion = (props) => {
         <SafeAreaView style={STYLES.safeAreaContainer}>
             <ActivityIndicatorComponent animating={loading} />
             <HeaderComponent
-                text={'Check Question'}
+                text={'Check Question New'}
                 onPress={navigation.goBack}
             />
 
@@ -227,8 +227,17 @@ const CheckQuestion = (props) => {
                 // contentContainerStyle={styles.parentContainer}
             // nestedScrollEnabled={true}
             >
+                {questionObject?.question && <View style={{
+                            // width: width * 0.75
+                        }}>
+                            <MathJaxNew
+                                question={questionObject?.question}
+                                options={options}
+                                solution={questionObject?.solution}
+                            />
+                        </View>}
 
-                <View style={styles.parentContainer}>
+                {/* <View style={styles.parentContainer}>
                     <View style={styles.container}>
                         <View style={styles.questionContainer}>
                             <View>
@@ -246,6 +255,7 @@ const CheckQuestion = (props) => {
                                 content={questionObject?.question}
                             />
                         </View>}
+
                     </View>
 
                     <FlatList
@@ -263,7 +273,6 @@ const CheckQuestion = (props) => {
                             <Text style={[styles.heading]}>Solution</Text>
                         </View>
 
-                        {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
                         {questionObject?.solution?.length > 0 && <View style={{
                             width: width * 0.75
                         }}>
@@ -273,7 +282,7 @@ const CheckQuestion = (props) => {
                         </View>}
                     </View>
 
-                </View>
+                </View> */}
                 {!initialLoading && <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
                     <View style={styles.approveRejectContainer}>
                         <TouchableOpacity style={styles.approveButton} onPress={() => setRejectModal(true)}>
@@ -312,4 +321,4 @@ const CheckQuestion = (props) => {
     )
 }
 
-export default CheckQuestion;
+export default CheckQuestionNew;

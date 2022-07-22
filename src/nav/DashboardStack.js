@@ -6,6 +6,7 @@ import SimilarQuestion from "../screens/question-verification/screens/SimilarQue
 import CheckQuestion from "../screens/question-verification/screens/CheckQuestion";
 import QuestionList from "../screens/question-verification/screens/QuestionList";
 import Congrats from "../screens/question-verification/screens/Congrats";
+import CheckQuestionNew from "../screens/question-verification/screens/CheckQuestionNew";
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,9 @@ export default function DashboardStack({ navigation }) {
                 headerShown: false
             }} />
             <Stack.Screen name="CheckQuestion" component={CheckQuestion} options={{
+                headerShown: false
+            }} />
+            <Stack.Screen name="CheckQuestionNew" component={CheckQuestionNew} options={{
                 headerShown: false
             }} />
             <Stack.Screen name="QuestionList" component={QuestionList} options={{
