@@ -12,7 +12,7 @@ import CheckQuestionOption from '../components/CheckQuestionOption'
 import styles from '../styles/check-question-new'
 import { getCurrentLevel, getKeyByValueFromMap, showApproveMessage, showRejectMessage, showSkipMessage } from '../utils'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import MathJaxNew from '../../../components/MathJaxNew'
+import MathJaxCheckQuestion from '../../../components/MathJaxCheckQuestion'
 
 const CheckQuestionNew = (props) => {
     const { navigation, route } = props
@@ -184,7 +184,7 @@ const CheckQuestionNew = (props) => {
         <SafeAreaView style={STYLES.safeAreaContainer}>
             <ActivityIndicatorComponent animating={loading} />
             <HeaderComponent
-                text={'Check Question New'}
+                text={'Check Question'}
                 onPress={navigation.goBack}
             />
 
@@ -224,20 +224,20 @@ const CheckQuestionNew = (props) => {
             {!initialLoading && <ScrollView
                 ref={scrollRef}
                 scrollsToTop={true}
-                // contentContainerStyle={styles.parentContainer}
+            // contentContainerStyle={styles.parentContainer}
             // nestedScrollEnabled={true}
             >
                 {questionObject?.question && <View style={{
-                            // width: width * 0.75
-                            // width: width,
-                            marginVertical: 20
-                        }}>
-                            <MathJaxNew
-                                question={questionObject?.question}
-                                options={options}
-                                solution={questionObject?.solution}
-                            />
-                        </View>}
+                    // width: width * 0.75
+                    // width: width,
+                    marginVertical: 10
+                }}>
+                    <MathJaxCheckQuestion
+                        options={options}
+                        questionObject={questionObject}
+                        questionNo={questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}
+                    />
+                </View>}
 
                 {/* <View style={styles.parentContainer}>
                     <View style={styles.container}>
