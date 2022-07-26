@@ -229,8 +229,8 @@ const Dashboard = ({ navigation }) => {
                   visibilityCheckCount == 0 ?
                     navigation.navigate('Congrats')
                     :
-                    // navigation.navigate('CheckQuestion')
-                    navigation.navigate('CheckQuestionNew')
+                    navigation.navigate('CheckQuestion')
+                    // navigation.navigate('CheckQuestionNew')
                 }}
 
                 style={!l3Permission ? styles.questionVerificationInactiveCard : styles.questionVerificationActiveCard} >

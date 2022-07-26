@@ -32,6 +32,7 @@ import { ActivityIndicatorComponent } from '../../../components/ActivityIndicato
 import { AttachmentButton } from '../components/AttachmentComponents'
 import DocumentPicker from 'react-native-document-picker'
 import { compareTwoArrays, fileToApiFormat } from '../../../AppUtils/commonUtils'
+import MathJaxQuestionList from '../../../components/MathJaxQuestionList'
 
 const QuestionList = (props) => {
     const { navigation, route } = props
@@ -754,9 +755,7 @@ const QuestionList = (props) => {
             >
                 <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
 
-
-
-                    <View style={styles.container}>
+                    {/* <View style={styles.container}>
                         <View style={styles.questionContainer}>
                             <View>
                                 <Text style={[styles.heading, { fontFamily: typography.montserrat_600 }]}>Question {questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}</Text>
@@ -765,8 +764,6 @@ const QuestionList = (props) => {
                                 <Text style={styles.questionIdText}>QID {questionId}</Text>
                             </View>
                         </View>
-
-                        {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
 
                         {questionObject?.question && <View style={{
                             width: width * 0.75
@@ -803,10 +800,23 @@ const QuestionList = (props) => {
                         </View>
                             :
                             null}
-                        {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
-                    </View>
+                    </View> */}
 
-                    <View style={styles.container}>
+                    {questionObject?.question && <View style={{
+                        // width: width * 0.75
+                        // width: width,
+                        marginVertical: 20
+                    }}>
+                        <MathJaxQuestionList
+                            options={options}
+                            questionObject={questionObject}
+                            questionNo={questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}
+                        />
+                    </View>}
+
+
+
+                    <View style={[styles.container, { marginTop: -5 }]}>
                         <Text style={[styles.heading]}>Check similar Questions</Text>
 
                         {duplicateQuestions.length > 0 ? <FlatList
@@ -824,6 +834,7 @@ const QuestionList = (props) => {
                                         }
                                         setVisitedQuestionObject({ ...temp })
                                         navigation.navigate('SimilarQuestion', {
+                                        // navigation.navigate('SimilarQuestionNew', {
                                             question_id: item?.id,
                                             is_accepted: false,
                                             chapter_id: selectedChapterId,
@@ -842,7 +853,7 @@ const QuestionList = (props) => {
                             <Text style={[styles.subHeadingGray, { marginTop: 10 }]}>No similar questions found</Text>}
                     </View>
 
-                    <View style={styles.container}>
+                    <View style={[styles.container, { marginTop: 5 }]}>
                         <View style={styles.questionPropertiesContainer}>
                             <Text style={[styles.heading, { color: '#393939' }]}>Question Properties</Text>
                             <TouchableOpacity style={styles.editContainer} onPress={() => setEditModal(true)}>

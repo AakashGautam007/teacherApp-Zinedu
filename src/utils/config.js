@@ -14,13 +14,13 @@ export const { width, height } = Dimensions.get("window");
 // export const ENDPOINT = `http://nadmin.zinedu.com`;
 
 //For Dev Base 
-export const ENDPOINT = `https://apdev.myclassroom.digital`;
+// export const ENDPOINT = `https://apdev.myclassroom.digital`;
 
 //For UAT BASE 
 // export const ENDPOINT = `https://studyuat.zinedu.com`;
 
 //For QA 
-// export const ENDPOINT = `https://apqa.zinedu.com`;
+export const ENDPOINT = `https://apqa.zinedu.com`;
 
 // export const SMSENDPOINT = `https://sms.zinedu.com`; //production
 // export const SMSENDPOINT = `https://smss.zinedu.com`//staging

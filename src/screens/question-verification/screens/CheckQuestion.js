@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FlatList, Modal, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import FlashMessage from 'react-native-flash-message'
-import { STYLES } from '../../../appStyles'
+import { STYLES, typography } from '../../../appStyles'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 import HeaderComponent from '../../../components/HeaderComponent'
 import MathJax from '../../../components/MathJax'
@@ -9,9 +9,10 @@ import ScrollToTop, { scrollToTop } from '../../../components/ScrollToTop'
 import { width } from '../../../utils/config'
 import { APPROVE_QUESTION, GET_L3_QUESTION_IDS, GET_QUESTION_DETAILS, GET_QUESTION_IDS, REJECT_QUESTION } from '../api'
 import CheckQuestionOption from '../components/CheckQuestionOption'
-import styles from '../styles/check-question'
+import styles from '../styles/check-question-new'
 import { getCurrentLevel, getKeyByValueFromMap, showApproveMessage, showRejectMessage, showSkipMessage } from '../utils'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import MathJaxCheckQuestion from '../../../components/MathJaxCheckQuestion'
 
 const CheckQuestion = (props) => {
     const { navigation, route } = props
@@ -57,7 +58,6 @@ const CheckQuestion = (props) => {
             setLoading(false)
             setInitialLoading(false)
         }
-
     }
 
     const getQuestionDetails = async ({ questionId, isSkip = false }) => {
@@ -224,11 +224,23 @@ const CheckQuestion = (props) => {
             {!initialLoading && <ScrollView
                 ref={scrollRef}
                 scrollsToTop={true}
-                // contentContainerStyle={styles.parentContainer}
+            // contentContainerStyle={styles.parentContainer}
             // nestedScrollEnabled={true}
+            // contentContainerStyle={{ flex: 1, height: '100%', width: '100%' }}
             >
+                {questionObject?.question && <View style={{
+                    // width: width * 0.75
+                    // width: width,
+                    marginVertical: 10,
+                }}>
+                    <MathJaxCheckQuestion
+                        options={options}
+                        questionObject={questionObject}
+                        questionNo={questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}
+                    />
+                </View>}
 
-                <View style={styles.parentContainer}>
+                {/* <View style={styles.parentContainer}>
                     <View style={styles.container}>
                         <View style={styles.questionContainer}>
                             <View>
@@ -246,6 +258,7 @@ const CheckQuestion = (props) => {
                                 content={questionObject?.question}
                             />
                         </View>}
+
                     </View>
 
                     <FlatList
@@ -263,7 +276,6 @@ const CheckQuestion = (props) => {
                             <Text style={[styles.heading]}>Solution</Text>
                         </View>
 
-                        {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
                         {questionObject?.solution?.length > 0 && <View style={{
                             width: width * 0.75
                         }}>
@@ -273,37 +285,37 @@ const CheckQuestion = (props) => {
                         </View>}
                     </View>
 
-                </View>
-                {!initialLoading && <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
-                    <View style={styles.approveRejectContainer}>
-                        <TouchableOpacity style={styles.approveButton} onPress={() => setRejectModal(true)}>
-                            <Text style={styles.approveText}>Reject</Text>
-                        </TouchableOpacity>
+                </View> */}
 
-                        <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 40 }]}
-                            onPress={() => setApproveModal(true)}>
-                            <Text style={[styles.approveText, { color: 'white' }]}>Approve</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {questionIdsArray.length > 1 && <TouchableOpacity onPress={() => {
-                        let tempArray = []
-                        if (skipQuestionIdArray.length) {
-                            tempArray = [...skipQuestionIdArray]
-                        } else {
-                            tempArray = [...questionIdsArray]
-                        }
-                        let questionId = tempArray?.splice(0, 1)
-                        getQuestionDetails({ questionId, isSkip: true })
-                        setSkipQuestionIdArray([...tempArray])
-                    }}>
-                        <Text style={styles.approveText}>Skip</Text>
-                    </TouchableOpacity>}
-                </View>}
             </ScrollView>}
 
 
+            {!initialLoading && <View style={{ backgroundColor: 'white', alignItems: 'center', paddingBottom: 10 }}>
+                <View style={styles.approveRejectContainer}>
+                    <TouchableOpacity style={styles.approveButton} onPress={() => setRejectModal(true)}>
+                        <Text style={styles.approveText}>Reject</Text>
+                    </TouchableOpacity>
 
+                    <TouchableOpacity style={[styles.approveButton, { backgroundColor: '#2B3789', marginLeft: 40 }]}
+                        onPress={() => setApproveModal(true)}>
+                        <Text style={[styles.approveText, { color: 'white' }]}>Approve</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {questionIdsArray.length > 1 && <TouchableOpacity onPress={() => {
+                    let tempArray = []
+                    if (skipQuestionIdArray.length) {
+                        tempArray = [...skipQuestionIdArray]
+                    } else {
+                        tempArray = [...questionIdsArray]
+                    }
+                    let questionId = tempArray?.splice(0, 1)
+                    getQuestionDetails({ questionId, isSkip: true })
+                    setSkipQuestionIdArray([...tempArray])
+                }}>
+                    <Text style={[styles.approveText, { fontFamily: typography.montserrat_400 }]}>Skip</Text>
+                </TouchableOpacity>}
+            </View>}
             <ScrollToTop
                 scrollRef={scrollRef}
                 style={{ bottom: 100 }}

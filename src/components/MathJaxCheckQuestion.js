@@ -4,6 +4,7 @@ import { width, height } from "../utils/config";
 import AutoHeightWebView from "react-native-autoheight-webview";
 import { typography } from "../appStyles";
 import { getOptionName } from "../screens/question-verification/utils";
+import { checkForNull } from "./utils";
 
 const defaultOptions = {
   tex: {
@@ -189,6 +190,7 @@ href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
 rel="stylesheet"
 type="text/css"
 />
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
   <script>
   MathJax = {
     ${mathJaxOptions}
@@ -231,7 +233,7 @@ type="text/css"
     </div>
   
     <div class="option-text" >
-      ${option1?.html}
+      ${checkForNull(option1?.html)}
     </div>
   </div>
   
@@ -241,7 +243,7 @@ type="text/css"
       Solution
     </div>
     <div class="solution-text">
-      ${solution}
+      ${checkForNull(solution)}
     </div>
   </div>
   
@@ -282,7 +284,7 @@ type="text/css"
       </div>
 
       <div class="option-text" >
-        ${option1?.html}
+        ${checkForNull(option1?.html)}
       </div>
     </div>
 
@@ -292,7 +294,7 @@ type="text/css"
       </div>
 
       <div class="option-text" >
-        ${option2?.html}
+        ${checkForNull(option2?.html)}
       </div>
     </div>
 
@@ -302,7 +304,7 @@ type="text/css"
       </div>
 
       <div class="option-text" >
-        ${option3?.html}
+        ${checkForNull(option3?.html)}
       </div>
     </div>
 
@@ -312,7 +314,7 @@ type="text/css"
       </div>
 
       <div class="option-text" >
-        ${option4?.html}
+        ${checkForNull(option4?.html)}
       </div>
     </div>
 
@@ -322,7 +324,7 @@ type="text/css"
         Solution
       </div>
       <div class="solution-text">
-        ${solution}
+        ${checkForNull(solution)}
       </div>
     </div>
 

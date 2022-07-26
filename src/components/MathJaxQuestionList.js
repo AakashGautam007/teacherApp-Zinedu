@@ -4,6 +4,7 @@ import { width, height } from "../utils/config";
 import AutoHeightWebView from "react-native-autoheight-webview";
 import { typography } from "../appStyles";
 import { getOptionName } from "../screens/question-verification/utils";
+import { checkForNull } from "./utils";
 
 const defaultOptions = {
   tex: {
@@ -179,6 +180,7 @@ const wrapMathjax = (props) => {
 
   const head = `<head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
   <link
 href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
 rel="stylesheet"
@@ -221,8 +223,8 @@ type="text/css"
       Correct Answer
     </div>
   
-    <div class="option-text" >
-      ${option1?.html}
+    <div class="option-text" style="margin: 10px 0px;">
+      ${checkForNull(option1?.html)}
     </div>
   </div>
   </div>
@@ -235,7 +237,7 @@ type="text/css"
       Solution
     </div>
     <div class="solution-text">
-      ${solution}
+      ${checkForNull(solution)}
     </div>
   </div>
   
@@ -274,7 +276,7 @@ type="text/css"
       </div>
 
       <div class="option-text" >
-        ${option1?.html}
+        ${checkForNull(option1?.html)}
       </div>
     </div>
 
@@ -284,7 +286,7 @@ type="text/css"
       </div>
 
       <div class="option-text" >
-        ${option2?.html}
+        ${checkForNull(option2?.html)}
       </div>
     </div>
 
@@ -294,17 +296,17 @@ type="text/css"
       </div>
 
       <div class="option-text" >
-        ${option3?.html}
+        ${checkForNull(option3?.html)}
       </div>
     </div>
 
-    <div class=${option4?.selected ? "selected-option" : "option"}>
+    <div class=${option4?.selected ? "selected-option" : "option"} style="margin-bottom: 10px;">
       <div class="option-name">
         ${getOptionName(3)}
       </div>
 
       <div class="option-text" >
-        ${option4?.html}
+        ${checkForNull(option4?.html)}
       </div>
     </div>
 
@@ -322,7 +324,7 @@ type="text/css"
         Solution
       </div>
       <div class="solution-text">
-        ${solution}
+        ${checkForNull(solution)}
       </div>
     </div>
     </body>
@@ -348,10 +350,10 @@ const MathJaxQuestionList = (props) => {
         width: width,
         // backgroundColor: 'white'
       }}
-      // pointerEvents="none"
+    // pointerEvents="none"
     >
       {html ? <AutoHeightWebView
-      // pointerEvents="none"
+        // pointerEvents="none"
         style={{
           opacity: 0.99,
           minHeight: 1,

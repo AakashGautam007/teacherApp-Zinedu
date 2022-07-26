@@ -4,6 +4,7 @@ import { width, height } from "../utils/config";
 import AutoHeightWebView from "react-native-autoheight-webview";
 import { typography } from "../appStyles";
 import { getOptionName } from "../screens/question-verification/utils";
+import { checkForNull } from "./utils";
 
 const defaultOptions = {
   tex: {
@@ -168,6 +169,7 @@ href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
 rel="stylesheet"
 type="text/css"
 />
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
   <script>
   MathJax = {
     ${mathJaxOptions}
@@ -249,7 +251,7 @@ type="text/css"
 
         <div class="option-text-container">
           <div class='questionText'>
-            ${option1?.prevQuestionHtml}
+            ${checkForNull(option1?.prevQuestionHtml)}
           </div>
         </div>
       </div>
@@ -266,7 +268,7 @@ type="text/css"
 
       <div class="option-text-container">
         <div class='questionText'>
-          ${option1?.html}
+          ${checkForNull(option1?.html)}
         </div>
       </div>
     </div>
@@ -349,7 +351,7 @@ type="text/css"
 
         <div class="option-text-container">
           <div class='questionText'>
-            ${option1?.prevQuestionHtml}
+            ${checkForNull(option1?.prevQuestionHtml)}
           </div>
         </div>
       </div>
@@ -366,7 +368,7 @@ type="text/css"
 
       <div class="option-text-container">
         <div class='questionText'>
-          ${option1?.html}
+          ${checkForNull(option1?.html)}
         </div>
       </div>
     </div>
@@ -391,7 +393,7 @@ type="text/css"
 
         <div class="option-text-container">
           <div class='questionText'>
-            ${option2?.prevQuestionHtml}
+            ${checkForNull(option2?.prevQuestionHtml)}
           </div>
         </div>
       </div>
@@ -408,7 +410,7 @@ type="text/css"
 
       <div class="option-text-container">
         <div class='questionText'>
-          ${option2?.html}
+          ${checkForNull(option2?.html)}
         </div>
       </div>
     </div>
@@ -433,7 +435,7 @@ type="text/css"
 
         <div class="option-text-container">
           <div class='questionText'>
-            ${option3?.prevQuestionHtml}
+            ${checkForNull(option3?.prevQuestionHtml)}
           </div>
         </div>
       </div>
@@ -450,7 +452,7 @@ type="text/css"
 
       <div class="option-text-container">
         <div class='questionText'>
-          ${option3?.html}
+          ${checkForNull(option3?.html)}
         </div>
       </div>
     </div>
@@ -475,7 +477,7 @@ type="text/css"
 
         <div class="option-text-container">
           <div class='questionText'>
-            ${option4?.prevQuestionHtml}
+            ${checkForNull(option4?.prevQuestionHtml)}
           </div>
         </div>
       </div>
@@ -492,7 +494,7 @@ type="text/css"
 
       <div class="option-text-container">
         <div class='questionText'>
-          ${option4?.html}
+          ${checkForNull(option4?.html)}
         </div>
       </div>
     </div>

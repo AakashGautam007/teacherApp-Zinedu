@@ -25,3 +25,7 @@ merged with arun branch
 
 25.07.2022:
 Completed Single webview rendering for L1, L2 and L3(need to test with different sets of data)
+
+26.07.2022:
+Completed Single webview rendering for L1, L2 and L3 and tested
+ENG-475

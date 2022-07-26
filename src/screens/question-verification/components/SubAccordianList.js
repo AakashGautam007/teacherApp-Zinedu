@@ -23,8 +23,8 @@ const SubAccordianList = ({ item, subjectId }) => {
         //     title: subject
         // })
         // console.log({ chapterId, subjectId, name })
-        // navigation.navigate("QuestionList", {
-        navigation.navigate("QuestionListNew", {
+        navigation.navigate("QuestionList", {
+        // navigation.navigate('QuestionListNew', {
           title: name,
           subjectId,
           chapterId,

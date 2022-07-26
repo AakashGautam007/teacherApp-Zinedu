@@ -15,9 +15,8 @@ import { width } from '../../../utils/config'
 import MathJax from '../../../components/MathJax'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 import { showRejectMessage } from '../utils'
-import MathJaxSimilarQuestion from '../../../components/MathJaxSimilarQuestion'
 
-const SimilarQuestionNew = (props) => {
+const SimilarQuestion = (props) => {
     const { navigation, route } = props
     const prevScreenData = route?.params
     const {
@@ -188,16 +187,9 @@ const SimilarQuestionNew = (props) => {
 
                 <View style={{
                     paddingHorizontal: 20,
-                    paddingBottom: 40,
-                    marginVertical: 20
+                    paddingBottom: 40
                 }}>
-                    <MathJaxSimilarQuestion
-                        questionObject={questionObject}
-                        currentQuestion={currentQuestion}
-                        options={options}
-                    />
-
-                    {/* <View style={styles.questionBorderContainer}>
+                    <View style={styles.questionBorderContainer}>
                         <View style={styles.container}>
                             <View style={styles.questionContainer}>
                                 <View>
@@ -211,14 +203,13 @@ const SimilarQuestionNew = (props) => {
                             <OptionTag verify={true} style={[styles.tag, { marginVertical: 5, marginBottom: 0, maxWidth: '27%' }]} />
 
                             <View style={[styles.borderContainer, { borderWidth: 0, padding: 10, paddingHorizontal: 10 }]}>
+                                {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
 
                                 <View style={{
                                     width: width * 0.75
                                 }}>
-                                    <MathJaxSimilarQuestion
-                                        questionObject={questionObject?.question}
-                                        currentQuestion={currentQuestion}
-                                        options={options}
+                                    <MathJax
+                                        content={questionObject?.question}
                                     />
                                 </View>
                             </View>
@@ -235,6 +226,7 @@ const SimilarQuestionNew = (props) => {
 
 
                             <View style={[styles.borderContainer, { borderWidth: 0, padding: 10, paddingHorizontal: 10 }]}>
+                                {/* <Text style={styles.questionText}>During water absorption from the soil, the water potential of the root cell is than the soil?</Text> */}
                                 <View style={{
                                     width: width * 0.75
                                 }}>
@@ -245,9 +237,9 @@ const SimilarQuestionNew = (props) => {
                             </View>
 
                         </View>
-                    </View> */}
+                    </View>
 
-                    {/* <FlatList
+                    <FlatList
                         data={options}
                         renderItem={({ item, index }) => {
                             return <Option
@@ -255,7 +247,7 @@ const SimilarQuestionNew = (props) => {
                                 index={index}
                             />
                         }}
-                    /> */}
+                    />
                 </View>
             </ScrollView>}
 
@@ -284,4 +276,4 @@ const SimilarQuestionNew = (props) => {
     )
 }
 
-export default SimilarQuestionNew;
+export default SimilarQuestion;
