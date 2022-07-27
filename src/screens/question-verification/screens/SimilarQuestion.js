@@ -16,6 +16,7 @@ import MathJax from '../../../components/MathJax'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 import { showRejectMessage } from '../utils'
 import MathJaxSimilarQuestion from '../../../components/MathJaxSimilarQuestion'
+import { handleApiErrors } from '../../../AppUtils/commonUtils'
 
 const SimilarQuestion = (props) => {
     const { navigation, route } = props
@@ -73,7 +74,7 @@ const SimilarQuestion = (props) => {
 
             scrollToTop(scrollRef)
         } else {
-            alert('Some error occured')
+            handleApiErrors()
         }
         setLoading(false)
         setInitialLoading(false)
@@ -134,7 +135,7 @@ const SimilarQuestion = (props) => {
                 navigation.goBack()
                 moveToNextQuestion()
             } else {
-
+                handleApiErrors()
             }
             setApproveModal(false)
         } catch (error) {

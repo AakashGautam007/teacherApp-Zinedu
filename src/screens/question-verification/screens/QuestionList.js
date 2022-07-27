@@ -31,7 +31,7 @@ import { width } from '../../../utils/config'
 import { ActivityIndicatorComponent } from '../../../components/ActivityIndicatorComponent'
 import { AttachmentButton } from '../components/AttachmentComponents'
 import DocumentPicker from 'react-native-document-picker'
-import { compareTwoArrays, fileToApiFormat } from '../../../AppUtils/commonUtils'
+import { compareTwoArrays, fileToApiFormat, handleApiErrors } from '../../../AppUtils/commonUtils'
 import MathJaxQuestionList from '../../../components/MathJaxQuestionList'
 
 const QuestionList = (props) => {
@@ -109,10 +109,8 @@ const QuestionList = (props) => {
                 setInitialLoading(false)
             }
             setQuestionIdsArray([...questionIdsArray])
-            // removing the first index since its used to call the api above, see the skip button onpress
-            questionIdsArray.splice(0, 1)
-            setSkipQuestionIdArray([...questionIdsArray])
         } else {
+            handleApiErrors()
             setInitialLoading(false)
             setLoading(false)
         }
@@ -158,8 +156,8 @@ const QuestionList = (props) => {
         // console.log({ questionId })
         setLoading(true)
         const response = await GET_QUESTION_DETAILS({ questionId })
+        console.log('getQuestionDetails', JSON.stringify(response))
 
-        // console.log('1', JSON.stringify(response))
         if (response?.status) {
             const { question, option1, option2, option3, option4, is_option1_correct, is_option2_correct, is_option3_correct, is_option4_correct, difficulty_level, question_type, feature_type, tag_ids, tag_names, chapter_name, chapter_assoc_id, duplicate_question_ids, duplicate_question_scores, fill_in_the_blank_answer, correct_option } = response?.payload[0]
             setQuestionId(questionId?.toString())
@@ -228,7 +226,7 @@ const QuestionList = (props) => {
             scrollToTop(scrollRef)
             setVisitedQuestionObject({})
         } else {
-            alert('Some error occured')
+            handleApiErrors()
         }
         setLoading(false)
         setInitialLoading(false)
@@ -281,17 +279,36 @@ const QuestionList = (props) => {
         return validated
     }
 
+    // const moveToNextQuestion = () => {
+    //     questionIdsArray.splice(questionIdsArray.indexOf(Number(questionObject?.question_id)), 1)
+    //     if (questionIdsArray.length > 0) {
+    //         if (questionIdsArray?.length) {
+    //             setInitialLoading(true)
+    //             getQuestionDetails({ questionId: questionIdsArray[0] })
+    //         }
+    //         setQuestionIdsArray([...questionIdsArray])
+    //         // removing the first index since its used to call the api above, see the skip button onpress
+    //         questionIdsArray.splice(0, 1)
+    //         setSkipQuestionIdArray([...questionIdsArray])
+    //         resetModal()
+    //     } else {
+    //         navigation.pop(1)
+    //     }
+    // }
+
     const moveToNextQuestion = () => {
-        questionIdsArray.splice(questionIdsArray.indexOf(Number(questionObject?.question_id)), 1)
-        if (questionIdsArray.length > 0) {
-            if (questionIdsArray?.length) {
-                setInitialLoading(true)
-                getQuestionDetails({ questionId: questionIdsArray[0] })
+        // current question index is got here
+        let index = questionIdsArray.indexOf(Number(questionObject?.question_id))
+        questionIdsArray.splice(index, 1)
+        if (questionIdsArray.length) {
+            if ((index != 0) && (index < questionIdsArray.length)) {
+                // same index is maintained here since current question is removed from array
+                getQuestionDetails({ questionId: questionIdsArray[index], isSkip: true })
+            } else {
+                getQuestionDetails({ questionId: questionIdsArray[0], isSkip: true })
             }
             setQuestionIdsArray([...questionIdsArray])
-            // removing the first index since its used to call the api above, see the skip button onpress
-            questionIdsArray.splice(0, 1)
-            setSkipQuestionIdArray([...questionIdsArray])
+            setInitialLoading(true)
             resetModal()
         } else {
             navigation.pop(1)
@@ -306,7 +323,7 @@ const QuestionList = (props) => {
             showApproveMessage()
             moveToNextQuestion()
         } else {
-
+            handleApiErrors()
         }
         setLoading(false)
     }
@@ -362,7 +379,7 @@ const QuestionList = (props) => {
                 showRejectMessage()
                 moveToNextQuestion()
             } else {
-
+                handleApiErrors()
             }
         } catch (error) {
         }
@@ -381,6 +398,16 @@ const QuestionList = (props) => {
         setRejectModal(false)
         setRejectReasonText('')
         setAttachmentFiles([])
+    }
+
+    const onSkipPressed = () => {
+        // next question index is got here
+        let index = questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1
+        if ((index != 0) && (index < questionIdsArray.length)) {
+            getQuestionDetails({ questionId: questionIdsArray[index], isSkip: true })
+        } else {
+            getQuestionDetails({ questionId: questionIdsArray[0], isSkip: true })
+        }
     }
 
     return (
@@ -810,7 +837,8 @@ const QuestionList = (props) => {
                         <MathJaxQuestionList
                             options={options}
                             questionObject={questionObject}
-                            questionNo={questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}
+                            questionNo={(questionObject?.question_id && questionIdsArray.indexOf(Number(questionObject?.question_id)) != -1) ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}
+                        // questionNo={currentQuestionIndex + 1}
                         />
                     </View>}
 
@@ -834,7 +862,7 @@ const QuestionList = (props) => {
                                         }
                                         setVisitedQuestionObject({ ...temp })
                                         navigation.navigate('SimilarQuestion', {
-                                        // navigation.navigate('SimilarQuestionNew', {
+                                            // navigation.navigate('SimilarQuestionNew', {
                                             question_id: item?.id,
                                             is_accepted: false,
                                             chapter_id: selectedChapterId,
@@ -939,17 +967,7 @@ const QuestionList = (props) => {
                         </TouchableOpacity>
                     </View>
 
-                    {questionIdsArray.length > 1 && <TouchableOpacity onPress={() => {
-                        let tempArray = []
-                        if (skipQuestionIdArray.length) {
-                            tempArray = [...skipQuestionIdArray]
-                        } else {
-                            tempArray = [...questionIdsArray]
-                        }
-                        let questionId = tempArray?.splice(0, 1)
-                        getQuestionDetails({ questionId, isSkip: true })
-                        setSkipQuestionIdArray([...tempArray])
-                    }}>
+                    {questionIdsArray.length > 1 && <TouchableOpacity onPress={onSkipPressed}>
                         <Text style={[styles.approveText, { fontFamily: typography.montserrat_400 }]}>Skip</Text>
                     </TouchableOpacity>}
                 </View>

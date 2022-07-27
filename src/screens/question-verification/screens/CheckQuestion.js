@@ -13,6 +13,7 @@ import styles from '../styles/check-question-new'
 import { getCurrentLevel, getKeyByValueFromMap, showApproveMessage, showRejectMessage, showSkipMessage } from '../utils'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MathJaxCheckQuestion from '../../../components/MathJaxCheckQuestion'
+import { handleApiErrors } from '../../../AppUtils/commonUtils'
 
 const CheckQuestion = (props) => {
     const { navigation, route } = props
@@ -52,9 +53,10 @@ const CheckQuestion = (props) => {
             }
             setQuestionIdsArray([...questionIdsArray])
             // removing the first index since its used to call the api above, see the skip button onpress
-            questionIdsArray.splice(0, 1)
-            setSkipQuestionIdArray([...questionIdsArray])
+            // questionIdsArray.splice(0, 1)
+            // setSkipQuestionIdArray([...questionIdsArray])
         } else {
+            handleApiErrors()
             setLoading(false)
             setInitialLoading(false)
         }
@@ -94,7 +96,7 @@ const CheckQuestion = (props) => {
             isSkip && showSkipMessage()
             scrollToTop(scrollRef)
         } else {
-            alert('Some error occured')
+            handleApiErrors()
         }
         setLoading(false)
         setInitialLoading(false)
@@ -104,16 +106,36 @@ const CheckQuestion = (props) => {
         getQuestionIds()
     }, [])
 
+    // const moveToNextQuestion = () => {
+    //     questionIdsArray.splice(questionIdsArray.indexOf(Number(questionObject?.question_id)), 1)
+    //     if (questionIdsArray.length > 0) {
+    //         if (questionIdsArray?.length) {
+    //             getQuestionDetails({ questionId: questionIdsArray[0] })
+    //         }
+    //         setQuestionIdsArray([...questionIdsArray])
+    //         // removing the first index since its used to call the api above, see the skip button onpress
+    //         questionIdsArray.splice(0, 1)
+    //         setSkipQuestionIdArray([...questionIdsArray])
+    //     } else {
+    //         navigation.replace('Congrats')
+    //     }
+    //     resetModal()
+    // }
+
     const moveToNextQuestion = () => {
-        questionIdsArray.splice(questionIdsArray.indexOf(Number(questionObject?.question_id)), 1)
-        if (questionIdsArray.length > 0) {
-            if (questionIdsArray?.length) {
-                getQuestionDetails({ questionId: questionIdsArray[0] })
+        // current question index is got here
+        let index = questionIdsArray.indexOf(Number(questionObject?.question_id))
+        questionIdsArray.splice(index, 1)
+        if (questionIdsArray.length) {
+            if ((index != 0) && (index < questionIdsArray.length)) {
+                // same index is maintained here since current question is removed from array
+                getQuestionDetails({ questionId: questionIdsArray[index], isSkip: true })
+            } else {
+                getQuestionDetails({ questionId: questionIdsArray[0], isSkip: true })
             }
             setQuestionIdsArray([...questionIdsArray])
-            // removing the first index since its used to call the api above, see the skip button onpress
-            questionIdsArray.splice(0, 1)
-            setSkipQuestionIdArray([...questionIdsArray])
+            setInitialLoading(true)
+            resetModal()
         } else {
             navigation.replace('Congrats')
         }
@@ -138,7 +160,7 @@ const CheckQuestion = (props) => {
                 showApproveMessage()
                 moveToNextQuestion()
             } else {
-
+                handleApiErrors()
             }
         } catch (e) {
             console.log('approve catch', e)
@@ -171,13 +193,23 @@ const CheckQuestion = (props) => {
                 showRejectMessage()
                 moveToNextQuestion()
             } else {
-
+                handleApiErrors()
             }
 
         } catch (error) {
             console.log('reject catch', e)
         }
         setLoading(false)
+    }
+
+    const onSkipPressed = () => {
+        // next question index is got here
+        let index = questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1
+        if ((index != 0) && (index < questionIdsArray.length)) {
+            getQuestionDetails({ questionId: questionIdsArray[index], isSkip: true })
+        } else {
+            getQuestionDetails({ questionId: questionIdsArray[0], isSkip: true })
+        }
     }
 
     return (
@@ -236,7 +268,7 @@ const CheckQuestion = (props) => {
                     <MathJaxCheckQuestion
                         options={options}
                         questionObject={questionObject}
-                        questionNo={questionObject?.question_id ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}
+                        questionNo={(questionObject?.question_id && questionIdsArray.indexOf(Number(questionObject?.question_id)) != -1) ? questionIdsArray.indexOf(Number(questionObject?.question_id)) + 1 : ''}
                     />
                 </View>}
 
@@ -302,17 +334,7 @@ const CheckQuestion = (props) => {
                     </TouchableOpacity>
                 </View>
 
-                {questionIdsArray.length > 1 && <TouchableOpacity onPress={() => {
-                    let tempArray = []
-                    if (skipQuestionIdArray.length) {
-                        tempArray = [...skipQuestionIdArray]
-                    } else {
-                        tempArray = [...questionIdsArray]
-                    }
-                    let questionId = tempArray?.splice(0, 1)
-                    getQuestionDetails({ questionId, isSkip: true })
-                    setSkipQuestionIdArray([...tempArray])
-                }}>
+                {questionIdsArray.length > 1 && <TouchableOpacity onPress={onSkipPressed}>
                     <Text style={[styles.approveText, { fontFamily: typography.montserrat_400 }]}>Skip</Text>
                 </TouchableOpacity>}
             </View>}

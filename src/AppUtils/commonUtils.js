@@ -71,3 +71,11 @@ export const compareTwoArrays = (arrA = [], arrB = []) => {
 
     return cA === cB;
 }
+
+export const handleApiErrors = ({ response, callback } = {}) => {
+    if (response && response?.message) {
+        callback && callback()
+    } else {
+        callback ? callback : alert('Some Error occured')
+    }
+}

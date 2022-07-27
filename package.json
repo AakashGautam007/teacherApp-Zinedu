@@ -9,7 +9,8 @@
     "codepush-staging": "appcenter codepush release-react -a MyClassroom/myFaculty -d Staging",
     "codepush-production": "appcenter codepush release-react -a MyClassroom/myFaculty -d Production",
     "codepush-qa": "appcenter codepush release-react -a MyClassroom/myFaculty -d QA",
-    "codepush-dev": "appcenter codepush release-react -a MyClassroom/myFaculty -d Dev"
+    "codepush-dev": "appcenter codepush release-react -a MyClassroom/myFaculty -d Dev",
+    "codepush-uat": "appcenter codepush release-react -a MyClassroom/myFaculty -d UAT"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.15",

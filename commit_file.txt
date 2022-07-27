@@ -29,3 +29,8 @@ Completed Single webview rendering for L1, L2 and L3(need to test with different
 26.07.2022:
 Completed Single webview rendering for L1, L2 and L3 and tested
 ENG-475
+
+27.07.2022:
+Approve issue post skip
+Question No hide when loading
+codepushed to QA, Staging, UAT
