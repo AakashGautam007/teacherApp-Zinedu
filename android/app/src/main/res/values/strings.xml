@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">myfaculty</string>
     <!-- Production -->
-    <!-- <string moduleConfig="true" name="CodePushDeploymentKey">s25bCQNKfT5wpqNpKmaJSGRI-K8bNaU_bQQvm</string> -->
+    <string moduleConfig="true" name="CodePushDeploymentKey">s25bCQNKfT5wpqNpKmaJSGRI-K8bNaU_bQQvm</string>
     <!-- Staging -->
-    <string moduleConfig="true" name="CodePushDeploymentKey">4hEZnbKCPuZ1syFjMrdrCSUeY4mSWR05f4zjT</string>
+    <!-- <string moduleConfig="true" name="CodePushDeploymentKey">4hEZnbKCPuZ1syFjMrdrCSUeY4mSWR05f4zjT</string> -->
     <!-- QA -->
     <!-- <string moduleConfig="true" name="CodePushDeploymentKey">0YGdnLdsNJp35iZ78wvBK_wCNnpriAon8Hg0S</string> -->
     <!-- Dev -->

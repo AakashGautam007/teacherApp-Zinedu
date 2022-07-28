@@ -34,3 +34,6 @@ ENG-475
 Approve issue post skip
 Question No hide when loading
 codepushed to QA, Staging, UAT
+
+28.07.2022:
+v1.31 pushed to playstore with

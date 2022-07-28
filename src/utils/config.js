@@ -8,7 +8,7 @@ export const { width, height } = Dimensions.get("window");
 // export const ENDPOINT = `https://apstaging.zinedu.com`;
 
 //Production Base 
-// export const ENDPOINT = `https://ap.zinedu.com`;
+export const ENDPOINT = `https://ap.zinedu.com`;
 
 //Dot Net Base 
 // export const ENDPOINT = `http://nadmin.zinedu.com`;
@@ -20,7 +20,7 @@ export const { width, height } = Dimensions.get("window");
 // export const ENDPOINT = `https://studyuat.zinedu.com`;
 
 //For QA 
-export const ENDPOINT = `https://apqa.zinedu.com`;
+// export const ENDPOINT = `https://apqa.zinedu.com`;
 
 // export const SMSENDPOINT = `https://sms.zinedu.com`; //production
 // export const SMSENDPOINT = `https://smss.zinedu.com`//staging
